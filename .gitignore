@@ -22,3 +22,15 @@ Thumbs.db
 # IDE/editor settings
 .vscode/
 .idea/
+
+
+# Frontend-specific ignores
+client/node_modules/
+client/build/
+client/dist/
+client/.next/
+client/.cache/
+client/.env
+client/coverage/
+client/.DS_Store
+client/Thumbs.db
