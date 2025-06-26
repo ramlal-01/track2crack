@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const theoryTopicSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -9,11 +11,15 @@ const theoryTopicSchema = new mongoose.Schema({
     required: true
   },
   content: {
-    type: String
+    type: String // optional written explanation
   },
-  tags: [String],
-  videoLink: String,
-  articleLinks: [String]
+  tags: [String], // optional keywords
+  videoLink: {
+    type: String // optional YouTube video
+  },
+  articleLinks: [String], // optional multiple GFG/W3 links
 }, {
-  timestamps: true // auto adds and updates createdAt, updatedAt
+  timestamps: true // ✅ adds createdAt and updatedAt automatically
 });
+
+module.exports = mongoose.model('TheoryTopic', theoryTopicSchema);

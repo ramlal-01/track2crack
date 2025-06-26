@@ -23,11 +23,7 @@ const dsaQuestionSchema = new mongoose.Schema({
   topic: {
     type: String,
     required: true
-  },
-  sheetCategory: {
-    type: String, // e.g., "Striver DSA Sheet", "A2Z Sheet"
-    required: true
-  }
+  } 
 });
 
 module.exports = mongoose.model('DSAQuestion', dsaQuestionSchema);

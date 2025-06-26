@@ -9,8 +9,20 @@ app.use(express.json());
 // 1
 app.use('/api/auth', require('./routes/authRoutes'));
 
-// app.use("/api/leetcode-submissions", require("./routes/leetcodeSubmissionFetcher"));
+//2
+app.use('/api/dsa', require('./routes/dsaRoutes'));
 
+// 3 
+app.use('/api/core', require('./routes/coreRoutes'));
+
+// 4 , theoryRoutes 
+app.use('/api/theory',  require('./routes/theoryRoutes'));
+
+// 5 . quizRoutes 
+app.use('/api/quiz', require('./routes/quizRoutes')); 
+
+// 6.  revisionRoutes  
+app.use('/api/revision', require('./routes/revisionRoutes'));
 // Root test route
 app.get("/", (req, res) => {
   res.send("Track2Crack backend is running");
