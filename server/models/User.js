@@ -1,82 +1,44 @@
-const mongoose = require("mongoose");
-
+const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
-  username: {
+  name: {
     type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    minlength: 3
+    required: [true, 'Name is required'],
+    trim: true
   },
   email: {
     type: String,
-    required: true,
+    required: [true, 'Email is required'],
     unique: true,
     lowercase: true,
-    match: [/^\S+@\S+\.\S+$/, "Invalid email format"]
+    trim: true,
+    match: [/^\S+@\S+\.\S+$/, 'Invalid email format']
   },
-  passwordHash: {
+  password: {
     type: String,
-    required: true,
-    minlength: 60 // bcrypt hashes are typically 60 chars
+    required: [true, 'Password is required'],
+    minlength: 60
   },
-  joined_on: {
-    type: Date,
-    default: Date.now
+  leetcodeUsername: {
+    type: String,
+    trim: true
   },
-
-  // 🔐 New Field: Role Support (for admin functionality in future)
+  avatarUrl: {
+    type: String,
+    default: ''
+  },
   role: {
     type: String,
-    enum: ["user", "admin"],
-    default: "user"
+    enum: ['user', 'admin'],
+    default: 'user'
   },
-
-  settings: {
-    contest_frequency_days: {
-      type: Number,
-      default: 7
-    },
-    include_bookmarks: {
-      type: Boolean,
-      default: true
-    },
-    include_retention_questions: {
-      type: Boolean,
-      default: true
-    },
-    preferred_language: {
-      type: String,
-      enum: ["cpp", "java", "python"],
-      default: "cpp"
-    }
-  },
-
-  platform_usernames: {
-    leetcode: { type: String },
-    codeforces: { type: String },
-    gfg: { type: String },
-    hackerrank: { type: String }
-  },
-
-  platforms: {
-    leetcode: {
-      synced: { type: Boolean, default: false },
-      last_sync: { type: Date }
-    },
-    codeforces: {
-      synced: { type: Boolean, default: false },
-      last_sync: { type: Date }
-    },
-    gfg: {
-      synced: { type: Boolean, default: false },
-      last_sync: { type: Date }
-    },
-    hackerrank: {
-      synced: { type: Boolean, default: false },
-      last_sync: { type: Date }
-    }
+  isVerified: {
+    type: Boolean,
+    default: false
   }
+}, {
+  timestamps: true // adds createdAt and updatedAt
 });
 
-module.exports = mongoose.model("User", userSchema);
+
+
+module.exports = mongoose.model('User', userSchema);

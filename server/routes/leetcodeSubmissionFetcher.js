@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const mongoose = require("mongoose");
-const PlatformSubmission = require("../models/platformSubmission");
+const PlatformSubmission = require("../models/LeetCodeStats");
 
 const router = express.Router();
 
