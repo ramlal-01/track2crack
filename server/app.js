@@ -5,9 +5,11 @@ const app = express();
 app.use(express.json());
 
 // Routes
-app.use("/api/users", require("./routes/userRoutes")); 
-// app.use("/api/leetcode-submissions", require("./routes/leetcodeSubmissionFetcher"));
 
+// 1
+app.use('/api/auth', require('./routes/authRoutes'));
+
+// app.use("/api/leetcode-submissions", require("./routes/leetcodeSubmissionFetcher"));
 
 // Root test route
 app.get("/", (req, res) => {
