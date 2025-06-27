@@ -20,9 +20,9 @@ const verifyToken = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
-    console.error("JWT VERIFY ERROR:", err.message);
-    return res.status(403).json({ message: "Invalid or expired token" });
-  }
+  console.error("JWT VERIFY ERROR:", err); // full error
+  return res.status(403).json({ message: "Invalid or expired token", error: err.message });
+}
 };
 
 module.exports = verifyToken;
