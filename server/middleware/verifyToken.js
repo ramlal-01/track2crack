@@ -1,5 +1,3 @@
-// server/middleware/verifyToken.js
-
 const jwt = require('jsonwebtoken');
 
 const verifyToken = (req, res, next) => {
@@ -11,13 +9,18 @@ const verifyToken = (req, res, next) => {
 
   const token = authHeader.split(" ")[1];
 
+  // DEBUG: Hardcode secret to test
+  const hardcodedSecret = "track2crack_secret_key";
+
+  console.log("TOKEN:", token);
+  console.log("SECRET:", hardcodedSecret);
+
   try {
-    console.log("VERIFY TOKEN RAW TOKEN:", token);
-    console.log("VERIFY TOKEN LOG (JWT_SECRET):", process.env.JWT_SECRET);
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // attach user info from token
+    const decoded = jwt.verify(token, hardcodedSecret); // Use hardcoded secret
+    req.user = decoded;
     next();
   } catch (err) {
+    console.error("JWT VERIFY ERROR:", err.message);
     return res.status(403).json({ message: "Invalid or expired token" });
   }
 };
