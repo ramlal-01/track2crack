@@ -38,8 +38,7 @@ exports.updateDSAProgress = async (req, res) => {
 
 
 // GET /api/dsa/progress/:userId
-exports.getUserDSAProgress = async (req, res) => {
-  console.log("🔓 getUserDSAProgress REACHED, User:", req.user);
+exports.getUserDSAProgress = async (req, res) => { 
 
   try {
     const requestedUserId = req.params.userId;
