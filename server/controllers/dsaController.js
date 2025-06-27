@@ -39,11 +39,12 @@ exports.updateDSAProgress = async (req, res) => {
 
 // GET /api/dsa/progress/:userId
 exports.getUserDSAProgress = async (req, res) => {
+  console.log("🔓 getUserDSAProgress REACHED, User:", req.user);
+
   try {
     const requestedUserId = req.params.userId;
-    const loggedInUserId = req.user._id; // This comes from verifyToken
+    const loggedInUserId = req.user.userId; // ✅ FIXED here
 
-    // 🛡️ Check if user is accessing their own data
     if (requestedUserId !== loggedInUserId) {
       return res.status(403).json({ message: "Forbidden: Access denied" });
     }
