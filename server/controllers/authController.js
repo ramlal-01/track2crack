@@ -34,7 +34,7 @@ exports.registerUser = async (req, res) => {
     await newUser.save();
 
     // Generate JWT Token
-    const token = jwt.sign({ userId: newUser._id }, 'track2crack_secret_key', { expiresIn: '7d' });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
     res.status(201).json({
       message: "User registered successfully",
@@ -75,8 +75,7 @@ exports.loginUser = async (req, res) => {
     }
 
     // Create token
-    const token = jwt.sign({ userId: user._id }, 'track2crack_secret_key', { expiresIn: '7d' });
-
+   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     res.status(200).json({
       message: "Login successful",
       user: {
