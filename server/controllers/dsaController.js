@@ -13,8 +13,9 @@ exports.getAllDSAQuestions = async (req, res) => {
 // POST /api/dsa/progress
 exports.updateDSAProgress = async (req, res) => {
   try {
-    const { userId, questionId, isCompleted, isBookmarked, remindOn } = req.body;
-
+    const { questionId, isCompleted, isBookmarked, remindOn } = req.body;
+    const userId = req.user.userId; // 🔒 Use verified token userId only
+    
     if (!userId || !questionId) {
       return res.status(400).json({ message: "userId and questionId are required" });
     }
