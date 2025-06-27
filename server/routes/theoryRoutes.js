@@ -1,9 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const { getTheoryTopicsBySubject,  updateTheoryProgress, getUserTheoryProgress } = require('../controllers/theoryController')
-// GET /api/theory/topics?subject=DSA
+const {
+  getTheoryTopicsBySubject,
+  updateTheoryProgress,
+  getUserTheoryProgress
+} = require('../controllers/theoryController');
 
+const verifyToken = require('../middleware/verifyToken'); // ✅ Import
+
+// Public route
 router.get('/topics', getTheoryTopicsBySubject);
-router.post('/progress', updateTheoryProgress); 
-router.get('/progress/:userId', getUserTheoryProgress);
+
+// ✅ Protected routes
+router.post('/progress', verifyToken, updateTheoryProgress);
+router.get('/progress/:userId', verifyToken, getUserTheoryProgress);
+
 module.exports = router;

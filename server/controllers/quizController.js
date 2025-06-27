@@ -3,11 +3,12 @@ const Quiz = require('../models/Quiz');
 // POST /api/quiz/generate
 exports.generateQuiz = async (req, res) => {
   try {
-    const { userId, subject, selectedTopics } = req.body;
+      const userId = req.user.userId; // Get from verified token
+      const { subject, selectedTopics } = req.body;
 
-    if (!userId || !subject || !selectedTopics || selectedTopics.length === 0) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
+      if (!subject || !selectedTopics || selectedTopics.length === 0) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
 
     // For now: sample mock questions (can replace with DB later)
     const questions = [
@@ -33,11 +34,13 @@ exports.generateQuiz = async (req, res) => {
 // POST /api/quiz/submit
 exports.submitQuiz = async (req, res) => {
   try {
-    const { userId, subject, source, questions, bookmarkedQuestions } = req.body;
+    const userId = req.user.userId; // Extracted from token
+    const { subject, source, questions, bookmarkedQuestions } = req.body;
 
-    if (!userId || !subject || !source || !questions) {
+    if (!subject || !source || !questions) {
       return res.status(400).json({ message: "Missing required fields" });
     }
+
 
     // Calculate score
     let score = 0;

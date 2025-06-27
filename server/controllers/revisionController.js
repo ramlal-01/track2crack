@@ -1,15 +1,17 @@
-const UserDSAProgress = require('../models/UserDSAProgress');
-const UserCoreProgress = require('../models/UserCoreProgress');
-const UserTheoryProgress = require('../models/UserTheoryProgress');
-
 exports.getReminderItems = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const requestedUserId = req.params.userId;
+    const loggedInUserId = req.user.userId;
+
+    // 🛡️ Block access if not same user
+    if (requestedUserId !== loggedInUserId) {
+      return res.status(403).json({ message: "Forbidden: Access denied" });
+    }
 
     const [dsa, core, theory] = await Promise.all([
-      UserDSAProgress.find({ userId, remindOn: { $ne: null } }).populate('questionId'),
-      UserCoreProgress.find({ userId, remindOn: { $ne: null } }).populate('coreTopicId'),
-      UserTheoryProgress.find({ userId, remindOn: { $ne: null } }).populate('topicId'),
+      UserDSAProgress.find({ userId: requestedUserId, remindOn: { $ne: null } }).populate('questionId'),
+      UserCoreProgress.find({ userId: requestedUserId, remindOn: { $ne: null } }).populate('coreTopicId'),
+      UserTheoryProgress.find({ userId: requestedUserId, remindOn: { $ne: null } }).populate('topicId'),
     ]);
 
     res.status(200).json({
