@@ -3,8 +3,7 @@ const Quiz = require('../models/Quiz');
 const UserTheoryProgress = require('../models/UserTheoryProgress');
 const UserCoreProgress = require('../models/UserCoreProgress');
 const TheoryTopic = require('../models/TheoryTopic');
-const CoreTopic = require('../models/CoreTopic');
-
+const CoreTopic = require('../models/CoreTopic'); 
 // ✅ HARDCODED DEMO MCQs
 const dummyMCQs = {
   Java: [
@@ -101,5 +100,39 @@ exports.generateQuiz = async (req, res) => {
 
   } catch (err) {
     res.status(500).json({ message: "Quiz generation failed", error: err.message });
+  }
+};
+exports.submitQuiz = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { subject, source, questions, bookmarkedQuestions } = req.body;
+
+    if (!subject || !source || !questions) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    let score = 0;
+    for (const q of questions) {
+      if (q.selectedAnswerIndex === q.correctAnswerIndex) score++;
+    }
+
+    const quiz = new Quiz({
+      userId,
+      subject,
+      source,
+      questions,
+      score,
+      bookmarkedQuestions: (bookmarkedQuestions || []).map(q => ({
+        questionText: q.questionText,
+        topicTag: q.topicTag,
+        bookmarkedAt: new Date()
+      }))
+    });
+
+    await quiz.save();
+
+    res.status(201).json({ message: "Quiz submitted", score, quizId: quiz._id });
+  } catch (error) {
+    res.status(500).json({ message: "Quiz submission failed", error: error.message });
   }
 };
