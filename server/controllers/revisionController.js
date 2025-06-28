@@ -1,3 +1,8 @@
+const UserDSAProgress = require('../models/UserDSAProgress');
+const UserCoreProgress = require('../models/UserCoreProgress');
+const UserTheoryProgress = require('../models/UserTheoryProgress');
+
+
 exports.getReminderItems = async (req, res) => {
   try {
     const requestedUserId = req.params.userId;
