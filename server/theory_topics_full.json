@@ -1,0 +1,491 @@
+[
+  {
+    "title": "Introduction to Java",
+    "subject": "Java",
+    "content": "Basic overview of Java language, syntax, and setup.",
+    "tags": [
+      "java",
+      "basics",
+      "syntax"
+    ],
+    "videoLink": "https://youtu.be/hlGoQC332VM",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/java-introduction/"
+    ]
+  },
+  {
+    "title": "Data Types in Java",
+    "subject": "Java",
+    "content": "Covers primitive and non-primitive data types.",
+    "tags": [
+      "java",
+      "data types"
+    ],
+    "videoLink": "https://youtu.be/BOEh8JBAu3M",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/data-types-in-java/"
+    ]
+  },
+  {
+    "title": "Control Statements in Java",
+    "subject": "Java",
+    "content": "if, switch, loops in Java with examples.",
+    "tags": [
+      "control flow",
+      "java",
+      "conditions",
+      "loops"
+    ],
+    "videoLink": "https://youtu.be/BXtmP5BHZnM",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/decision-making-javaif-if-else-nested-if-else-switch/"
+    ]
+  },
+  {
+    "title": "Functions and Methods",
+    "subject": "Java",
+    "content": "User-defined methods, parameters, return types.",
+    "tags": [
+      "functions",
+      "methods",
+      "java"
+    ],
+    "videoLink": "https://youtu.be/iQXM3IuSx8Y",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/methods-in-java/"
+    ]
+  },
+  {
+    "title": "Arrays in Java",
+    "subject": "Java",
+    "content": "1D and 2D arrays, memory layout, syntax.",
+    "tags": [
+      "arrays",
+      "java",
+      "data structures"
+    ],
+    "videoLink": "https://youtu.be/BuN5_JsGb2g",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/arrays-in-java/"
+    ]
+  },
+  {
+    "title": "Strings in Java",
+    "subject": "Java",
+    "content": "Immutable nature of strings, StringBuilder.",
+    "tags": [
+      "strings",
+      "java"
+    ],
+    "videoLink": "https://youtu.be/NpAR3KfUjOQ",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/strings-in-java/"
+    ]
+  },
+  {
+    "title": "Exception Handling",
+    "subject": "Java",
+    "content": "try-catch, finally, throw, throws, custom exceptions.",
+    "tags": [
+      "java",
+      "exceptions",
+      "error handling"
+    ],
+    "videoLink": "https://youtu.be/_r0J3Wq2snY",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/exceptions-in-java/"
+    ]
+  },
+  {
+    "title": "File Handling in Java",
+    "subject": "Java",
+    "content": "FileReader, FileWriter, BufferedReader, File class.",
+    "tags": [
+      "file",
+      "java",
+      "input output"
+    ],
+    "videoLink": "https://youtu.be/k1TG9-UY6QA",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/file-handling-in-java/"
+    ]
+  },
+  {
+    "title": "Multithreading in Java",
+    "subject": "Java",
+    "content": "Threads, Runnable interface, thread lifecycle.",
+    "tags": [
+      "java",
+      "threads",
+      "concurrency"
+    ],
+    "videoLink": "https://youtu.be/qbLc5a9jdXo",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/multithreading-in-java/"
+    ]
+  },
+  {
+    "title": "Java Collections Framework",
+    "subject": "Java",
+    "content": "List, Set, Map, Queue, Collections utility class.",
+    "tags": [
+      "collections",
+      "java",
+      "data structures"
+    ],
+    "videoLink": "https://youtu.be/4nO66tVhg-c",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/collections-in-java-2/"
+    ]
+  },
+  {
+    "title": "OOPS Principles",
+    "subject": "OOPS",
+    "content": "Encapsulation, Abstraction, Inheritance, Polymorphism.",
+    "tags": [
+      "oops",
+      "principles",
+      "java"
+    ],
+    "videoLink": "https://youtu.be/QO4NXhWo_NM",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/object-oriented-programming-oops-concept-in-java/"
+    ]
+  },
+  {
+    "title": "Encapsulation in Java",
+    "subject": "OOPS",
+    "content": "Private fields, getters and setters.",
+    "tags": [
+      "oops",
+      "encapsulation",
+      "java"
+    ],
+    "videoLink": "https://youtu.be/8n8g7A7Rrnc",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/encapsulation-in-java/"
+    ]
+  },
+  {
+    "title": "Inheritance in Java",
+    "subject": "OOPS",
+    "content": "Single, multilevel, hierarchical inheritance.",
+    "tags": [
+      "inheritance",
+      "java",
+      "oops"
+    ],
+    "videoLink": "https://youtu.be/7lZ6hLgx2l8",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/inheritance-in-java/"
+    ]
+  },
+  {
+    "title": "Polymorphism in Java",
+    "subject": "OOPS",
+    "content": "Compile-time and run-time polymorphism.",
+    "tags": [
+      "oops",
+      "polymorphism",
+      "java"
+    ],
+    "videoLink": "https://youtu.be/ny6UO5LJXtI",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/polymorphism-in-java/"
+    ]
+  },
+  {
+    "title": "Abstraction in Java",
+    "subject": "OOPS",
+    "content": "Abstract classes and interfaces.",
+    "tags": [
+      "abstraction",
+      "java",
+      "oops"
+    ],
+    "videoLink": "https://youtu.be/n3GrZRa6Z2E",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/abstraction-in-java-2/"
+    ]
+  },
+  {
+    "title": "Greedy Algorithms",
+    "subject": "DSA",
+    "content": "Greedy Algorithms explained with examples and use-cases.",
+    "tags": [
+      "greedy",
+      "algorithms"
+    ],
+    "videoLink": "https://youtu.be/example1",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/1"
+    ]
+  },
+  {
+    "title": "Dynamic Programming Basics",
+    "subject": "DSA",
+    "content": "Dynamic Programming Basics explained with examples and use-cases.",
+    "tags": [
+      "dynamic",
+      "programming",
+      "basics"
+    ],
+    "videoLink": "https://youtu.be/example2",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/2"
+    ]
+  },
+  {
+    "title": "Memoization vs Tabulation",
+    "subject": "DSA",
+    "content": "Memoization vs Tabulation explained with examples and use-cases.",
+    "tags": [
+      "memoization",
+      "vs",
+      "tabulation"
+    ],
+    "videoLink": "https://youtu.be/example3",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/3"
+    ]
+  },
+  {
+    "title": "Backtracking Explained",
+    "subject": "DSA",
+    "content": "Backtracking Explained explained with examples and use-cases.",
+    "tags": [
+      "backtracking",
+      "explained"
+    ],
+    "videoLink": "https://youtu.be/example4",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/4"
+    ]
+  },
+  {
+    "title": "Heap and Priority Queue",
+    "subject": "DSA",
+    "content": "Heap and Priority Queue explained with examples and use-cases.",
+    "tags": [
+      "heap",
+      "and",
+      "priority",
+      "queue"
+    ],
+    "videoLink": "https://youtu.be/example5",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/5"
+    ]
+  },
+  {
+    "title": "Hashing in Data Structures",
+    "subject": "DSA",
+    "content": "Hashing in Data Structures explained with examples and use-cases.",
+    "tags": [
+      "hashing",
+      "in",
+      "data",
+      "structures"
+    ],
+    "videoLink": "https://youtu.be/example6",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/6"
+    ]
+  },
+  {
+    "title": "Sliding Window Technique",
+    "subject": "DSA",
+    "content": "Sliding Window Technique explained with examples and use-cases.",
+    "tags": [
+      "sliding",
+      "window",
+      "technique"
+    ],
+    "videoLink": "https://youtu.be/example7",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/7"
+    ]
+  },
+  {
+    "title": "Two Pointer Technique",
+    "subject": "DSA",
+    "content": "Two Pointer Technique explained with examples and use-cases.",
+    "tags": [
+      "two",
+      "pointer",
+      "technique"
+    ],
+    "videoLink": "https://youtu.be/example8",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/8"
+    ]
+  },
+  {
+    "title": "Bit Manipulation Basics",
+    "subject": "DSA",
+    "content": "Bit Manipulation Basics explained with examples and use-cases.",
+    "tags": [
+      "bit",
+      "manipulation",
+      "basics"
+    ],
+    "videoLink": "https://youtu.be/example9",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/9"
+    ]
+  },
+  {
+    "title": "Top K Problems",
+    "subject": "DSA",
+    "content": "Top K Problems explained with examples and use-cases.",
+    "tags": [
+      "top",
+      "k",
+      "problems"
+    ],
+    "videoLink": "https://youtu.be/example10",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/10"
+    ]
+  },
+  {
+    "title": "Interfaces in Java",
+    "subject": "Java",
+    "content": "Interfaces in Java explained with examples and use-cases.",
+    "tags": [
+      "interfaces",
+      "in",
+      "java"
+    ],
+    "videoLink": "https://youtu.be/example11",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/11"
+    ]
+  },
+  {
+    "title": "Access Modifiers",
+    "subject": "Java",
+    "content": "Access Modifiers explained with examples and use-cases.",
+    "tags": [
+      "access",
+      "modifiers"
+    ],
+    "videoLink": "https://youtu.be/example12",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/12"
+    ]
+  },
+  {
+    "title": "Wrapper Classes",
+    "subject": "Java",
+    "content": "Wrapper Classes explained with examples and use-cases.",
+    "tags": [
+      "wrapper",
+      "classes"
+    ],
+    "videoLink": "https://youtu.be/example13",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/13"
+    ]
+  },
+  {
+    "title": "Type Casting in Java",
+    "subject": "Java",
+    "content": "Type Casting in Java explained with examples and use-cases.",
+    "tags": [
+      "type",
+      "casting",
+      "in",
+      "java"
+    ],
+    "videoLink": "https://youtu.be/example14",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/14"
+    ]
+  },
+  {
+    "title": "Overloading vs Overriding",
+    "subject": "OOPS",
+    "content": "Overloading vs Overriding explained with examples and use-cases.",
+    "tags": [
+      "overloading",
+      "vs",
+      "overriding"
+    ],
+    "videoLink": "https://youtu.be/example15",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/15"
+    ]
+  },
+  {
+    "title": "Association, Aggregation, Composition",
+    "subject": "OOPS",
+    "content": "Association, Aggregation, Composition explained with examples and use-cases.",
+    "tags": [
+      "association,",
+      "aggregation,",
+      "composition"
+    ],
+    "videoLink": "https://youtu.be/example16",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/16"
+    ]
+  },
+  {
+    "title": "Final Keyword in Java",
+    "subject": "Java",
+    "content": "Final Keyword in Java explained with examples and use-cases.",
+    "tags": [
+      "final",
+      "keyword",
+      "in",
+      "java"
+    ],
+    "videoLink": "https://youtu.be/example17",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/17"
+    ]
+  },
+  {
+    "title": "Java Memory Management",
+    "subject": "Java",
+    "content": "Java Memory Management explained with examples and use-cases.",
+    "tags": [
+      "java",
+      "memory",
+      "management"
+    ],
+    "videoLink": "https://youtu.be/example18",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/18"
+    ]
+  },
+  {
+    "title": "Object Lifecycle in Java",
+    "subject": "Java",
+    "content": "Object Lifecycle in Java explained with examples and use-cases.",
+    "tags": [
+      "object",
+      "lifecycle",
+      "in",
+      "java"
+    ],
+    "videoLink": "https://youtu.be/example19",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/19"
+    ]
+  },
+  {
+    "title": "SOLID Principles",
+    "subject": "OOPS",
+    "content": "SOLID Principles explained with examples and use-cases.",
+    "tags": [
+      "solid",
+      "principles"
+    ],
+    "videoLink": "https://youtu.be/example20",
+    "articleLinks": [
+      "https://www.geeksforgeeks.org/example-article/20"
+    ]
+  }
+]

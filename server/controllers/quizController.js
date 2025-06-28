@@ -1,48 +1,68 @@
 const Quiz = require('../models/Quiz');
+const { fetchMCQsFromGFG } = require('../utils/gfgScraper');
+const UserTheoryProgress = require('../models/UserTheoryProgress');
+const UserCoreProgress = require('../models/UserCoreProgress');
 
-// POST /api/quiz/generate
+// POST /api/quiz/generate (🔒 Protected via verifyToken)
 exports.generateQuiz = async (req, res) => {
   try {
-      const userId = req.user.userId; // Get from verified token
-      const { subject, selectedTopics } = req.body;
+    const userId = req.user.userId; // token se nikal raha
+    const { subject, source } = req.body;
 
-      if (!subject || !selectedTopics || selectedTopics.length === 0) {
-        return res.status(400).json({ message: "Missing required fields" });
-      }
+    if (!userId || !subject || !source) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
 
-    // For now: sample mock questions (can replace with DB later)
-    const questions = [
-      {
-        questionText: "What is JVM?",
-        options: ["Java Virtual Machine", "Java Verified Method", "Just Virtual Memory", "None"],
-        correctAnswerIndex: 0
-      },
-      {
-        questionText: "Which of these is not OOPS concept?",
-        options: ["Encapsulation", "Polymorphism", "Compilation", "Inheritance"],
-        correctAnswerIndex: 2
-      }
-    ];
+    let topicDocs = [];
 
-    res.status(200).json({ subject, count: questions.length, questions });
+    if (source === 'Theory') {
+      const progress = await UserTheoryProgress.find({ userId, isCompleted: true }).populate('topicId');
+      topicDocs = progress.filter(p => p.topicId.subject === subject).map(p => p.topicId);
+    } else if (source === 'Core') {
+      const progress = await UserCoreProgress.find({ userId, isCompleted: true }).populate('coreTopicId');
+      topicDocs = progress
+        .filter(p => p.coreTopicId.subject === subject)
+        .map(p => ({ title: p.coreTopicId.title }));
+    } else {
+      return res.status(400).json({ message: "Invalid quiz source type" });
+    }
 
-  } catch (error) {
-    res.status(500).json({ message: "Failed to generate quiz", error: error.message });
+    let allMCQs = [];
+    for (const topic of topicDocs) {
+      const mcqs = await fetchMCQsFromGFG(topic.title);
+      allMCQs.push(...mcqs);
+    }
+
+    if (allMCQs.length === 0) {
+      return res.status(404).json({ message: "No MCQs found for your studied topics." });
+    }
+
+    const final = allMCQs.sort(() => 0.5 - Math.random()).slice(0, 10);
+
+    res.status(200).json({
+      subject,
+      source,
+      topicsCovered: topicDocs.map(t => t.title),
+      totalQuestions: final.length,
+      questions: final
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: "Quiz generation failed", error: err.message });
   }
 };
 
-// POST /api/quiz/submit
+
+// POST /api/quiz/submit (🔒 Protected via verifyToken)
 exports.submitQuiz = async (req, res) => {
   try {
-    const userId = req.user.userId; // Extracted from token
+    const userId = req.user.userId;
     const { subject, source, questions, bookmarkedQuestions } = req.body;
 
     if (!subject || !source || !questions) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-
-    // Calculate score
     let score = 0;
     for (const q of questions) {
       if (q.selectedAnswerIndex === q.correctAnswerIndex) score++;
