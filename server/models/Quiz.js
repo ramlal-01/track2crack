@@ -16,7 +16,7 @@ const quizSchema = new mongoose.Schema({
     enum: ['Java', 'OOPS', 'DSA', 'OS', 'DBMS', 'CN'],
     required: true
   },
-  topicsCovered: [String], // List of topics included in quiz
+  topicsCovered: [String], // <-- make sure this is the exact field
   totalQuestions: Number,
   questions: [
     {
@@ -43,7 +43,7 @@ const quizSchema = new mongoose.Schema({
   takenAt: {
     type: Date,
     default: Date.now
-  } 
+  }
 });
 
 module.exports = mongoose.model('Quiz', quizSchema);

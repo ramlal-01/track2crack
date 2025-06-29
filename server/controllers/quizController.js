@@ -1,125 +1,82 @@
+// Imports
 const Quiz = require('../models/Quiz');
-// const { fetchMCQsFromGFG } = require('../utils/gfgScraper'); // ❌ NOT needed for now
-const UserTheoryProgress = require('../models/UserTheoryProgress');
-const UserCoreProgress = require('../models/UserCoreProgress');
-const TheoryTopic = require('../models/TheoryTopic');
-const CoreTopic = require('../models/CoreTopic'); 
-// ✅ HARDCODED DEMO MCQs
-const dummyMCQs = {
-  Java: [
-    {
-      questionText: "What is the size of int in Java?",
-      options: ["2 bytes", "4 bytes", "8 bytes", "Depends on OS"],
-      correctAnswerIndex: 1
-    },
-    {
-      questionText: "Which of the following is not a Java feature?",
-      options: ["Object-oriented", "Use of pointers", "Portable", "Dynamic"],
-      correctAnswerIndex: 1
-    }
-  ],
-  OOPS: [
-    {
-      questionText: "Which principle binds data and functions together?",
-      options: ["Encapsulation", "Abstraction", "Inheritance", "Polymorphism"],
-      correctAnswerIndex: 0
-    },
-    {
-      questionText: "Which OOP concept allows method overriding?",
-      options: ["Encapsulation", "Polymorphism", "Abstraction", "Inheritance"],
-      correctAnswerIndex: 1
-    }
-  ],
-  DSA: [
-    {
-      questionText: "What is the time complexity of binary search?",
-      options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
-      correctAnswerIndex: 1
-    },
-    {
-      questionText: "Which data structure uses FIFO?",
-      options: ["Stack", "Queue", "Tree", "Graph"],
-      correctAnswerIndex: 1
-    }
-  ],
-  OS: [
-    {
-      questionText: "What is a deadlock?",
-      options: ["A program error", "A system crash", "Processes waiting indefinitely", "None"],
-      correctAnswerIndex: 2
-    }
-  ],
-  DBMS: [
-    {
-      questionText: "Which normal form eliminates transitive dependency?",
-      options: ["1NF", "2NF", "3NF", "BCNF"],
-      correctAnswerIndex: 2
-    }
-  ],
-  CN: [
-    {
-      questionText: "What does IP stand for?",
-      options: ["Internet Provider", "Internet Protocol", "Internal Protocol", "Internet Protection"],
-      correctAnswerIndex: 1
-    }
-  ]
-};
+const QuizQuestion = require('../models/QuizQuestion');
 
-// ✅ FINAL generateQuiz CONTROLLER
+/**
+ * @route   POST /api/quiz/generate
+ * @access  Protected (token required)
+ * @desc    Generates a quiz from selected topics (max 10 questions)
+ */
 exports.generateQuiz = async (req, res) => {
   try {
-    const { subject, source } = req.body;
-    const userId = req.user.userId;
+    const { subject, topics, source } = req.body;
 
-    let topicDocs = [];
-
-    if (source === 'Theory') {
-      const progress = await UserTheoryProgress.find({ userId, isCompleted: true }).populate('topicId');
-      topicDocs = progress.filter(p => p.topicId.subject === subject).map(p => p.topicId);
-    } else if (source === 'Core') {
-      const progress = await UserCoreProgress.find({ userId, isCompleted: true }).populate('coreTopicId');
-      topicDocs = progress.filter(p => p.coreTopicId.subject === subject).map(p => p.coreTopicId);
+    if (!subject || !Array.isArray(topics) || !topics.length || !source) {
+      return res.status(400).json({ message: "Subject, topics and source are required" });
     }
 
-    // ✅ fallback to hardcoded dummy MCQs
-    const allMCQs = dummyMCQs[subject] || [];
+    // Fetch questions matching subject and topic list
+    const allMCQs = await QuizQuestion.find({
+      subject,
+      topic: { $in: topics }
+    });
 
     if (allMCQs.length === 0) {
-      return res.status(404).json({ message: "No MCQs available for this subject." });
+      return res.status(404).json({ message: "No MCQs found for selected topics." });
     }
 
-    const final = allMCQs.slice(0, 10);
+    // Randomly pick up to 10 questions
+    const selected = allMCQs
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 10)
+      .map(q => ({
+        questionText: q.questionText,
+        options: q.options,
+        correctAnswerIndex: q.correctAnswerIndex,
+        topicTag: q.topic
+      }));
 
     res.status(200).json({
       subject,
       source,
-      topicsCovered: topicDocs.map(t => t.title),
-      totalQuestions: final.length,
-      questions: final
+      topicsCovered: topics,
+      totalQuestions: selected.length,
+      questions: selected
     });
 
   } catch (err) {
+    console.error("Error generating quiz:", err);
     res.status(500).json({ message: "Quiz generation failed", error: err.message });
   }
 };
+
+/**
+ * @route   POST /api/quiz/submit
+ * @access  Protected (token required)
+ * @desc    Submits the user's quiz attempt and saves it to DB
+ */
 exports.submitQuiz = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { subject, source, questions, bookmarkedQuestions } = req.body;
+    const { subject, source, questions, bookmarkedQuestions, topics } = req.body;
 
-    if (!subject || !source || !questions) {
-      return res.status(400).json({ message: "Missing required fields" });
+    if (!subject || !source || !questions || !Array.isArray(topics) || !topics.length) {
+      return res.status(400).json({ message: "Subject, source, topics, and questions are required" });
     }
 
+    // Calculate total score
     let score = 0;
     for (const q of questions) {
       if (q.selectedAnswerIndex === q.correctAnswerIndex) score++;
     }
 
+    // Save attempt
     const quiz = new Quiz({
       userId,
       subject,
       source,
+      topicsCovered: topics,
+      totalQuestions: questions.length,
       questions,
       score,
       bookmarkedQuestions: (bookmarkedQuestions || []).map(q => ({
@@ -133,6 +90,28 @@ exports.submitQuiz = async (req, res) => {
 
     res.status(201).json({ message: "Quiz submitted", score, quizId: quiz._id });
   } catch (error) {
+    console.error("Error submitting quiz:", error);
     res.status(500).json({ message: "Quiz submission failed", error: error.message });
+  }
+};
+
+
+/**
+ * @route   GET /api/quiz/history
+ * @access  Protected (token required)
+ * @desc    Fetches all past quiz attempts of the logged-in user
+ */
+exports.getQuizHistory = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const quizzes = await Quiz.find({ userId })
+      .sort({ takenAt: -1 }) // most recent first
+      .select('subject source topicsCovered score takenAt totalQuestions');
+
+    res.status(200).json({ quizzes });
+  } catch (err) {
+    console.error("Error fetching quiz history:", err);
+    res.status(500).json({ message: "Failed to load quiz history", error: err.message });
   }
 };
