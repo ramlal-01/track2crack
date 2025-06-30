@@ -99,14 +99,21 @@ exports.submitQuiz = async (req, res) => {
 /**
  * @route   GET /api/quiz/history
  * @access  Protected (token required)
- * @desc    Fetches all past quiz attempts of the logged-in user
+ * @desc    Fetches filtered or recent quiz attempts for dashboard/subject page
  */
 exports.getQuizHistory = async (req, res) => {
   try {
     const userId = req.user.userId;
+    const { subject, limit } = req.query;
 
-    const quizzes = await Quiz.find({ userId })
+    const filter = { userId };
+    if (subject) {
+      filter.subject = subject;
+    }
+
+    const quizzes = await Quiz.find(filter)
       .sort({ takenAt: -1 }) // most recent first
+      .limit(Number(limit) || 0) // if no limit, fetch all
       .select('subject source topicsCovered score takenAt totalQuestions');
 
     res.status(200).json({ quizzes });
@@ -115,3 +122,4 @@ exports.getQuizHistory = async (req, res) => {
     res.status(500).json({ message: "Failed to load quiz history", error: err.message });
   }
 };
+
