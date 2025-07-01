@@ -23,6 +23,10 @@ app.use('/api/quiz', require('./routes/quizRoutes'));
 
 // 6.  revisionRoutes  
 app.use('/api/revision', require('./routes/revisionRoutes'));
+
+// 7. Dashboard route
+app.use('/api/users', require('./routes/userRoutes'));
+
 // Root test route
 app.get("/", (req, res) => {
   res.send("Track2Crack backend is running");
