@@ -17,11 +17,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Password is required'],
     minlength: 60
-  },
-  leetcodeUsername: {
-    type: String,
-    trim: true
-  },
+  }, 
   avatarUrl: {
     type: String,
     default: ''

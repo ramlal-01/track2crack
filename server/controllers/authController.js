@@ -5,10 +5,10 @@ const jwt = require('jsonwebtoken');
 // POST /api/auth/register
 exports.registerUser = async (req, res) => {
   try {
-    const { name, email, password, leetcodeUsername, preferredLanguage } = req.body;
+    const { name, email, password } = req.body;
 
     // Validation
-    if (!name || !email || !password || !leetcodeUsername || !preferredLanguage) {
+    if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -26,7 +26,6 @@ exports.registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      leetcodeUsername,
       role: 'user',
       isVerified: true // or set false if you want email verification later
     });
@@ -41,8 +40,7 @@ exports.registerUser = async (req, res) => {
       user: {
         _id: newUser._id,
         name: newUser.name,
-        email: newUser.email,
-        leetcodeUsername: newUser.leetcodeUsername
+        email: newUser.email
       },
       token
     });
@@ -81,8 +79,7 @@ exports.loginUser = async (req, res) => {
       user: {
         _id: user._id,
         name: user.name,
-        email: user.email,
-        leetcodeUsername: user.leetcodeUsername
+        email: user.email
       },
       token
     });
