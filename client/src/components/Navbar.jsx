@@ -36,13 +36,13 @@ const Navbar = () => {
       <div className="flex items-center space-x-4">
         <Link
           to="/login"
-          className="inline-block rounded-sm border border-current px-8 py-3 text-sm font-bold bg-white text-indigo-600 transition hover:scale-110 hover:shadow-xl focus:ring-3 focus:outline-hidden"
+          className="inline-block rounded-sm border border-current px-8 py-3 text-sb font-bold bg-white text-indigo-900 transition hover:scale-110 hover:shadow-xl focus:ring-3 focus:outline-hidden"
           >
           Login
         </Link>
         <Link
           to="/register"
-          className="inline-block rounded-sm bg-indigo-600 px-8 py-3 text-sm font-bold text-white transition hover:scale-110 hover:shadow-xl focus:ring-3 focus:outline-hidden"
+          className="inline-block rounded-sm bg-indigo-600 px-8 py-3 text-sb font-bold text-white transition hover:scale-110 hover:shadow-xl focus:ring-3 focus:outline-hidden"
         >
           Sign Up
         </Link>
