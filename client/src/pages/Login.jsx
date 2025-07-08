@@ -80,7 +80,7 @@ const Login = () => {
                 autoComplete="new-password"
                 required
                 className="w-full px-2 py-2 outline-none"
-                placeholder=""
+                placeholder="Enter password"
               />
             </div>
           </div>
