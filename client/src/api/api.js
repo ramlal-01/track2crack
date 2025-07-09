@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const API = axios.create({
-  baseURL: 'https://track2crack-backend.onrender.com/api', // 🔁 Replace with your backend URL
+  baseURL: import.meta.env.VITE_API_BASE_URL, // 🔁 Replace with your backend URL
 })
 
 // Add token to headers automatically if present
