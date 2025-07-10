@@ -5,7 +5,10 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
-import DSASheet from './pages/DSASheet'
+import DSASheet from './pages/DSASheet';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -22,6 +25,18 @@ const App = () => {
         </div>
         <Footer />
       </div>
+
+      {/* ✅ Add this to enable toast messages */}
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="colored"
+      />
     </BrowserRouter>
   );
 };

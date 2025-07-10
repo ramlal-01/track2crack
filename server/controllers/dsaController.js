@@ -13,20 +13,23 @@ exports.getAllDSAQuestions = async (req, res) => {
 // POST /api/dsa/progress
 exports.updateDSAProgress = async (req, res) => {
   try {
-    const { questionId, isCompleted, isBookmarked, remindOn } = req.body;
+    const { questionId, isCompleted, isBookmarked, remindOn, note } = req.body;
     const userId = req.user.userId; // 🔒 Use verified token userId only
-    
+
     if (!userId || !questionId) {
       return res.status(400).json({ message: "userId and questionId are required" });
     }
 
+    // 🛡️ Build update object only with defined values
+    const update = {};
+    if (isCompleted !== undefined) update.isCompleted = isCompleted;
+    if (isBookmarked !== undefined) update.isBookmarked = isBookmarked;
+    if (remindOn !== undefined) update.remindOn = remindOn;
+    if (note !== undefined) update.note = note;
+
     const progress = await UserDSAProgress.findOneAndUpdate(
       { userId, questionId },
-      {
-        isCompleted: isCompleted ?? false,
-        isBookmarked: isBookmarked ?? false,
-        remindOn: remindOn ?? null
-      },
+      update,
       { upsert: true, new: true }
     );
 
