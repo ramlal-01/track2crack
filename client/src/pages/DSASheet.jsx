@@ -10,9 +10,8 @@ import "react-circular-progressbar/dist/styles.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { SiLeetcode, SiGeeksforgeeks } from "react-icons/si";
-import { toast } from 'react-toastify'; 
-
-
+import { toast } from 'react-toastify';   
+import { FaChevronRight, FaChevronDown } from "react-icons/fa";
 const DSASheet = () => {
   const [groupedQuestions, setGroupedQuestions] = useState({});
   const [progressMap, setProgressMap] = useState({});
@@ -26,10 +25,11 @@ const DSASheet = () => {
   const [resettingTopic, setResettingTopic] = useState(null);
   const reminderRefs = useRef({});
   const noteRefs = useRef({});
-
-
+  const [searchQuery, setSearchQuery] = useState('');
+  const [difficultyFilter, setDifficultyFilter] = useState("All");
+  const topicRef = useRef(null);
   const userId = localStorage.getItem("userId");
-
+  const topicRefs = useRef({});
   const fetchAll = async () => {
     try {
       const qRes = await API.get("/dsa/questions");
@@ -73,6 +73,48 @@ const DSASheet = () => {
       setLoading(false);
     }
   };
+  const highlightMatch = (text, query) => {
+      if (!query) return text;
+      const parts = text.split(new RegExp(`(${query})`, 'gi'));
+      return parts.map((part, i) => 
+        part.toLowerCase() === query.toLowerCase() 
+          ? <mark key={i} className="bg-yellow-200">{part}</mark> 
+          : part
+      );
+    };
+
+  const getFilteredQuestions = () => {
+    const result = {};
+    Object.keys(groupedQuestions).forEach((topic) => {
+      // First filter by difficulty
+      let topicQuestions = groupedQuestions[topic].filter(q => 
+        difficultyFilter === "All" || q.difficulty === difficultyFilter
+      );
+
+      // Then apply other filters
+      topicQuestions = topicQuestions.filter((q) => {
+        const matchesSearch = searchQuery 
+          ? q.title.toLowerCase().includes(searchQuery.toLowerCase())
+          : true;
+        
+        if (filter === "Solved") return matchesSearch && progressMap[q._id]?.isCompleted;
+        if (filter === "Bookmarked") return matchesSearch && progressMap[q._id]?.isBookmarked;
+        if (filter === "Reminders") return matchesSearch && progressMap[q._id]?.remindOn;
+        
+        return matchesSearch;
+      });
+
+      if (topicQuestions.length > 0) {
+        result[topic] = topicQuestions;
+      }
+    });
+    return result;
+  };
+
+  const filteredQuestions = getFilteredQuestions();
+
+  
+
 
   useEffect(() => {
     fetchAll();
@@ -88,6 +130,8 @@ const DSASheet = () => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+
   useEffect(() => {
     const newWidths = {};
     Object.keys(groupedQuestions).forEach((topic) => {
@@ -99,31 +143,61 @@ const DSASheet = () => {
     setAnimatedWidths(newWidths);
   }, [progressMap, groupedQuestions]);
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      let clickedInsideReminder = false;
-      let clickedInsideNote = false;
+useEffect(() => {
+  const handleClickOutside = (e) => {
+    let clickedInsideReminder = false;
+    let clickedInsideNote = false;
+    let clickedInsideAnyTopic = false;
 
-      if (openReminderId && reminderRefs.current[openReminderId]) {
-        clickedInsideReminder = reminderRefs.current[openReminderId].contains(e.target);
+    // Check reminders
+    if (openReminderId && reminderRefs.current[openReminderId]) {
+      clickedInsideReminder = reminderRefs.current[openReminderId].contains(e.target);
+    }
+
+    // Check notes
+    if (openNoteId && noteRefs.current[openNoteId]) {
+      clickedInsideNote = noteRefs.current[openNoteId].contains(e.target);
+    }
+
+    // Check if click was inside ANY expanded topic (header or content)
+    Object.keys(expandedTopics).forEach(topic => {
+      if (expandedTopics[topic]) {
+        const topicHeaderRef = topicRefs.current[topic];
+        const topicContentRef = topicRefs.current[`${topic}-content`];
+        
+        if ((topicHeaderRef && topicHeaderRef.contains(e.target)) || 
+            (topicContentRef && topicContentRef.contains(e.target))) {
+          clickedInsideAnyTopic = true;
+        }
       }
+    });
 
-      if (openNoteId && noteRefs.current[openNoteId]) {
-        clickedInsideNote = noteRefs.current[openNoteId].contains(e.target);
-      }
+    // Close reminders/notes if needed
+    if (!clickedInsideReminder) setOpenReminderId(null);
+    if (!clickedInsideNote) setOpenNoteId(null);
 
-      if (!clickedInsideReminder) {
-        setOpenReminderId(null);
-      }
+    // Only collapse topics if click was outside ALL topic containers
+    // AND outside search/filter controls
+    const searchInput = document.querySelector('input[type="text"]');
+    const filterButtons = document.querySelectorAll('[data-filter-button]');
+    const difficultySelect = document.querySelector('select');
+    
+    const clickedInsideControls = 
+      searchInput?.contains(e.target) ||
+      Array.from(filterButtons).some(btn => btn.contains(e.target)) ||
+      difficultySelect?.contains(e.target);
 
-      if (!clickedInsideNote) {
-        setOpenNoteId(null);
-      }
-    };
+    if (!clickedInsideAnyTopic && !clickedInsideControls) {
+      // Add the timeout here
+      setTimeout(() => {
+        setExpandedTopics({});
+      }, 100);
+    }
+  };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [openReminderId, openNoteId]);
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => document.removeEventListener("mousedown", handleClickOutside);
+}, [openReminderId, openNoteId, expandedTopics]);
 
   const updateProgress = async (questionId, updates) => {
     try {
@@ -237,9 +311,24 @@ const DSASheet = () => {
     return "bg-gray-200 text-gray-800";
   };
 
-  const total = Object.values(groupedQuestions).flat().length;
+  // Calculate progress statistics
+  const allQuestions = Object.values(groupedQuestions).flat();
+  const total = allQuestions.length;
   const completed = Object.values(progressMap).filter((q) => q.isCompleted).length;
   const progress = Math.round((completed / total) * 100);
+
+  // Calculate difficulty-specific progress
+  const easyQuestions = allQuestions.filter(q => q.difficulty === "Easy");
+  const mediumQuestions = allQuestions.filter(q => q.difficulty === "Medium");
+  const hardQuestions = allQuestions.filter(q => q.difficulty === "Hard");
+
+  const easyCompleted = easyQuestions.filter(q => progressMap[q._id]?.isCompleted).length;
+  const mediumCompleted = mediumQuestions.filter(q => progressMap[q._id]?.isCompleted).length;
+  const hardCompleted = hardQuestions.filter(q => progressMap[q._id]?.isCompleted).length;
+
+  const easyProgress = easyQuestions.length > 0 ? Math.round((easyCompleted / easyQuestions.length) * 100) : 0;
+  const mediumProgress = mediumQuestions.length > 0 ? Math.round((mediumCompleted / mediumQuestions.length) * 100) : 0;
+  const hardProgress = hardQuestions.length > 0 ? Math.round((hardCompleted / hardQuestions.length) * 100) : 0;
 
   const getPlatformIcon = (platform) => {
     if (platform === "GFG") return <SiGeeksforgeeks className="text-green-600 " title="GFG" />;
@@ -247,19 +336,28 @@ const DSASheet = () => {
     return null;
   };
 
+  // Modified toggle function to auto-expand during search
   const toggleTopic = (topic) => {
-    setExpandedTopics((prev) => ({
-      ...prev,
-      [topic]: !prev[topic],
-    }));
+    if (searchQuery) {
+      // During search, close other topics and toggle current one
+      setExpandedTopics({
+        [topic]: !expandedTopics[topic]
+      });
+    } else {
+      // Normal behavior when not searching
+      setExpandedTopics(prev => ({
+        ...prev,
+        [topic]: !prev[topic]
+      }));
+    }
   };
 
   return (
-    <div className="p-6 md:p-10 min-h-screen bg-gradient-to-r from-blue-100 via-teal-100 to-cyan-100">
+    <div className="p-6 md:p-10 min-h-screen bg-slate-50">
       <div className="flex justify-between items-center mb-10 px-10 py-4 bg-white rounded-2xl shadow-md">
         {/* LEFT: Title and Subtitle */}
         <div>
-          <h1 className="text-4xl font-extrabold text-purple-800 flex items-center gap-2 tracking-tight">
+          <h1 className="text-4xl font-extrabold text-indigo-700 flex items-center gap-2 tracking-tight">
             📘 <span>DSA Sheet</span>
           </h1>
           <p className="text-sb text-gray-600 tracking-wide mt-1">
@@ -267,86 +365,280 @@ const DSASheet = () => {
           </p>
         </div>
 
-        {/* RIGHT: Circular Progress Ring */}
-        <div className="w-25 h-25 drop-shadow-md">
-          <CircularProgressbar
-            value={progress}
-            text={`${progress}%`}
-            styles={buildStyles({
-              textSize: "18px",
-              // pathColor: "url(#gradient)",
-              pathTransition: "stroke-dashoffset 0.5s ease 0s",
-              pathColor: "#10b981",   // emerald-500
-              textColor: "#047857",   // emerald-700
-              trailColor: "#e5e7eb",  // gray-200
-            })}
-          />
-          <svg style={{ height: 0 }}>
-            <defs>
-              <linearGradient id="gradient" gradientTransform="rotate(90)">
-                <stop offset="0%" stopColor="#9333ea" />
-                <stop offset="100%" stopColor="#7c3aed" />
-              </linearGradient>
-            </defs>
-          </svg>
+        {/* RIGHT: Progress Rings - Now showing counts */}
+        <div className="flex items-center gap-9">
+          {/* Easy Progress */}
+          <div className="flex flex-col items-center">
+            <div className="w-29 h-29 drop-shadow-md relative">
+              <CircularProgressbar
+                value={easyProgress}
+                styles={buildStyles({
+                  pathTransition: "stroke-dashoffset 0.5s ease 0s",
+                  pathColor: "#22c55e",
+                  trailColor: "#e5e7eb",
+                })}
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-lg font-bold text-gray-800">
+                  {easyCompleted}/{easyQuestions.length}
+                </span>
+              </div>
+            </div>
+            <div className="text-lg font-semibold text-green-700 mt-1">Easy</div>
+          </div>
+
+          {/* Medium Progress */}
+          <div className="flex flex-col items-center">
+            <div className="w-29 h-29 drop-shadow-md relative">
+              <CircularProgressbar
+                value={mediumProgress}
+                styles={buildStyles({
+                  pathTransition: "stroke-dashoffset 0.5s ease 0s",
+                  pathColor: "#eab308",
+                  trailColor: "#e5e7eb",
+                })}
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-lg font-bold text-gray-800">
+                  {mediumCompleted}/{mediumQuestions.length}
+                </span>
+              </div>
+            </div>
+            <div className="text-lg font-semibold text-yellow-700 mt-1">Medium</div>
+          </div>
+
+          {/* Hard Progress */}
+          <div className="flex flex-col items-center">
+            <div className="w-29 h-29 drop-shadow-md relative">
+              <CircularProgressbar
+                value={hardProgress}
+                styles={buildStyles({
+                  pathTransition: "stroke-dashoffset 0.5s ease 0s",
+                  pathColor: "#ef4444",
+                  trailColor: "#e5e7eb",
+                })}
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-lg font-bold text-gray-800">
+                  {hardCompleted}/{hardQuestions.length}
+                </span>
+              </div>
+            </div>
+            <div className="text-lg font-semibold text-red-700 mt-1">Hard</div>
+          </div>
+
+          {/* Overall Progress */}
+          <div className="flex flex-col items-center ml-4">
+            <div className="w-29 h-29 drop-shadow-md relative">
+              <CircularProgressbar
+                value={progress}
+                styles={buildStyles({
+                  pathTransition: "stroke-dashoffset 0.5s ease 0s",
+                  pathColor: "#10b981",
+                  trailColor: "#e5e7eb",
+                })}
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-xl font-bold text-gray-800">
+                  {completed}/{total}
+                </span>
+              </div>
+            </div>
+            <div className="text-lg font-semibold text-emerald-700 mt-1">Overall</div>
+          </div>
         </div>
       </div>
       
 
       {/* 🔍 Filter Tabs */}
-      <div className="flex justify-start gap-3 mb-6">
-        {["All", "Solved" ,"Bookmarked", "Reminders"].map((tab) => {
-          const isActive = filter === tab;
-          return (
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6"> 
+
+        <div className="flex flex-wrap items-center gap-3">
+          {["All", "Solved", "Bookmarked", "Reminders"].map((tab) => (
             <button
               key={tab}
-              onClick={() => setFilter(tab)}
-              className={`px-4 py-1.5 text-lg rounded-full border transition-all duration-200
-                ${
-                  isActive
-                    ? "bg-indigo-600 text-white border-indigo-600 shadow-md scale-105"
-                    : "bg-gray-100 text-gray-800 border-gray-300 hover:bg-purple-50 hover:border-purple-400"
-                }`}
+              data-filter-button
+              onClick={() => {
+                setFilter(tab);
+                setSearchQuery(''); // Clear search when changing tabs
+              }}
+              className={`px-4 py-1.5 text-lg rounded-full border transition-all duration-200 ${
+                tab === filter
+                  ? "bg-indigo-600 text-white border-indigo-600 shadow-md scale-105"
+                  : "bg-gray-100 text-gray-800 border-gray-300 hover:bg-purple-50 hover:border-purple-400"
+              }`}
             >
               {tab}
             </button>
-          );
-        })}
+          ))}
+        </div>
+
+          {/* Difficulty dropdown - styled like tabs */}
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <select
+              value={difficultyFilter}
+              onChange={(e) => setDifficultyFilter(e.target.value) }
+              className="appearance-none px-4 py-1.5 pr-8 text-lg text-gray-900 rounded-full border border-gray-300 bg-white hover:bg-purple-50 hover:border-purple-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+            >
+              <option value="All">All</option>
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+              <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        
+          {/* Search Bar - now properly integrated */}
+
+          <div className="relative flex-1 min-w-[350px] max-w-md mt-3 md:mt-0">
+            
+            <input
+              type="text"
+              placeholder="🔍 Search questions..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setDifficultyFilter("All");
+                if (e.target.value) {
+                  // Auto-expand all matching topics during search
+                  const expanded = {};
+                  Object.keys(filteredQuestions).forEach(topic => {
+                    expanded[topic] = true;
+                  });
+                  setExpandedTopics(expanded);
+                } else {
+                  // Collapse all when search is cleared
+                  setExpandedTopics({});
+                }
+              }}
+              className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg bg-white hover:border-gray-600 transition-colors"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setExpandedTopics({}); // Collapse all when search is cleared
+                }}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
-
       {loading ? (
-        <p>Loading...</p>
-      ) : (
-        Object.keys(groupedQuestions).map((topic) => {
-          const allQs = groupedQuestions[topic];
-          const topicQs = allQs.filter((q) => {
-            if (filter === "Solved") return progressMap[q._id]?.isCompleted;
-            if (filter === "Bookmarked") return progressMap[q._id]?.isBookmarked;
-            if (filter === "Reminders") return progressMap[q._id]?.remindOn;
-            return true;
-          });
-          const topicCompleted = allQs.filter((q) => progressMap[q._id]?.isCompleted).length;
+        <div className="space-y-6">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="bg-white rounded-2xl p-6 animate-pulse">
+              <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+              <div className="space-y-3">
+                <div className="h-4 bg-gray-100 rounded w-full"></div>
+                <div className="h-4 bg-gray-100 rounded w-5/6"></div>
+                <div className="h-4 bg-gray-100 rounded w-2/3"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      ) : Object.keys(filteredQuestions).length > 0 ? (
+
+        Object.keys(filteredQuestions).map((topic) => {
+          const topicQs = filteredQuestions[topic];
+
+          const filteredByDifficulty = topicQs.filter(q => 
+            difficultyFilter === "All" || q.difficulty === difficultyFilter
+          );
+
+          const bookmarkedCount = topicQs.filter(q => progressMap[q._id]?.isBookmarked).length;
+          const reminderCount = topicQs.filter(q => progressMap[q._id]?.remindOn).length;
+
+          const topicCompleted = filteredByDifficulty.filter(q => progressMap[q._id]?.isCompleted).length;
+          const totalInDifficulty = filteredByDifficulty.length;
+
           const isExpanded = expandedTopics[topic] ?? false;
-          const hasProgress = allQs.some((q) => {
+
+          const hasProgress = topicQs.some((q) => {
             const p = progressMap[q._id] || {};
             return p.isCompleted || p.isBookmarked || p.remindOn || p.note;
           });
 
           return (
-              <div key={topic} className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md  transition duration-300 mb-3">
-              
-              <div
-                className={`px-4 py-2 bg-white hover:bg-emerald-50 rounded-xl transition-all duration-200 ${
-                  filter === "All" ? "flex flex-col gap-2 shadow-sm" : "flex justify-between items-center"
+              <div key={topic} className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition duration-300 mb-3">
+            
+                <div 
+                ref={(el) => (topicRefs.current[topic] = el)}
+                className={`px-4 py-2 bg-gray-50 hover:bg-indigo-50 rounded-xl transition-all duration-200 ${
+                  filter === "All" ? "flex flex-col gap-2 shadow-sm" : ""
                 } cursor-pointer`}
-                onClick={() => toggleTopic(topic)}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent event from bubbling up
+                  toggleTopic(topic);
+                }}
               >
-                {filter === "All" ? (
-                  <>
-                    {/* Line 1: Topic + Reset */}
-                    <div className="flex justify-between items-center">
-                      <h2 className="text-base sm:text-xl font-semibold text-gray-800">{topic}</h2>
+                <div className="flex justify-between items-center w-full">
+                  {/* Left side - Topic name */}
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    {expandedTopics[topic] ? (
+                      <FaChevronDown className="text-gray-500 text-sm" />
+                    ) : (
+                      <FaChevronRight className="text-gray-500 text-sm" />
+                    )}
+                    <h2 className="text-base sm:text-xl font-semibold text-gray-800 truncate">{topic}</h2>
+                  </div>
+
+                  {/* Right side - Progress bar and count+icon */}
+                  <div className="flex items-center gap-10">
+                    {filter !== "All" && (
+                      <>
+                        {/* Progress bar - now first in the right section */}
+                        <div className="w-120 h-2 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
+                          <div
+                            className="h-full bg-gradient-to-r from-indigo-500 to-indigo-700 transition-all duration-700 ease-in-out"
+                            style={{ 
+                              width: (() => {
+                                if (filter === "Solved") {
+                                  const solved = topicQs.filter(q => progressMap[q._id]?.isCompleted).length;
+                                  return topicQs.length > 0 ? `${Math.round((solved / topicQs.length) * 100)}%` : "0%";
+                                } else if (filter === "Bookmarked") {
+                                  const bookmarked = topicQs.filter(q => progressMap[q._id]?.isBookmarked);
+                                  const solved = bookmarked.filter(q => progressMap[q._id]?.isCompleted).length;
+                                  return bookmarked.length > 0 ? `${Math.round((solved / bookmarked.length) * 100)}%` : "0%";
+                                } else if (filter === "Reminders") {
+                                  const reminders = topicQs.filter(q => progressMap[q._id]?.remindOn);
+                                  const solved = reminders.filter(q => progressMap[q._id]?.isCompleted).length;
+                                  return reminders.length > 0 ? `${Math.round((solved / reminders.length) * 100)}%` : "0%";
+                                }
+                                return "0%";
+                              })()
+                            }}
+                          ></div>
+                        </div>
+
+                        {/* Count + icon - now after progress bar */}
+                        <div className="flex items-center w-20 flex-shrink-0"> {/* Fixed width container */}
+                          <span className="mr-1">{/* Icon */}
+                            {filter === "Solved" && "✅"}
+                            {filter === "Bookmarked" && "🔖"}
+                            {filter === "Reminders" && "⏰"}
+                          </span>
+                          <span className="font-mono tabular-nums tracking-tight text-2xl"> {/* Monospace numbers */}
+                            {filter === "Solved" && topicQs.filter(q => progressMap[q._id]?.isCompleted).length}
+                            {filter === "Bookmarked" && bookmarkedCount}
+                            {filter === "Reminders" && reminderCount}
+                          </span>
+                        </div>
+                      </>
+                    )}
+
+                    {/* Reset button - only for "All" filter */}
+                    {filter === "All" && !searchQuery && difficultyFilter === "All" && (
                       <button
                         title="Reset all progress.."
                         disabled={resettingTopic === topic || !hasProgress}
@@ -356,36 +648,39 @@ const DSASheet = () => {
                           await handleResetTopic(topic);
                           setResettingTopic(null);
                         }}
-                        className={`flex items-center gap-1 text-sb font-medium rounded-full px-3 py-1 border transition 
-                          ${
-                            resettingTopic === topic || !hasProgress
-                              ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-                              : "text-gray-900  border-red-600 hover:bg-red-300 hover:ring hover:ring-red-100 hover:border-red-500 hover:font-bold transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-sm" 
-                          }` }
+                        className={`flex items-center gap-1 text-sb font-medium rounded-full px-3 py-1 border transition ${
+                          resettingTopic === topic || !hasProgress
+                            ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                            : "text-gray-900 border-red-600 hover:bg-red-300 hover:ring hover:ring-red-100 hover:border-red-500 hover:font-bold transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-sm" 
+                        }`}
                       >
                         {resettingTopic === topic ? "⟳ Resetting..." : "⟳ Reset"}
                       </button>
-                    </div>
+                    )}
+                  </div>
+                </div>
 
-                    {/* Line 2: Progress Bar */}
+                {/* Progress bar and details - only for "All" filter */}
+                {filter === "All" && (
+                  <>
                     <div className="w-full mt-1">
                       <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-emerald-500 to-emerald-700 transition-all duration-700 ease-in-out"
-                          style={{ width: animatedWidths[topic] ? `${animatedWidths[topic]}%` : "0%" }}
+                          className="h-full bg-gradient-to-r from-indigo-500 to-indigo-700 transition-all duration-700 ease-in-out"
+                          style={{ 
+                            width: difficultyFilter === "All"
+                              ? (animatedWidths[topic] ? `${animatedWidths[topic]}%` : "0%")
+                              : (totalInDifficulty > 0 
+                                  ? `${Math.round((topicCompleted / totalInDifficulty) * 100)}%` : "0%")
+                          }}
                         ></div>
                       </div>
                     </div>
-
-                    {/* Line 3: Progress Count + Bookmarks + Reminders */}
                     <div className="flex justify-between items-center mt-3 text-xl text-gray-600">
-                      {/* ✅ Progress count (no capsule) */}
                       <div className="text-emerald-700 font-semibold text-sm">
-                        ✅ {topicCompleted} / {topicQs.length}
+                        ✅ {topicQs.filter(q => progressMap[q._id]?.isCompleted).length}/{topicQs.length}
                       </div>
-
-                      {/* 🔖 ⏰ */}
-                      <div className="flex gap-4 text-xl  text-gray-600">
+                      <div className="flex gap-4 text-xl text-gray-600">
                         <div className="flex items-center gap-1" title="Bookmarked">
                           🔖 {topicQs.filter((q) => progressMap[q._id]?.isBookmarked).length}
                         </div>
@@ -395,21 +690,15 @@ const DSASheet = () => {
                       </div>
                     </div>
                   </>
-                ) : (
-                  <>
-                    <h2 className="text-base sm:text-xl font-semibold text-black">{topic}</h2>
-                    <div className="text-lg text-gray-600">
-                      🔖 {topicQs.filter((q) => progressMap[q._id]?.isBookmarked).length}
-                      &nbsp; • &nbsp;
-                      ⏰ {topicQs.filter((q) => progressMap[q._id]?.remindOn).length}
-                    </div>
-                  </>
                 )}
               </div>
 
               {/* ✅ Table Content */}
               {isExpanded && (
-              <div className="w-full">
+              <div
+                   ref={(el) => (topicRefs.current[`${topic}-content`] = el)} 
+                   onClick={(e) => e.stopPropagation()}
+                  className="w-full">
                 {/* Headers */}
                 <div className="grid grid-cols-[70px_2.5fr_.85fr_.85fr_.85fr_1fr_1.5fr] px-4 py-2 text-lg font-bold text-gray-800 border-b bg-blue-50">
                   <div>Status</div>
@@ -423,7 +712,7 @@ const DSASheet = () => {
 
                 {/* Questions */}
                 <div className="flex flex-col gap-3 mt-2">
-                  {topicQs.map((q, idx) => {
+                  {topicQs.map((q) => {
                     const p = progressMap[q._id] || {};
                     return (
                       <div
@@ -436,7 +725,10 @@ const DSASheet = () => {
                             type="checkbox"
                             className="accent-green-600 w-6 h-6"
                             checked={p.isCompleted || false}
-                            onChange={() => handleToggle(q._id, "isCompleted")}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              handleToggle(q._id, "isCompleted");
+                            }}
                           />
                         </div>
 
@@ -445,7 +737,7 @@ const DSASheet = () => {
                           onClick={() => handleToggle(q._id, "isCompleted")}
                           title={q.title}
                         >
-                          {q.title}
+                          {highlightMatch(q.title, searchQuery)}
                         </div>
 
                         {/* Practice */}
@@ -625,12 +917,15 @@ const DSASheet = () => {
                 </div>
               </div>
             )}
-
-
-              
-            </div>
+          </div>
           );
         })
+        ) : (
+        <div className="text-center py-10 text-gray-500">
+          {searchQuery 
+            ? `No questions found matching "${searchQuery}"`
+            : `No questions match the current filter`}
+        </div>
         )}
     </div>
   );

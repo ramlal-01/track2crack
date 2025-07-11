@@ -7,3 +7,11 @@ html {
 body {
   font-family: 'Inter', sans-serif;
 }
+
+.rotate-90 {
+  transform: rotate(90deg);
+}
+
+.arrow-transition {
+  transition: transform 0.2s ease;
+}

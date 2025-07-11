@@ -28,7 +28,7 @@ const App = () => {
 
       {/* ✅ Add this to enable toast messages */}
       <ToastContainer
-        position="bottom-right"
+        position="top-center"
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
