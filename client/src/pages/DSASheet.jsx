@@ -354,7 +354,7 @@ useEffect(() => {
 
   return (
     <div className="p-6 md:p-10 min-h-screen bg-slate-50">
-      <div className="flex justify-between items-center mb-10 px-10 py-4 bg-white rounded-2xl shadow-md">
+      <div className="flex justify-between items-center mb-10 px-10 py-4 bg-gradient-to-r from-purple--100 to-blue-100 rounded-2xl shadow-md">
         {/* LEFT: Title and Subtitle */}
         <div>
           <h1 className="text-4xl font-extrabold text-indigo-700 flex items-center gap-2 tracking-tight">
@@ -536,7 +536,7 @@ useEffect(() => {
       {loading ? (
         <div className="space-y-6">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl p-6 animate-pulse">
+            <div key={i} className="bg-indigo-50 rounded-2xl p-6 animate-pulse">
               <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
               <div className="space-y-3">
                 <div className="h-4 bg-gray-100 rounded w-full"></div>
