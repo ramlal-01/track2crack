@@ -15,6 +15,9 @@ import Quiz from "./pages/quiz/Quiz";
 import QuizHistory from "./pages/quiz/QuizHistory";
 import MainHistory from './pages/MainHistory';
 import RevisionPlanner from './pages/RevisionPlanner'
+import ProfilePage from './pages/ProfilePage'
+import EditProfile from './pages/EditProfile'
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -38,7 +41,8 @@ const App = () => {
                 {/* <Route path="/profile" element={<Profile />} /> */}
             <Route path="/quizhistory" element={<MainHistory />} />
             <Route path="/dashboard/revision-Plannar" element={<RevisionPlanner />} />
-
+            <Route path="/profile/" element={<ProfilePage />} />
+            <Route path="/edit-profile" element={<EditProfile />} />
           </Routes>
         </div>
         <Footer />

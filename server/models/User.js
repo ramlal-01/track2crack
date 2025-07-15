@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -17,9 +18,44 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Password is required'],
     minlength: 60
-  }, 
+  },
   avatarUrl: {
     type: String,
+    default: ''
+  },
+  phone: {
+    type: String,
+    default: ''
+  },
+  gender: {
+    type: String,
+    enum: ['Male', 'Female', 'Other', ''],
+    default: ''
+  },
+  dob: {
+    type: Date,
+    default: null
+  },
+  dateOfJoining: {
+    type: Date,
+    default: Date.now
+  },
+  linkedin: {
+    type: String,
+    default: ''
+  },
+  github: {
+    type: String,
+    default: ''
+  },
+  college: {
+    type: String,
+    default: ''
+  },
+  username: {
+    type: String,
+    unique: true,
+    trim: true,
     default: ''
   },
   role: {
@@ -32,9 +68,7 @@ const userSchema = new mongoose.Schema({
     default: false
   }
 }, {
-  timestamps: true // adds createdAt and updatedAt
+  timestamps: true
 });
-
-
 
 module.exports = mongoose.model('User', userSchema);
