@@ -112,10 +112,8 @@ exports.changePassword = async (req, res) => {
 
 exports.deleteAccount = async (req, res) => {
   const userId = req.user.userId;
-  
-  try {
-    await User.findByIdAndDelete(userId);
 
+  try { 
     await Promise.all([
       User.findByIdAndDelete(userId),
       DSAProgress.deleteOne({ userId }),
@@ -126,6 +124,8 @@ exports.deleteAccount = async (req, res) => {
 
     res.status(200).json({ message: "Account deleted successfully" });
   } catch (err) {
+    console.error("Account deletion failed:", err);
     res.status(500).json({ message: "Server error while deleting account" });
   }
 };
+
