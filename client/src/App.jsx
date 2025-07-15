@@ -17,7 +17,9 @@ import MainHistory from './pages/MainHistory';
 import RevisionPlanner from './pages/RevisionPlanner'
 import ProfilePage from './pages/ProfilePage'
 import EditProfile from './pages/EditProfile'
-
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import VerifyEmail from './pages/VerifyEmail';
 const App = () => {
   return (
     <BrowserRouter>
@@ -43,6 +45,9 @@ const App = () => {
             <Route path="/dashboard/revision-Plannar" element={<RevisionPlanner />} />
             <Route path="/profile/" element={<ProfilePage />} />
             <Route path="/edit-profile" element={<EditProfile />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
+            <Route path="/verify-email/:token" element={<VerifyEmail />} />
           </Routes>
         </div>
         <Footer />

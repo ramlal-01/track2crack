@@ -7,9 +7,7 @@ import {
   FaLock,
   FaGoogle,
   FaGithub,
-  FaLinkedin,
-  FaEye,
-  FaEyeSlash
+  FaLinkedin
 } from 'react-icons/fa';
 
 // Password strength logic
@@ -48,9 +46,7 @@ const Register = () => {
     confirmPassword: ''
   });
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -67,17 +63,20 @@ const Register = () => {
       return;
     }
 
+    setLoading(true);
     try {
       await API.post('/auth/register', {
         name: formData.name,
         email: formData.email,
         password: formData.password
       });
-      alert('Registration successful! Please login.');
+      alert('✅ Registration successful! Please check your email and verify your account before logging in.');
       navigate('/login');
     } catch (err) {
       console.error('FULL ERROR:', err);
       alert('Registration failed: ' + (err.response?.data?.message || err.message));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -161,7 +160,6 @@ const Register = () => {
               />
             </div>
 
-            {/* Password Strength */}
             {formData.password && (
               <>
                 <div className="w-full h-2 mt-2 rounded bg-gray-200">
@@ -206,14 +204,24 @@ const Register = () => {
           {/* Submit */}
           <button
             type="submit"
-            disabled={!isFormValid}
+            disabled={!isFormValid || loading}
             className={`w-full py-2 rounded-md font-semibold transition ${
-              isFormValid
+              isFormValid && !loading
                 ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
           >
-            Register
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                </svg>
+                Registering...
+              </span>
+            ) : (
+              "Register"
+            )}
           </button>
         </form>
 

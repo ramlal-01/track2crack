@@ -11,3 +11,6 @@ connectDB().then(() => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
   });
 });
+
+const cleanupExpiredResetTokens = require('./cronJobs/cleanupResetTokens');
+cleanupExpiredResetTokens(); // 🔁 Start the cron job

@@ -7,6 +7,10 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false); // ✅ Missing loading state
   const navigate = useNavigate();
+  const [showResend, setShowResend] = useState(false);
+  const [unverifiedEmail, setUnverifiedEmail] = useState('');
+  const [resending, setResending] = useState(false);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -28,7 +32,8 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // ✅ Set loading true on submit
+    setLoading(true);
+    setShowResend(false); // Reset in case previously shown
     try {
       const response = await API.post('/auth/login', formData);
       const { token, user } = response.data;
@@ -36,12 +41,43 @@ const Login = () => {
       localStorage.setItem('userId', user._id);
       navigate('/dashboard');
     } catch (err) {
-      console.error('Login error:', err.response?.data?.message || err.message);
-      alert('Invalid credentials or server error');
+      const msg = err.response?.data?.message || err.message;
+      console.error('Login error:', msg);
+
+      if (err.response?.status === 403 && msg === 'Please verify your email before logging in.') {
+        alert('❗ Please verify your email before logging in.');
+        setShowResend(true);
+        setUnverifiedEmail(formData.email);
+      } else if (err.response?.status === 401) {
+        alert('❌ Invalid credentials. Please try again.');
+      } else {
+        alert('🚨 Server error. Please try again later.');
+      }
     } finally {
-      setLoading(false); // ✅ Reset loading
+      setLoading(false);
     }
   };
+
+
+
+  const handleResend = async () => {
+    if (!unverifiedEmail) return;
+
+    try {
+      if (resending) return;
+
+      setResending(true);
+      await API.post('/auth/resend-verification', { email: unverifiedEmail });
+      alert('Verification email resent. Check your inbox.');
+    } catch (err) {
+      alert('Failed to resend verification email');
+      console.error(err);
+    } finally {
+      setResending(false);
+    }
+  };
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -123,9 +159,9 @@ const Login = () => {
         </form>
 
         <div className="text-center mt-4">
-          <a href="#" className="text-sm text-gray-600 hover:underline">
+          <Link to="/forgot-password" className="text-sm text-gray-600 hover:underline">
             Forgot password?
-          </a>
+          </Link>
         </div>
 
         <div className="text-center mt-2">
@@ -151,6 +187,20 @@ const Login = () => {
             </button>
           </div>
         </div>
+
+        {showResend && (
+          <div className="text-center mt-4">
+            <button
+              onClick={handleResend}
+              disabled={resending}
+              className="text-blue-600 hover:underline font-medium"
+            >
+              {resending ? 'Resending...' : 'Resend Verification Email'}
+            </button>
+          </div>
+        )}
+
+
       </div>
     </div>
   );
