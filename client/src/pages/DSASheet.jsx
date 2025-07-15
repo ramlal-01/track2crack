@@ -479,7 +479,7 @@ useEffect(() => {
             <select
               value={difficultyFilter}
               onChange={(e) => setDifficultyFilter(e.target.value) }
-              className="appearance-none px-4 py-1.5 pr-8 text-lg text-gray-900 rounded-full border border-gray-300 bg-white hover:bg-purple-50 hover:border-purple-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+              className="appearance-none px-4 py-1.5 pr-8 text-lg text-gray-900 rounded-full border border-gray-400 bg-white hover:bg-purple-50 hover:border-purple-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
             >
               <option value="All">All</option>
               <option value="Easy">Easy</option>
@@ -516,7 +516,7 @@ useEffect(() => {
                   setExpandedTopics({});
                 }
               }}
-              className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg bg-white hover:border-gray-600 transition-colors"
+              className="w-full px-4 py-2 border border-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg bg-white hover:border-gray-600 transition-colors"
             />
             {searchQuery && (
               <button
@@ -574,7 +574,7 @@ useEffect(() => {
             
                 <div 
                 ref={(el) => (topicRefs.current[topic] = el)}
-                className={`px-4 py-2 bg-gray-50 hover:bg-indigo-50 rounded-xl transition-all duration-200 ${
+                className={`px-4 py-2 bg-gray-50 hover:bg-indigo-50 rounded-xl transition-all duration-200 border border-indigo-300 ${
                   filter === "All" ? "flex flex-col gap-2 shadow-sm" : ""
                 } cursor-pointer`}
                 onClick={(e) => {

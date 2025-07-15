@@ -111,12 +111,26 @@ const TheoryPage = ({ subject, title }) => {
         autoClose: 2000,
       });
     } else if (field === "isBookmarked") {
-      toast(updated.isBookmarked ? "Bookmarked!" : "Removed bookmark!", {
-        type: updated.isBookmarked ? "success" : "error",
-        position: "top-center",
-        autoClose: 2000,
-      });
-    } else if (field === "remindOn") {
+        if (!prev?.isBookmarked && value !== false) {
+          await fetch("http://localhost:5000/api/bookmarks/access", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              itemType: "theory",
+              itemId: topicId,
+            }),
+          });
+        }
+
+        toast(updated.isBookmarked ? "Bookmarked!" : "Removed bookmark!", {
+          type: updated.isBookmarked ? "success" : "error",
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else if (field === "remindOn") {
       if (value) {
         toast("Reminder set!", { type: "success", position: "top-center", autoClose: 2000 });
       } else if (prev.remindOn && !value) {
@@ -187,11 +201,11 @@ const TheoryPage = ({ subject, title }) => {
   });
 
   return (
-    <div className="p-6 max-w-6xl mx-auto text-sm bg-gray-50 min-h-screen">
-      <ToastContainer />
+    <div className="p-6 md:p-10 min-h-screen bg-slate-50 text-xl">
+       
       
       {/* 🎯 Dashboard Cards */}
-      <h2 className="text-3xl font-bold text-center text-indigo-800 mb-6">{title} Theory Dashboard</h2>
+      <h2 className="text-4xl font-bold text-center text-indigo-800 mb-6">{title} Theory Dashboard</h2>
       <div className="grid grid-cols-4 gap-4 mb-8 text-center">
         <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-lg border border-indigo-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="text-2xl font-bold text-indigo-700">{total}</div>
@@ -261,13 +275,13 @@ const TheoryPage = ({ subject, title }) => {
             placeholder="Search topics..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-3 py-2 rounded border border-gray-300 shadow-sm w-48 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            className="px-3 py-2 rounded border border-gray-300 shadow-sm w-98 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
       </div>
 
       {/* 📋 Table Header */}
-      <div className="grid grid-cols-[80px_2fr_76px_68px_90px_90px_100px_130px] font-semibold text-gray-600 border-b-2 border-gray-200 pb-3 mb-3">
+      <div className="grid grid-cols-[85px_3fr_.85fr_.85fr_.85fr_.85fr_.85fr_1.85fr] font-semibold text-lg text-gray-600 border-b-2 border-gray-200 pb-3 mb-3">
         <div className="text-center">Status</div>
         <div className="pl-2">Topic</div>
         <div className="text-left">GFG</div>
@@ -288,7 +302,7 @@ const TheoryPage = ({ subject, title }) => {
         return (
           <div
             key={topic._id}
-            className={`grid grid-cols-[60px_2fr_70px_70px_90px_90px_100px_120px] items-center p-3 mb-3 rounded-xl transition-all ${
+            className={`grid grid-cols-[85px_3fr_.85fr_.85fr_.85fr_.85fr_.85fr_1.85fr] items-center p-3 mb-3 rounded-xl transition-all ${
               isCompleted 
                 ? "bg-green-50 border-2 border-green-400 hover:border-green-500" 
                 : "bg-white border border-amber-300 hover:border-amber-400"
@@ -318,7 +332,7 @@ const TheoryPage = ({ subject, title }) => {
             <div>
               {gfg ? (
                 <a href={gfg.url} target="_blank" rel="noreferrer" className="inline-block hover:scale-110 transition-transform">
-                  <img src={getIconUrl("article", gfg.url)} className="w-6 h-6" />
+                  <img src={getIconUrl("article", gfg.url)} className="w-7 h-7" />
                 </a>
               ) : (
                 <span className="text-gray-400">-</span>
@@ -329,7 +343,7 @@ const TheoryPage = ({ subject, title }) => {
             <div>
               {yt ? (
                 <a href={yt.url} target="_blank" rel="noreferrer" className="inline-block hover:scale-110 transition-transform">
-                  <img src={getIconUrl("video", yt.url)} className="w-6 h-6" />
+                  <img src={getIconUrl("video", yt.url)} className="w-7 h-7" />
                 </a>
               ) : (
                 <span className="text-gray-400">-</span>
@@ -341,7 +355,7 @@ const TheoryPage = ({ subject, title }) => {
               {topic.type === "Important" ? (
                 <button 
                   onClick={() => handleSingleTopicQuiz(topic.title)} 
-                  className="px-2 py-1 text-xs bg-gradient-to-br from-purple-100 to-purple-50 hover:from-purple-200 hover:to-purple-100 text-purple-800 rounded border border-purple-200 transition-all"
+                  className="px-2 py-1 text-lg bg-gradient-to-br from-purple-100 to-purple-50 hover:from-purple-200 hover:to-purple-100 text-purple-800 rounded border border-purple-200 transition-all"
                 >
                   Quiz
                 </button>

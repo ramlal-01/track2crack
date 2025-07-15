@@ -15,3 +15,8 @@ body {
 .arrow-transition {
   transition: transform 0.2s ease;
 }
+
+.react-calendar {
+  width: 100%;
+  border: none;
+}

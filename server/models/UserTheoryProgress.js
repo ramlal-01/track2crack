@@ -23,6 +23,14 @@ const userTheoryProgressSchema = new mongoose.Schema({
   remindOn: {
     type: Date,
     default: null
+  },
+  lastAccessed: {
+    type: Date,
+    default: null
+  },
+  note: {
+    type: String,
+    default: ""
   }
 }, {
   timestamps: true

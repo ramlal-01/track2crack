@@ -28,6 +28,10 @@ const userDSAProgressSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
+  lastAccessed: {
+    type: Date,
+    default: null
+  }
 }, {
   timestamps: true
 });

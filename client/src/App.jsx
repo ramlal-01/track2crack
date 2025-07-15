@@ -14,7 +14,7 @@ import OOPS from './pages/theory/OOPS';             // ✅ OOPS Theory Page (NEW
 import Quiz from "./pages/quiz/Quiz";
 import QuizHistory from "./pages/quiz/QuizHistory";
 import MainHistory from './pages/MainHistory';
-
+import RevisionPlanner from './pages/RevisionPlanner'
 const App = () => {
   return (
     <BrowserRouter>
@@ -37,6 +37,7 @@ const App = () => {
                 <Route path="/quiz/history" element={<QuizHistory />} />
                 {/* <Route path="/profile" element={<Profile />} /> */}
             <Route path="/quizhistory" element={<MainHistory />} />
+            <Route path="/dashboard/revision-Plannar" element={<RevisionPlanner />} />
 
           </Routes>
         </div>

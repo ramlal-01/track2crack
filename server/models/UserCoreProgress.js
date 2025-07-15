@@ -23,6 +23,10 @@ const userCoreProgressSchema = new mongoose.Schema({
   remindOn: {
     type: Date,
     default: null
+  },
+  lastAccessed: {
+    type: Date,
+    default: null
   }
 }, {
   timestamps: true
