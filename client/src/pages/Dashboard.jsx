@@ -1,78 +1,38 @@
-import { useEffect, useState } from "react"
-import API from "../api/api"
-import { useNavigate } from "react-router-dom"
+import React, { useState } from "react";
 
-function Dashboard() {
-  const [dsa, setDsa] = useState(null)
-  const [core, setCore] = useState(null)
-  const [theory, setTheory] = useState(null)
-  const [quizzes, setQuizzes] = useState([])
-  const navigate = useNavigate()
+const Dashboard = () => {
+  const [theme, setTheme] = useState("light");
 
-  const userId = localStorage.getItem("userId")
-
-  useEffect(() => {
-    if (!userId) {
-      navigate("/login")
-      return
-    }
-
-    const fetchData = async () => {
-      try {
-        const [dsaRes, coreRes, theoryRes, quizRes] = await Promise.all([
-          API.get(`/dsa/progress/${userId}`),
-          API.get(`/core/progress/${userId}`),
-          API.get(`/theory/progress/${userId}`),
-          API.get(`/quiz/history?limit=5`),
-        ])
-        setDsa(dsaRes.data)
-        setCore(coreRes.data)
-        setTheory(theoryRes.data)
-        setQuizzes(quizRes.data)
-      } catch (err) {
-        console.error("Error fetching dashboard data:", err)
-      }
-    }
-
-    fetchData()
-  }, [userId])
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
+  };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
+      {/* Sidebar Placeholder */}
+      <aside className="w-64 bg-white dark:bg-gray-900 p-4 shadow-md">
+        <h2 className="text-xl font-bold text-gray-800 dark:text-white">Sidebar</h2>
+        <button
+          onClick={toggleTheme}
+          className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg"
+        >
+          Toggle Theme
+        </button>
+      </aside>
 
-      <section className="mb-6">
-        <h2 className="text-lg font-semibold">DSA Progress</h2>
-        <p>Solved: {dsa?.solved || 0} / {dsa?.total || 0}</p>
-      </section>
-
-      <section className="mb-6">
-        <h2 className="text-lg font-semibold">Core Subjects</h2>
-        <p>Completed: {core?.completed || 0} / {core?.total || 0}</p>
-      </section>
-
-      <section className="mb-6">
-        <h2 className="text-lg font-semibold">Theory</h2>
-        <p>Completed: {theory?.completed || 0} / {theory?.total || 0}</p>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-semibold mb-2">Recent Quizzes</h2>
-        {!Array.isArray(quizzes) || quizzes.length === 0 ? (
-          <p>No quizzes attempted yet.</p>
-        ) : (
-          <ul className="list-disc ml-6">
-            {quizzes.map((q, index) => (
-              <li key={index}>
-                {q.subject} - Score: {q.score}/{q.total} ({new Date(q.takenAt).toLocaleDateString()})
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
+      {/* Main Dashboard Content */}
+      <main className="flex-1 p-6">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">
+          Dashboard
+        </h1>
+        <p className="text-gray-700 dark:text-gray-300">
+          This is a basic dashboard layout. You can now re-integrate individual components step by step.
+        </p>
+      </main>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

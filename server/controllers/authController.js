@@ -5,6 +5,11 @@ const crypto = require('crypto');
 const sendResetEmail = require('../utils/sendResetEmail');
 const sendVerificationEmail = require('../utils/sendVerificationEmail');
 
+const FRONTEND_URL = process.env.USE_PROD_URL === "true"
+  ? process.env.FRONTEND_URL_PROD
+  : process.env.FRONTEND_URL_DEV;
+
+
 // POST /api/auth/register
 exports.registerUser = async (req, res) => {
   try {
@@ -43,7 +48,7 @@ exports.registerUser = async (req, res) => {
     console.log(`🔑 Raw verification token: ${rawToken}`);
     console.log(`🔐 Hashed verification token stored: ${hashedToken}`);
     const encodedToken = encodeURIComponent(rawToken);
-    const verificationURL = `http://localhost:5173/verify-email/${encodedToken}`;
+    const verificationURL = `${FRONTEND_URL}/verify-email/${encodedToken}`;
 
     
     sendVerificationEmail(email, verificationURL).catch(err =>
@@ -134,7 +139,7 @@ exports.forgotPassword = async (req, res) => {
   user.resetPasswordExpires = expiry;
   await user.save();
 
-  const resetURL = `http://localhost:5173/reset-password/${rawToken}`;
+  const resetURL = `${FRONTEND_URL}/reset-password/${rawToken}`;
   await sendResetEmail(email, resetURL);
 
   res.status(200).json({ message: 'Reset link sent if email exists' });
@@ -234,7 +239,7 @@ exports.resendVerification = async (req, res) => {
   user.emailVerificationExpires = expiry;
   await user.save();
 
-  const verificationURL = `http://localhost:5173/verify-email/${encodeURIComponent(rawToken)}`;
+  const verificationURL = `${FRONTEND_URL}/verify-email/${encodeURIComponent(rawToken)}`;
   console.log("📧 Sending verification to:", email);
   console.log("🔗 Link:", verificationURL);
 
