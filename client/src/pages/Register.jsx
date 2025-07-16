@@ -9,6 +9,8 @@ import {
   FaGithub,
   FaLinkedin
 } from 'react-icons/fa';
+import { auth, googleProvider, githubProvider } from '../firebase';
+import { signInWithPopup } from 'firebase/auth';
 
 // Password strength logic
 const getPasswordStrength = (password) => {
@@ -100,6 +102,39 @@ const Register = () => {
     formData.confirmPassword.trim() !== '' &&
     passwordsMatch &&
     strength >= 3;
+
+
+    
+
+  const handleOAuthLogin = async (providerName) => {
+      try {
+        const provider = providerName === 'google' ? googleProvider : githubProvider;
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+
+        const payload = {
+          email: user.email,
+          uid: user.uid,
+          name: user.displayName,
+          avatarUrl: user.photoURL,
+          provider: user.providerData[0]?.providerId || providerName,
+          emailVerified: user.emailVerified,
+        };
+
+        const response = await API.post('/auth/social-login', payload);
+        const { token: backendToken, user: backendUser } = response.data;
+
+        localStorage.setItem('token', backendToken);
+        localStorage.setItem('userId', backendUser._id);
+        navigate('/dashboard');
+      } catch (error) {
+        console.error('OAuth signup failed:', error);
+        alert('OAuth signup failed. Please try again.');
+      }
+    };
+
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -236,16 +271,21 @@ const Register = () => {
         </div>
 
         <div className="mt-6">
-          <p className="text-center text-sm text-gray-500 mb-2">Or sign up with:</p>
-          <div className="flex justify-center space-x-4">
-            <button className="bg-blue-600 text-white p-2 rounded-full hover:opacity-80 transition">
-              <FaGoogle />
+          <p className="text-center text-sm text-gray-500 mb-4">Or Sign up with:</p>
+          <div className="space-y-3">
+            <button
+              onClick={() => handleOAuthLogin('google')}
+              className="flex items-center justify-center w-full border border-gray-300 rounded-full py-2 text-sm font-semibold text-gray-800 shadow-sm hover:shadow-md transition hover:bg-red-50"
+            >
+              <FaGoogle className="mr-2 text-xl text-[#e3580e]" />
+              Sign up with Google
             </button>
-            <button className="bg-pink-500 text-white p-2 rounded-full hover:opacity-80 transition">
-              <FaGithub />
-            </button>
-            <button className="bg-blue-400 text-white p-2 rounded-full hover:opacity-80 transition">
-              <FaLinkedin />
+            <button
+              onClick={() => handleOAuthLogin('github')}
+              className="flex items-center justify-center w-full border border-gray-300 rounded-full py-2 text-sm font-semibold text-gray-800 shadow-sm hover:shadow-md transition hover:bg-gray-100"
+            >
+              <FaGithub className="mr-2 text-xl text-gray-800" />
+              Sign up with GitHub
             </button>
           </div>
         </div>

@@ -247,3 +247,43 @@ exports.resendVerification = async (req, res) => {
 
   res.status(200).json({ message: "Verification email resent successfully" });
 };
+
+
+
+
+// POST /api/auth/social-login
+exports.socialLogin = async (req, res) => {
+  try {
+    const { email, uid, name, provider, avatarUrl, emailVerified } = req.body;
+
+    if (!email || !uid || !provider) {
+      console.error("❌ Missing required fields", req.body);
+      return res.status(400).json({ message: "Missing required fields." });
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = new User({
+        name: name || 'No Name',
+        email,
+        avatarUrl: avatarUrl || '',
+        isVerified: emailVerified || false,
+        password: crypto.randomBytes(32).toString("hex"),
+        username: email.split('@')[0] + Math.floor(Math.random() * 10000),
+      });
+
+      await user.save();
+    }
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d"
+    });
+
+    console.log("✅ Social login successful:", user.email);
+    res.json({ token, user });
+  } catch (err) {
+    console.error("❌ Social login server error:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};

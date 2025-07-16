@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API from '../api/api';
 import { FaEnvelope, FaLock, FaGoogle, FaGithub, FaLinkedin } from 'react-icons/fa';
+import { auth, googleProvider, githubProvider } from '../firebase';
+import { signInWithPopup } from 'firebase/auth';
+
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -76,6 +79,36 @@ const Login = () => {
       setResending(false);
     }
   };
+
+
+const handleOAuthLogin = async (providerName) => {
+  try {
+    const provider = providerName === 'google' ? googleProvider : githubProvider;
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    const payload = {
+      email: user.email,
+      uid: user.uid,
+      name: user.displayName,
+      avatarUrl: user.photoURL,
+      provider: user.providerData[0]?.providerId || providerName,
+      emailVerified: user.emailVerified,
+    };
+
+    console.log("🔐 Firebase user:", payload); // Add this
+    const response = await API.post('/auth/social-login', payload);
+    console.log("✅ Backend response:", response.data); // Add this
+
+    const { token: backendToken, user: backendUser } = response.data;
+    localStorage.setItem('token', backendToken);
+    localStorage.setItem('userId', backendUser._id);
+    navigate('/dashboard');
+  } catch (error) {
+    console.error('❌ OAuth login error:', error.response?.data || error.message);
+    alert('OAuth login failed. Please try again.');
+  }
+};
 
 
 
@@ -173,20 +206,26 @@ const Login = () => {
           </p>
         </div>
 
-        <div className="mt-6">
-          <p className="text-center text-sm text-gray-500 mb-2">Or log in with:</p>
-          <div className="flex justify-center space-x-4">
-            <button className="bg-blue-600 text-white p-2 rounded-full hover:opacity-80 transition">
-              <FaGoogle />
-            </button>
-            <button className="bg-pink-500 text-white p-2 rounded-full hover:opacity-80 transition">
-              <FaGithub />
-            </button>
-            <button className="bg-blue-400 text-white p-2 rounded-full hover:opacity-80 transition">
-              <FaLinkedin />
-            </button>
-          </div>
+       <div className="mt-6">
+        <p className="text-center text-sm text-gray-500 mb-4">Or log in with:</p>
+        <div className="space-y-3">
+          <button
+            onClick={() => handleOAuthLogin('google')}
+            className="flex items-center justify-center w-full border border-gray-300 rounded-full py-2 text-sm font-semibold text-gray-800 shadow-sm hover:shadow-md transition hover:bg-red-50"
+          >
+            <FaGoogle className="mr-2 text-xl text-[#DB4437]" />
+            Sign in with Google
+          </button>
+          <button
+            onClick={() => handleOAuthLogin('github')}
+            className="flex items-center justify-center w-full border border-gray-300 rounded-full py-2 text-sm font-semibold text-gray-800 shadow-sm hover:shadow-md transition hover:bg-gray-100"
+          >
+            <FaGithub className="mr-2 text-xl text-gray-800" />
+            Sign in with GitHub
+          </button>
         </div>
+      </div>
+
 
         {showResend && (
           <div className="text-center mt-4">

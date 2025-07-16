@@ -77,6 +77,21 @@ const userSchema = new mongoose.Schema({
     type: String, 
   },
   emailVerificationExpires: Date, 
+  
+  // ✅ Social login fields
+  provider: {
+    type: String,
+    enum: ['local', 'google', 'github', 'linkedin'],
+    default: 'local'
+  },
+  providerId: {
+    type: String,
+    default: null
+  },
+  emailVerified: {
+    type: Boolean,
+    default: false
+  }
 }, {
   timestamps: true
 });
