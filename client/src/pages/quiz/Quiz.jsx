@@ -28,8 +28,9 @@ const Quiz = () => {
     if (!saved) {
       toast.error("No quiz found. Redirecting...");
       const fallbackSubject = localStorage.getItem("viewHistoryFor") || "java";
+      const fallbackSource = localStorage.getItem("viewHistorySource") || "theory";
       setTimeout(() => {
-        navigate(`/theory/${fallbackSubject.toLowerCase()}`);
+        navigate(`/dashboard/${fallbackSource.toLowerCase()}/${fallbackSubject.toLowerCase()}`);
       }, 200);
       return;
     }
@@ -111,6 +112,7 @@ const Quiz = () => {
       if (res.ok) {
         toast.success(`Quiz submitted! Score: ${correctCount}/${questions.length}`);
         localStorage.setItem("viewHistoryFor", quizData.subject);
+        localStorage.setItem("viewHistorySource", quizData.source); 
         localStorage.removeItem("activeQuiz");
       } else {
         toast.error(data.message || "Submission failed.");
@@ -423,7 +425,10 @@ const Quiz = () => {
             {/* Moved View Quiz History button here with better styling */}
             <Link
               to="/quiz/history"
-              onClick={() => localStorage.setItem("viewHistoryFor", quizData.subject)}
+              onClick={() => {
+                localStorage.setItem("viewHistoryFor", quizData.subject);
+                localStorage.setItem("viewHistorySource", quizData.source); 
+              }}
               className={`inline-block px-6 py-3 rounded-lg font-medium text-lg ${
                 darkMode 
                   ? "bg-indigo-600 hover:bg-indigo-700 text-white" 

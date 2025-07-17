@@ -123,3 +123,19 @@ exports.getQuizHistory = async (req, res) => {
   }
 };
 
+
+
+exports.getRecentQuizzes = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const quizzes = await Quiz.find({ userId })
+      .sort({ takenAt: -1 })
+      .limit(5)
+      .select('subject source topicsCovered score takenAt totalQuestions');
+    res.status(200).json(quizzes);
+  } catch (err) {
+    // error handling
+     console.error("Error fetching recent quizzes:", err);
+    res.status(500).json({ message: "Failed to load recent quizzes", error: err.message });
+  }
+};

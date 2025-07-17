@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.4",
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/vite": "^4.1.11",
     "axios": "^1.10.0",
+    "browser-image-compression": "^2.0.2",
     "chart.js": "^4.5.0",
     "date-fns": "^4.1.0",
     "firebase": "^11.10.0",
@@ -24,8 +26,10 @@
     "react-circular-progressbar": "^2.2.0",
     "react-datepicker": "^8.4.0",
     "react-dom": "^19.1.0",
+    "react-easy-crop": "^5.5.0",
     "react-hot-toast": "^2.5.2",
     "react-icons": "^5.5.0",
+    "react-modal": "^3.16.3",
     "react-router-dom": "^7.6.3",
     "react-toastify": "^11.0.5",
     "tailwindcss": "^4.1.11"

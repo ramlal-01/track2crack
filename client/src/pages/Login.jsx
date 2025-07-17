@@ -42,6 +42,12 @@ const Login = () => {
       const { token, user } = response.data;
       localStorage.setItem('token', token);
       localStorage.setItem('userId', user._id);
+      localStorage.setItem('user', JSON.stringify({
+        _id: user._id,
+        name: user.name || user.email.split('@')[0], // Fallback to email prefix if name not available
+        email: user.email
+      }));
+
       navigate('/dashboard');
     } catch (err) {
       const msg = err.response?.data?.message || err.message;

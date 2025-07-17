@@ -9,7 +9,12 @@ const {
   changePassword,
   deleteAccount
 } = require('../controllers/userController');
-const upload = require('../middleware/multerConfig');
+
+const multer = require("multer");
+const storage = require("../utils/cloudinaryStorage");
+ 
+const upload = multer({ storage });
+
 // Already existing
 router.get('/dashboard/:userId', verifyToken, getUserDashboard);
 

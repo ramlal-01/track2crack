@@ -9,6 +9,7 @@ const QuizHistory = () => {
   const [history, setHistory] = useState([]);
   const [performanceFilter, setPerformanceFilter] = useState("All");
   const [subjectFromQuiz, setSubjectFromQuiz] = useState(null);
+  const [sourceFromQuiz, setSourceFromQuiz] = useState(null);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -21,7 +22,9 @@ const QuizHistory = () => {
         const data = await res.json();
         if (res.ok) {
           const savedSubject = localStorage.getItem("viewHistoryFor");
+          const savedSource = localStorage.getItem("viewHistorySource");
           if (savedSubject) setSubjectFromQuiz(savedSubject);
+          if (savedSource) setSourceFromQuiz(savedSource);
           setHistory(data.quizzes || []);
         } else {
           toast.error(data.message || "Failed to fetch quiz history.");
@@ -205,8 +208,22 @@ const QuizHistory = () => {
             )}
           </tbody>
         </table>
+        {subjectFromQuiz && sourceFromQuiz && (
+  <div className="mt-10 text-center">
+    <button
+      onClick={() =>
+        window.location.href = `/dashboard/${sourceFromQuiz}/${subjectFromQuiz.toLowerCase()}`
+      }
+      className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg shadow transition-all"
+    >
+      ← Back to {sourceFromQuiz.toUpperCase()} / {subjectFromQuiz}
+    </button>
+  </div>
+)}
+
       </div>
     </div>
+    
   );
 };
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
+import AvatarCropper from "../components/AvatarCropper"; 
 
 const EditProfile = () => {
   const userId = localStorage.getItem("userId");
@@ -12,9 +13,11 @@ const EditProfile = () => {
     dob: "",
     github: "",
     linkedin: ""
-  });
-  const [selectedFile, setSelectedFile] = useState(null);
+  }); 
+  
   const navigate = useNavigate();
+  const [previewImage, setPreviewImage] = useState(null);
+  const [croppedBlob, setCroppedBlob] = useState(null);
 
   useEffect(() => {
     if (!userId) return;
@@ -74,14 +77,11 @@ const EditProfile = () => {
 
   const handleAvatarUpload = async (e) => {
     e.preventDefault();
-    if (!selectedFile) return alert("No file selected");
 
-    if (selectedFile.size > 5 * 1024 * 1024) {
-      return alert("File too large. Max 5MB allowed.");
-    }
+    if (!croppedBlob) return alert("Please crop and save your image first");
 
     const formData = new FormData();
-    formData.append("avatar", selectedFile);
+    formData.append("avatar", croppedBlob); // ✅ Upload the cropped blob
 
     try {
       const token = localStorage.getItem("token");
@@ -92,12 +92,13 @@ const EditProfile = () => {
         },
       });
       alert("Avatar updated successfully");
-      navigate("/profile"); // 🔁 refresh profile to reflect new avatar
+      navigate("/profile");
     } catch (err) {
       console.error("Avatar Upload Failed:", err);
       alert("Failed to upload avatar");
     }
   };
+
 
   return (
     <div className="max-w-6xl mx-auto py-10 px-4">
@@ -115,9 +116,24 @@ const EditProfile = () => {
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => setSelectedFile(e.target.files[0])}
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                if (file.size > 5 * 1024 * 1024) {
+                  return alert("File too large. Max 5MB allowed.");
+                }
+
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  setPreviewImage(reader.result); // base64 to show in cropper
+                };
+                reader.readAsDataURL(file);
+              }}
               className="text-sm text-white"
             />
+
+
             <button
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-full"
@@ -230,6 +246,19 @@ const EditProfile = () => {
           </div>
         </form>
       </div>
+
+      {previewImage && (
+        <AvatarCropper
+          image={previewImage}
+          onClose={() => setPreviewImage(null)}
+          onCropDone={(blob) => {
+            setCroppedBlob(blob);
+            setPreviewImage(null);
+          }}
+        />
+      )}
+
+
     </div>
   );
 };

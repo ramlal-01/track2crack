@@ -68,7 +68,11 @@ const ProfilePage = () => {
         {/* LEFT CARD */}
         <div className="bg-gray-900 rounded-xl p-6 shadow-md flex flex-col items-center text-center">
           <img
-            src={`${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}${user.avatarUrl}`}
+            src={user.avatarUrl || "/avatar.svg"}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/avatar.svg"; // fallback if the URL is broken
+            }}
             alt="avatar"
             className="w-32 h-32 rounded-full object-cover border-4 border-emerald-500 mb-4"
           />

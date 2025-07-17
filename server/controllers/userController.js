@@ -2,6 +2,7 @@ const DSAProgress = require('../models/UserDSAProgress');
 const CoreProgress = require('../models/UserCoreProgress');
 const TheoryProgress = require('../models/UserTheoryProgress');
 const Quiz = require('../models/Quiz');
+const cloudinary = require('../utils/cloudinary');
 const User = require('../models/User');
 
 exports.getUserDashboard = async (req, res) => {
@@ -54,31 +55,47 @@ exports.updateUserProfile = async (req, res) => {
   }
 };
 
- 
-const path = require('path');
-
+  
 exports.uploadAvatar = async (req, res) => {
+  const userId = req.params.userId;
+
   try {
-    if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    const filePath = `/uploads/${req.file.filename}`; // relative path
+    if (!req.file) return res.status(400).json({ message: "No image file uploaded" });
 
-    const updated = await User.findByIdAndUpdate(
-      req.params.userId,
-      { avatarUrl: filePath },
-      { new: true }
-    ).select('-password');
+    // 🔥 Delete old avatar from Cloudinary if exists
+    if (user.avatarPublicId) {
+      try {
+        await cloudinary.uploader.destroy(user.avatarPublicId);
+      } catch (err) {
+        console.warn("Failed to delete old Cloudinary image:", err.message);
+      }
+    }
 
-    res.json({
-      message: 'Avatar uploaded successfully',
-      avatarUrl: filePath,
-      user: updated
+    // 🆕 Upload new avatar
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "track2crack/avatars",
+      width: 300,
+      height: 300,
+      crop: "fill"
     });
+
+    // 🔃 Update user with new avatar data
+    user.avatarUrl = result.secure_url;
+    user.avatarPublicId = result.public_id;
+    await user.save();
+
+    return res.status(200).json({ avatarUrl: user.avatarUrl });
+
   } catch (err) {
-    console.error('Avatar Upload Error:', err);
-    res.status(500).json({ message: 'Server Error: Failed to upload avatar' });
+    console.error("Avatar Upload Error:", err);
+    return res.status(500).json({ message: "Failed to upload avatar" });
   }
 };
+
+
 
 
 const bcrypt = require("bcrypt");
