@@ -19,7 +19,7 @@ import {
 // Register Chart.js components
 Chart.register(BarController, BarElement, LinearScale, CategoryScale, Tooltip);
 
-const Dashboard = () => {
+const Dashboard = ({ theme, toggleTheme }) => {
    
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
@@ -30,15 +30,16 @@ const Dashboard = () => {
   const [progress, setProgress] = useState({ dsa: [], core: [], theory: [], quiz: [] });
   const [hoveredCard, setHoveredCard] = useState("");
   const chartRef = useRef(null);
+ 
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
 
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.documentElement.classList.toggle("dark", newTheme === "dark");
-  };
+   
 
   useEffect(() => {
     const fetchData = async () => {

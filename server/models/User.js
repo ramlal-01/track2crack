@@ -95,7 +95,12 @@ const userSchema = new mongoose.Schema({
   emailVerified: {
     type: Boolean,
     default: false
-  }
+  },
+  fcmToken: {
+  type: String,
+  default: null,
+}
+
 }, {
   timestamps: true
 });
