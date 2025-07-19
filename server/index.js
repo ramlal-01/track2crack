@@ -14,3 +14,10 @@ connectDB().then(() => {
 
 const cleanupExpiredResetTokens = require('./cronJobs/cleanupResetTokens');
 cleanupExpiredResetTokens(); // 🔁 Start the cron job
+<<<<<<< HEAD
+=======
+
+
+
+ 
+>>>>>>> ed2c9a1 (.)
