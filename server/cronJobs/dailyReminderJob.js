@@ -73,7 +73,7 @@ const runReminderJob = async () => {
 };
 
 // ⏰ Cron: Run every day at 8:00 AM IST
-cron.schedule("11 * * *", runReminderJob, {
+cron.schedule("0 8 * * *", runReminderJob, {
   timezone: "Asia/Kolkata",
 });
 
