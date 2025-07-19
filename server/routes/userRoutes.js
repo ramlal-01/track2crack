@@ -7,7 +7,8 @@ const {
   updateUserProfile,
   uploadAvatar,
   changePassword,
-  deleteAccount
+  deleteAccount,
+  saveFcmToken 
 } = require('../controllers/userController');
 
 const multer = require("multer");
@@ -31,5 +32,8 @@ router.post('/avatar/:userId',verifyToken, upload.single('avatar'),uploadAvatar)
 router.post("/change-password", verifyToken, changePassword);
 
 router.delete("/:userId", verifyToken, deleteAccount);
+
+// Save FCM token
+router.post("/fcm-token", verifyToken, saveFcmToken);
 
 module.exports = router;

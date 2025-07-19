@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import API from "../api/api";
 import { useState, useEffect } from "react";
 
-const Sidebar = () => {
+const Sidebar = ({ theme, toggleTheme }) => {
   const [showCoreMenu, setShowCoreMenu] = useState(false);
   const [showTheoryMenu, setShowTheoryMenu] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

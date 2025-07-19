@@ -24,6 +24,9 @@ import { useEffect, useState } from 'react';
 import CN from './pages/CoreCN';
 import DBMS from './pages/CoreDBMS';
 import OS from './pages/CoreOS'; 
+import { messaging, getToken, onMessage } from "./firebase";  
+import API from './api/api';
+import { toast } from 'react-toastify';
 
 const App = () => {
   return (
@@ -48,6 +51,56 @@ const AppContent = () => {
     }
   }, []);
 
+
+  useEffect(() => {
+    const setupFCM = async () => {
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") {
+        console.warn("Notification permission not granted");
+        return;
+      }
+
+      try {
+        const token = await getToken(messaging, {
+          vapidKey: "BFC2XaAuXY6Xco3qHbXHH-iA2dsZUWM1cccmnD9jm2w8lH1rx1QgmgYfOndUoZyfVLAOgIS-FMBFWAjjT8rhfoE",
+        });
+
+        if (token) {
+          console.log("🔥 FCM Token:", token);
+
+          // ✅ Send token to backend
+          const storedToken = localStorage.getItem("token");
+          if (storedToken) {
+            await API.post(
+              "/users/fcm-token",
+              { fcmToken: token },
+              {
+                headers: {
+                  Authorization: `Bearer ${storedToken}`,
+                },
+              }
+            );
+            console.log("✅ Token saved to backend");
+          }
+        } else {
+          console.warn("No token received");
+        }
+      } catch (err) {
+        console.error("Error fetching FCM token:", err);
+      }
+    };
+
+    setupFCM();
+
+    // 👂 Foreground notifications handler
+    onMessage(messaging, (payload) => { 
+    toast.info(`${payload?.notification?.title}: ${payload?.notification?.body}`);
+  });
+
+  }, []);
+
+ 
+
   // Toggle theme function
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -71,7 +124,7 @@ const AppContent = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard theme={theme} toggleTheme={toggleTheme} />} />
           <Route path="/dashboard/dsa" element={<DSASheet />} />
           {/* Theory Routes */}
           <Route path="/dashboard/theory/dsa" element={<DSA />} />

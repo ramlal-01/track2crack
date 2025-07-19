@@ -36,9 +36,19 @@ app.use('/api/users', require('./routes/userRoutes'));
 //8.
 app.use('/api/bookmarks', require('./routes/bookmarks'));
 
+
+// 9
+app.use("/api/notifications", require('./routes/notificationRoutes'));
 // Root test route
 app.get("/", (req, res) => {
   res.send("Track2Crack backend is running");
 });
+
+
+const testRoutes = require("./routes/test");
+app.use("/api/test", testRoutes);
+
+// ✅ Start daily reminder cron job
+require("./cronJobs/dailyReminderJob");  
 
 module.exports = app;
