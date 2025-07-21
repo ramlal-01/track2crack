@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
-
+import ThemeToggle from "./ThemeToggle";
 import {
   ChevronDownIcon,
   ArrowRightOnRectangleIcon,
-  MoonIcon,
-  SunIcon,
+   
   UserIcon,
   CogIcon,
   AcademicCapIcon,
@@ -15,7 +14,7 @@ import {
   BellIcon
 } from "@heroicons/react/24/solid";
 
-const TopRightAvatar = ({ theme, toggleTheme }) => {
+const TopRightAvatar = () => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [notificationPage, setNotificationPage] = useState(1);
@@ -143,7 +142,7 @@ const handleProfileClick = () => {
 };
 
 const handleSettingsClick = () => {
-  navigate("/setting");
+  navigate("/edit-profile");
 };
 
   const formatDate = (dateString) => {
@@ -154,15 +153,8 @@ const handleSettingsClick = () => {
   return (
     <div className="flex items-center justify-end mb-6 gap-3">
       {/* Dark/Light Toggle */}
-      <button 
-        onClick={toggleTheme} 
-        className="p-2 rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:shadow transition-all duration-200" 
-        title="Toggle Theme">
-        {theme === "light" ? 
-        <MoonIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" /> : 
-        <SunIcon className="h-5 w-5 text-yellow-400" />}
-      </button>
-
+       
+      <ThemeToggle />
       {/* Notification Bell */}
       <div className="relative">
         <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:shadow transition-all duration-200 relative" title="Notifications">
@@ -320,7 +312,7 @@ const handleSettingsClick = () => {
                         } group flex items-center w-full px-4 py-3 text-sm transition-colors duration-150`}
                       >
                         <CogIcon className="w-5 h-5 mr-3 text-indigo-500 dark:text-indigo-400" />
-                        Account Settings
+                        Edit Profile
                       </button>
                     )}
                   </Menu.Item>

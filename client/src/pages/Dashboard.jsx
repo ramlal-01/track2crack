@@ -1,495 +1,277 @@
-import React, { useEffect, useState, useRef } from "react";
+// src/pages/Deskboard.jsx
+import React from "react";
 import Sidebar from "../components/Sidebar";
-import API from "../api/api";
 import TopRightAvatar from "../components/TopRightAvatar";
+import { useTheme } from "../context/ThemeContext"; // global dark/light theme
+import { FaFire } from "react-icons/fa";
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import SubjectCard from "../components/SubjectCard";
 import { useNavigate } from "react-router-dom";
-import { Chart, BarController, BarElement, LinearScale, CategoryScale, Tooltip } from 'chart.js';
-import { 
-  ArrowLeftIcon,
-  XMarkIcon,
-  TvIcon,
-  CircleStackIcon,
-  CpuChipIcon,
-  BoltIcon,
-  CubeIcon,
-  CodeBracketIcon,
-  ChevronRightIcon
-} from "@heroicons/react/24/solid";
+import SubjectProgressChart from "../components/SubjectProgressChart";
+import { useEffect, useState } from "react";
+import API from "../api/api"; // your API utility
 
-// Register Chart.js components
-Chart.register(BarController, BarElement, LinearScale, CategoryScale, Tooltip);
-
-const Dashboard = ({ theme, toggleTheme }) => {
-   
+const Dashboard = () => {
+  const { theme } = useTheme(); // dark / light 
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
-  const userId = user?._id;
-  const userName = user?.name || "Coder";
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [progress, setProgress] = useState({ dsa: [], core: [], theory: [], quiz: [] });
-  const [hoveredCard, setHoveredCard] = useState("");
-  const chartRef = useRef(null);
- 
-  useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [theme]);
 
-   
+ const [progress, setProgress] = useState({
+    Java: 0,
+    OOPS: 0,
+    DSA: 0,
+    OS: 0,
+    DBMS: 0,
+    CN: 0,
+    DSASheet: 0,
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [dsaRes, coreRes, theoryRes, quizRes] = await Promise.all([
-          API.get(`/dsa/progress/${userId}`),
-          API.get(`/core/progress/${userId}`),
-          API.get(`/theory/progress/${userId}`),
-          API.get(`/quiz/recent`),
-        ]);
 
-        setProgress({
-          dsa: dsaRes.data,
-          core: coreRes.data,
-          theory: theoryRes.data,
-          quiz: quizRes.data,
-        });
-      } catch (err) {
-        console.error("\u274C Dashboard data fetch failed:", err);
-      }
-    };
 
-    if (userId) fetchData();
-  }, [userId]);
 
-  useEffect(() => {
-    if (user?.email) {
-      const hash = Array.from(user.email).reduce(
-        (acc, char) => char.charCodeAt(0) + ((acc << 5) - acc),
-        0
-      );
-      const styles = ["adventurer", "avataaars", "bottts", "lorelei", "micah", "miniavs", "open-peeps", "personas", "pixel-art"];
-      const avatarStyle = styles[Math.abs(hash) % styles.length];
-      setAvatarUrl(`https://api.dicebear.com/7.x/${avatarStyle}/svg?seed=${encodeURIComponent(user.email)}`);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (progress.quiz.length > 0 && chartRef.current) {
-      const ctx = chartRef.current.getContext('2d');
-      
-      if (chartRef.current.chart) {
-        chartRef.current.chart.destroy();
-      }
-
-      const quizData = [...progress.quiz].reverse();
-      const labels = quizData.map((_, index) => `Quiz ${index + 1}`);
-      const scores = quizData.map(q => (q.score / q.totalQuestions) * 100);
-
-      chartRef.current.chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Quiz Scores (%)',
-            data: scores,
-            backgroundColor: theme === 'dark' 
-              ? [
-                'rgba(129, 140, 248, 0.7)',
-                'rgba(165, 180, 252, 0.7)',
-                'rgba(199, 210, 254, 0.7)',
-                'rgba(224, 231, 255, 0.7)',
-                'rgba(248, 250, 252, 0.7)'
-              ]
-              : [
-                'rgba(79, 70, 229, 0.7)',
-                'rgba(99, 102, 241, 0.7)',
-                'rgba(129, 140, 248, 0.7)',
-                'rgba(165, 180, 252, 0.7)',
-                'rgba(199, 210, 254, 0.7)'
-              ],
-            borderColor: theme === 'dark' 
-              ? 'rgba(165, 180, 252, 1)'
-              : 'rgba(79, 70, 229, 1)',
-            borderWidth: 1,
-            borderRadius: 6,
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: true,
-              max: 100,
-              grid: {
-                color: theme === 'dark' ? 'rgba(75, 85, 99, 0.5)' : 'rgba(229, 231, 235, 0.5)'
-              },
-              ticks: {
-                color: theme === 'dark' ? '#9CA3AF' : '#6B7280',
-                callback: function(value) {
-                  return value + '%';
-                }
-              }
-            },
-            x: {
-              grid: {
-                display: false
-              },
-              ticks: {
-                color: theme === 'dark' ? '#9CA3AF' : '#6B7280'
-              }
-            }
-          },
-          plugins: {
-            legend: {
-              display: false
-            },
-            tooltip: {
-              backgroundColor: theme === 'dark' ? '#1F2937' : '#FFFFFF',
-              titleColor: theme === 'dark' ? '#F3F4F6' : '#111827',
-              bodyColor: theme === 'dark' ? '#D1D5DB' : '#4B5563',
-              borderColor: theme === 'dark' ? '#4B5563' : '#E5E7EB',
-              borderWidth: 1,
-              padding: 12,
-              callbacks: {
-                label: function(context) {
-                  const quiz = quizData[context.dataIndex];
-                  return `${Math.round(context.raw)}% (${quiz.score}/${quiz.totalQuestions})`;
-                }
-              }
-            }
-          }
-        }
-      });
-    }
-  }, [progress.quiz, theme]);
-
-  const handleCoreClick = (subject) => {
-    switch(subject) {
-      case "CN":
-        navigate("/dashboard/core/cn");
-        break;
-      case "DBMS":
-        navigate("/dashboard/core/dbms");
-        break;
-      case "OS":
-        navigate("/dashboard/core/os");
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleTheoryClick = (subject) => {
-    switch(subject) {
-      case "DSA":
-        navigate("/dashboard/theory/dsa");
-        break;
-      case "Java":
-        navigate("/dashboard/theory/java");
-        break;
-      case "OOPS":
-        navigate("/dashboard/theory/oops");
-        break;
-      default:
-        break;
-    }
-  };
-const handleDSAClick = () => {
-  navigate("/dashboard/dsa");
-};
-  function countCompleted(list) {
-    if (!Array.isArray(list)) return 0;
-    return list.filter(item => item.completed).length;
+useEffect(() => {
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+  
+  if (!userId || !token) {
+    console.error("Missing credentials");
+    setError("Please login again");
+    return;
   }
 
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+  const fetchProgress = async () => {
+    setIsLoading(true);
+    try {
+      // 1. First fetch all topics to create ID-subject mapping
+      const [
+        { data: javaTopics = {} },
+        { data: oopsTopics = {} },
+        { data: dsaTheoryTopics = {} },
+        { data: osTopics = {} },
+        { data: dbmsTopics = {} },
+        { data: cnTopics = {} }
+      ] = await Promise.all([
+        API.get('/theory/topics?subject=Java'),
+        API.get('/theory/topics?subject=OOPS'),
+        API.get('/theory/topics?subject=DSA'),
+        API.get('/core/topics?subject=OS'),
+        API.get('/core/topics?subject=DBMS'),
+        API.get('/core/topics?subject=CN')
+      ]);
+
+      // Create ID to subject mapping
+      const topicSubjectMap = {};
+      
+      // Add theory topics
+      [javaTopics, oopsTopics, dsaTheoryTopics].forEach(topicGroup => {
+        topicGroup.topics?.forEach(topic => {
+          topicSubjectMap[topic._id] = topic.subject;
+        });
+      });
+
+      // Add core topics
+      [osTopics, dbmsTopics, cnTopics].forEach(topicGroup => {
+        topicGroup.topics?.forEach(topic => {
+          topicSubjectMap[topic._id] = topic.subject;
+        });
+      });
+
+      // 2. Now fetch progress data
+      const [
+        { data: theoryProgress = {} },
+        { data: coreProgress = {} },
+        { data: dsaProgress = {} },
+        { data: dsaQuestions = {} }
+      ] = await Promise.all([
+        API.get(`/theory/progress/${userId}`),
+        API.get(`/core/progress/${userId}`),
+        API.get(`/dsa/progress/${userId}`),
+        API.get('/dsa/questions')
+      ]);
+
+      // Add subject to progress items
+      const theoryWithSubjects = theoryProgress.progress?.map(item => ({
+        ...item,
+        subject: topicSubjectMap[item.topicId]
+      })) || [];
+
+      const coreWithSubjects = coreProgress.progress?.map(item => ({
+        ...item,
+        subject: topicSubjectMap[item.coreTopicId]
+      })) || [];
+
+      const calculateProgress = (items, total) => {
+        if (!Array.isArray(items)) return 0;
+        const completed = items.filter(i => i?.isCompleted).length;
+        return total > 0 ? Math.round((completed / total) * 100) : 0;
+      };
+
+      const newProgress = {
+        Java: calculateProgress(
+          theoryWithSubjects.filter(p => p?.subject === 'Java'),
+          javaTopics.count || 0
+        ),
+        OOPS: calculateProgress(
+          theoryWithSubjects.filter(p => p?.subject === 'OOPS'),
+          oopsTopics.count || 0
+        ),
+        DSA: calculateProgress(
+          theoryWithSubjects.filter(p => p?.subject === 'DSA'),
+          dsaTheoryTopics.count || 0
+        ),
+        OS: calculateProgress(
+          coreWithSubjects.filter(p => p?.subject === 'OS'),
+          osTopics.count || 0
+        ),
+        DBMS: calculateProgress(
+          coreWithSubjects.filter(p => p?.subject === 'DBMS'),
+          dbmsTopics.count || 0
+        ),
+        CN: calculateProgress(
+          coreWithSubjects.filter(p => p?.subject === 'CN'),
+          cnTopics.count || 0
+        ),
+        DSASheet: calculateProgress(
+          dsaProgress.progress || [],
+          dsaQuestions.count || 0
+        )
+      };
+
+      console.log('Enriched progress data:', {
+        theoryWithSubjects,
+        coreWithSubjects,
+        newProgress
+      });
+
+      setProgress(newProgress);
+
+    } catch (err) {
+      console.error("Error:", err);
+      setError("Failed to load progress");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const getProgressCard = (title, list, bg, textColor, subSubjects,onClick) => {
-    const [selectedCard, setSelectedCard] = useState(null);
-    const total = list.length;
-    const completed = countCompleted(list);
-    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+  fetchProgress();
+}, []);
 
-    // Icons for sub-subjects
-    const subjectIcons = {
-      "CN": <TvIcon className="w-5 h-5 text-blue-500" />,
-      "DBMS": <CircleStackIcon className="w-5 h-5 text-green-500" />,
-      "OS": <CpuChipIcon className="w-5 h-5 text-purple-500" />,
-      "Java": <BoltIcon className="w-5 h-5 text-yellow-500" />,
-      "OOPS": <CubeIcon className="w-5 h-5 text-indigo-500" />,
-      "DSA": <CodeBracketIcon className="w-5 h-5 text-red-500" />
-    };
-
-    const subjectDescriptions = {
-      "CN": "Computer Networks concepts and protocols",
-      "DBMS": "Database management systems fundamentals",
-      "OS": "Operating system principles and concepts",
-      "Java": "Java programming language fundamentals",
-      "OOPS": "Object-oriented programming concepts",
-      "DSA": "Data Structures and Algorithms problems"
-    };
-
-    if (selectedCard && selectedCard !== "expand") {
-      return (
-        <div className={`relative p-6 rounded-2xl shadow-md ${bg}`}>
-          <button 
-            onClick={() => setSelectedCard(null)}
-            className="flex items-center mb-4 text-sm font-medium text-indigo-600 dark:text-indigo-300 hover:text-indigo-800 dark:hover:text-indigo-200"
-          >
-            <ArrowLeftIcon className="w-4 h-4 mr-2" />
-            Back to {title}
-          </button>
-          
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-            <div className="flex items-center mb-3">
-              <div className="p-2 bg-indigo-100 dark:bg-indigo-900 rounded-lg mr-3">
-                {subjectIcons[selectedCard]}
-              </div>
-              <h3 className="text-lg font-bold text-gray-800 dark:text-white">{selectedCard}</h3>
-            </div>
-            <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-              {subjectDescriptions[selectedCard]}
-            </p>
-            
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm text-gray-700 dark:text-gray-300">
-                <span>Progress</span>
-                <span className="font-medium">{percent}%</span>
-              </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
-                <div 
-                  className="h-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600" 
-                  style={{ width: `${percent}%` }}
-                ></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    if (subSubjects.length > 0) {
-      return (
-        <div
-          className={`relative p-6 rounded-2xl shadow-md cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${bg}`}
-          onClick={() => setSelectedCard("expand")}
-        >
-          <div className="flex justify-between items-start mb-2">
-            <h3 className={`text-lg font-bold ${textColor}`}>{title}</h3>
-            <span className={`text-sm font-semibold ${textColor}`}>{percent}%</span>
-          </div>
-          <p className="text-gray-700 dark:text-gray-300 mb-4 text-sm">{completed} of {total} topics mastered</p>
-          <div className="w-full bg-gray-200 dark:bg-gray-700 h-3 rounded-full overflow-hidden">
-            <div 
-              className="h-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 transition-all duration-500" 
-              style={{ width: `${percent}%` }}
-            ></div>
-          </div>
-
-          {/* Sub-subjects grid that appears when clicked */}
-          {selectedCard === "expand" && (
-            <div className="absolute inset-0 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg z-10">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className={`text-lg font-bold ${textColor}`}>{title} Subjects</h3>
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedCard(null);
-                  }}
-                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                >
-                  <XMarkIcon className="w-5 h-5" />
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-1 gap-3">
-                {subSubjects.map((subject) => (
-                  <div
-                    key={subject}
-                    className="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (title === "Core Subjects") {
-                        handleCoreClick(subject);
-                      } else if (title === "Theory Subjects") {
-                        handleTheoryClick(subject);
-                      } else {
-                        setSelectedCard(subject);
-                      }
-                    }}
-                  >
-                    <div className="p-2 bg-white dark:bg-gray-800 rounded-lg mr-3 shadow-sm">
-                      {subjectIcons[subject]}
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-gray-800 dark:text-gray-200">{subject}</h4>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {subjectDescriptions[subject]}
-                      </p>
-                    </div>
-                    <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    // Default card for DSA which has no sub-subjects
-    return (
-      <div
-        className={`relative p-6 rounded-2xl shadow-md cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${bg}`}
-        onClick={onClick || (() => {})}
-        onMouseEnter={() => setHoveredCard(title)}
-        onMouseLeave={() => setHoveredCard("")}
-      >
-        <div className="flex justify-between items-start mb-2">
-          <h3 className={`text-lg font-bold ${textColor}`}>{title}</h3>
-          <span className={`text-sm font-semibold ${textColor}`}>{percent}%</span>
-        </div>
-        <p className="text-gray-700 dark:text-gray-300 mb-4 text-sm">{completed} of {total} topics mastered</p>
-        <div className="w-full bg-gray-200 dark:bg-gray-700 h-3 rounded-full overflow-hidden">
-          <div 
-            className="h-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 transition-all duration-500" 
-            style={{ width: `${percent}%` }}
-          ></div>
-        </div>
-      </div>
-    );
-  };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
-      <Sidebar theme={theme} toggleTheme={toggleTheme} />
+    <div className={`flex min-h-screen ${theme === "dark" ? "bg-gray-900 text-white" : "bg-blue-50 text-gray-900"}`}>
+      {/* Sidebar */}
+      <Sidebar />
 
-      <main className="flex-1 p-6 pb-10">
-        <div className="flex justify-between items-start mb-8">
-          <div className="shadow-md">
-            <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-1">Dashboard</h1>
-            <div className="bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 p-4 rounded-lg shadow-sm inline-block">
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
-                🎊🎊Welcome back 👋, <span className="text-indigo-600 dark:text-indigo-300">{userName}</span>
+      {/* Main content */}
+      <div className="flex-1 p-6">
+        {/* Header */}
+        <div className="sticky top-0 z-30 bg-gray-100 dark:bg-gray-900 py-4 px-2 mb-6 shadow-sm">
+          <div className="flex items-center justify-between"> 
+
+            {/* Center - Welcome Message */}
+            <div className="text-center hidden sm:block">
+              <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+                Welcome back, <span className="text-indigo-600 dark:text-blue-300">{user?.name || "Coder"}</span>
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 italic mt-1">
-                "The path remembers your footprints"
+              <p className="text-sb italic text-gray-800 dark:text-gray-400">
+                "Track your progress. Crack your placements."
               </p>
             </div>
-          </div>
-          <TopRightAvatar theme={theme} toggleTheme={toggleTheme} />
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-          {getProgressCard(
-            "DSA Progress", 
-            progress.dsa, 
-            "bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30", 
-            "text-purple-800 dark:text-purple-200", 
-            [],
-             () => navigate("/dashboard/dsa")
-          )}
-          {getProgressCard(
-            "Core Subjects", 
-            progress.core, 
-            "bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30", 
-            "text-purple-800 dark:text-purple-200", 
-            ["CN", "DBMS", "OS"]
-          )}
-          {getProgressCard(
-            "Theory Subjects", 
-            progress.theory, 
-            "bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30", 
-            "text-purple-800 dark:text-purple-200", 
-            ["Java", "OOPS", "DSA"]
-          )}
-        </div>
-
-        {/* Quiz History Table */}
-        <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30
-            text-purple-800 dark:text-purple-200  rounded-xl shadow-md overflow-hidden mb-10">
-          <div className="p-6">
-            <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6">Recent Quiz Attempts</h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-700">
-                  <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Date & Time
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Subject
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Topics
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Source
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Score
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Percentage
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                  {progress.quiz.length > 0 ? (
-                    progress.quiz.map((quiz, index) => (
-                      <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                          {new Date(quiz.takenAt || quiz.createdAt).toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                          {quiz.subject || 'General'}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
-                          <div className="flex flex-wrap gap-1">
-                            {quiz.topicsCovered?.map((topic, i) => (
-                              <span key={i} className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs rounded-full">
-                                {topic}
-                              </span>
-                            ))}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                          {quiz.source || 'Unknown'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                          {quiz.score}/{quiz.totalQuestions}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                            ${(quiz.score / quiz.totalQuestions) >= 0.7 ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 
-                              (quiz.score / quiz.totalQuestions) >= 0.5 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 
-                              'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'}`}>
-                            {Math.round((quiz.score / quiz.totalQuestions) * 100)}%
-                          </span>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                        No quiz attempts found. Take a quiz to see your results here!
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+            {/* Right - Streak + Avatar */}
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1 bg-orange-100 dark:bg-orange-800 px-3 py-1 rounded-full shadow-sm">
+                <FaFire className="text-orange-500 dark:text-orange-300" />
+                <span className="font-semibold text-sm text-orange-700 dark:text-orange-200">5-Day Streak</span>
+              </div>
+              <TopRightAvatar />
             </div>
+
           </div>
         </div>
-      </main>
+
+
+
+        {/* --- From here, actual content starts (Step 2 onward) --- */}
+         
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 mt-6 mb-15"> 
+            <SubjectCard
+                icon="/assets/icons/dsa-sheet.svg"
+                title="DSA Sheet"
+                progress={progress.DSASheet}
+                onClick={() => navigate("/dashboard/dsa")}
+            />    
+        </div>
+        
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-white tracking-tight mb-2">📘 Core Subjects</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Track progress in foundational subjects</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-6 mb-15">
+            <SubjectCard 
+                icon="/assets/icons/os.svg" 
+                title="Operating Systems" 
+                progress={progress.OS}   
+                onClick={() => navigate("/dashboard/core/os")}
+            />
+            <SubjectCard 
+                icon="/assets/icons/dbms.svg" 
+                title="DBMS" 
+                progress={progress.DBMS}  
+                onClick={() => navigate("/dashboard/core/dbms")}
+            />
+            <SubjectCard 
+                icon="/assets/icons/cn.svg" 
+                title="Computer Networks" 
+                progress={progress.CN}     
+                onClick={() => navigate("/dashboard/core/cn")}
+            />
+        </div>
+        
+
+        {/* Theory Subjects  */}
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-white tracking-tight mb-2">
+        🧠 Conceptual Mastery
+        </h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+        Strengthen your foundational understanding in core CS concepts like OOPS, Java, and DSA Theory.
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 mt-6 mb-15">
+            <SubjectCard
+                icon="/assets/icons/java.svg"
+                title="Java"
+                progress={progress.Java}  
+                onClick={() => navigate("/dashboard/theory/java")}
+            />
+            <SubjectCard
+                icon="/assets/icons/dsa.svg"
+                title="DSA Theory"
+                progress={progress.DSA}  
+                onClick={() => navigate("/dashboard/theory/dsa")}
+            />
+            <SubjectCard
+                icon="/assets/icons/oops.svg"
+                title="OOPS"
+                progress={progress.OOPS}  
+                onClick={() => navigate("/dashboard/theory/oops")}
+            />
+        </div>
+ 
+        <SubjectProgressChart data={{
+          Java: progress.Java,
+          OOPS: progress.OOPS,
+          DSA: progress.DSA,
+          OS: progress.OS,
+          DBMS: progress.DBMS,
+          CN: progress.CN,
+        }} />
+
+
+      </div>
     </div>
   );
 };

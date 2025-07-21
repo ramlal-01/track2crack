@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@custom-variant dark (&:where(.dark, .dark *));
 html {
   scroll-behavior: smooth;
 }
@@ -20,3 +20,16 @@ body {
   width: 100%;
   border: none;
 }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: white;
+}
+
+.dark body {
+  background-color: #121212; /* Or whatever dark bg you want */
+}
+
+/* * {
+  transition: background-color 200ms ease, color 200ms ease;
+} */

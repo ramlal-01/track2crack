@@ -26,8 +26,8 @@ import DBMS from './pages/CoreDBMS';
 import OS from './pages/CoreOS'; 
 import { messaging, getToken, onMessage } from "./firebase";  
 import API from './api/api';
-import { toast } from 'react-toastify';
-
+import { toast } from 'react-toastify'; 
+import Feedback from './pages/FeedbackPage';
 const App = () => {
   return (
     <BrowserRouter>
@@ -40,16 +40,7 @@ const AppContent = () => {
   const location = useLocation();
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
-  // Initialize theme on load
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "light";
-    setTheme(savedTheme);
-    if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, []);
+ 
 
 
   useEffect(() => {
@@ -99,32 +90,19 @@ const AppContent = () => {
 
   }, []);
 
- 
-
-  // Toggle theme function
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    if (newTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  };
 
   // Show navbar only on specific routes
   const showNavbar = ['/', '/login', '/register', '/forgot-password', '/reset-password', '/verify-email'].includes(location.pathname);
 
   return (
     <div className="flex flex-col min-h-screen">
-      {showNavbar && <Navbar theme={theme} toggleTheme={toggleTheme} />}
+      {showNavbar && <Navbar  />}
       <div className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard theme={theme} toggleTheme={toggleTheme} />} />
+          <Route path="/dashboard" element={<Dashboard  />} />
           <Route path="/dashboard/dsa" element={<DSASheet />} />
           {/* Theory Routes */}
           <Route path="/dashboard/theory/dsa" element={<DSA />} />
@@ -148,7 +126,10 @@ const AppContent = () => {
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/verify-email/:token" element={<VerifyEmail />} />
           {/* Redirect root to dashboard */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} /> 
+          {/* <Route path='/deskboard' element={<Deskboard />} /> */}
+          <Route path="/dashboard/feedback" element = {<Feedback />} />
+
         </Routes>
       </div>
       <Footer />

@@ -10,7 +10,7 @@ import API from "../api/api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
-
+import TopRightAvatar from "../components/TopRightAvatar";
 const CoreCN = () => {
   const [topics, setTopics] = useState([]);
   const [progress, setProgress] = useState({});
@@ -181,7 +181,7 @@ const CoreCN = () => {
   return (
     <div className="p-6 max-w-6xl mx-auto min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       <ToastContainer position="top-right" autoClose={3000} />
-      
+      <TopRightAvatar  />
       <div 
         className="text-center mb-8 p-6 rounded-2xl shadow-lg"
         style={{ background: '#043E86' }}

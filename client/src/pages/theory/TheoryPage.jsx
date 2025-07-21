@@ -2,7 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css"; 
+import TopRightAvatar from "../../components/TopRightAvatar";
+
 const TheoryPage = ({ subject, title }) => {
   const [topics, setTopics] = useState([]);
   const [progress, setProgress] = useState({});
@@ -205,7 +207,14 @@ const TheoryPage = ({ subject, title }) => {
        
       
       {/* 🎯 Dashboard Cards */}
-      <h2 className="text-4xl font-bold text-center text-indigo-800 mb-6">{title} Theory Dashboard</h2>
+       
+      <div className="relative mb-6">
+        <h2 className="text-4xl font-semibold text-center text-indigo-800">Theory Dashboard</h2>
+        <div className="absolute right-0 top-0">
+          <TopRightAvatar />
+        </div>
+      </div>
+      
       <div className="grid grid-cols-4 gap-4 mb-8 text-center">
         <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-lg border border-indigo-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="text-2xl font-bold text-indigo-700">{total}</div>

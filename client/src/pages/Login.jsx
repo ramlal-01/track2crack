@@ -109,6 +109,11 @@ const handleOAuthLogin = async (providerName) => {
     const { token: backendToken, user: backendUser } = response.data;
     localStorage.setItem('token', backendToken);
     localStorage.setItem('userId', backendUser._id);
+    localStorage.setItem('user', JSON.stringify({
+        _id: user._id,
+        name: user.name || user.email.split('@')[0], 
+        email: user.email
+      }));
     navigate('/dashboard');
   } catch (error) {
     console.error('❌ OAuth login error:', error.response?.data || error.message);

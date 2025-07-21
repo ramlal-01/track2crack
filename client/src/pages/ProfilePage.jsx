@@ -8,6 +8,21 @@ import {
   FaEnvelope,
   FaGenderless,
   FaBirthdayCake,
+  FaEdit,
+  FaTrash,
+  FaKey,
+  FaUserEdit,
+  FaMoon,
+  FaSun,
+  FaBars,
+  FaTimes,
+  FaCalendarAlt,
+  FaUser,
+  FaIdCard,
+  FaMobile,
+  FaAt,
+  FaUniversity,
+  FaExternalLinkAlt
 } from "react-icons/fa";
 import ChangePasswordModal from "../components/ChangePasswordModal";
 
@@ -17,6 +32,8 @@ const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const [completion, setCompletion] = useState(0);
   const [showPassModal, setShowPassModal] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!userId) return;
@@ -41,7 +58,16 @@ const ProfilePage = () => {
     };
 
     fetchProfile();
+    
+    const savedMode = localStorage.getItem("darkMode") === "true";
+    setDarkMode(savedMode);
   }, [userId]);
+
+  const toggleDarkMode = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem("darkMode", newMode.toString());
+  };
 
   const handleDeleteAccount = async () => {
     if (!confirm("Are you sure you want to delete your account? This is permanent.")) return;
@@ -60,87 +86,264 @@ const ProfilePage = () => {
     }
   };
 
-  if (!user) return <div className="text-center mt-10 text-white">Loading...</div>;
+  if (!user) return <div className={`text-center mt-10 ${darkMode ? "text-gray-200" : "text-gray-800"}`}>Loading...</div>;
 
   return (
-    <div className="max-w-6xl mx-auto py-10 px-6 text-white">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* LEFT CARD */}
-        <div className="bg-gray-900 rounded-xl p-6 shadow-md flex flex-col items-center text-center">
-          <img
-            src={user.avatarUrl || "/avatar.svg"}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/avatar.svg"; // fallback if the URL is broken
-            }}
-            alt="avatar"
-            className="w-32 h-32 rounded-full object-cover border-4 border-emerald-500 mb-4"
-          />
-
-          <h2 className="text-xl font-semibold">{user.name}</h2>
-          <p className="text-sm text-gray-400">{user.college || "No college info"}</p>
-          <p className="text-sm mt-1 text-emerald-400">
-            {user.username ? `${user.username} | ` : ""}
-            {completion}% Profile Completed
-          </p>
-
-          {/* Buttons */}
-          <div className="mt-6 space-y-3 w-full">
-            <button
-              className="w-full border border-blue-400 text-blue-400 py-1.5 rounded-lg hover:bg-blue-600 hover:text-white transition"
-              onClick={() => navigate("/edit-profile")}
-            >
-              Edit Profile Photo
-            </button>
-            <button
-              className="w-full border border-yellow-400 text-yellow-400 py-1.5 rounded-lg hover:bg-yellow-600 hover:text-white transition"
-              onClick={() => setShowPassModal(true)}
-            >
-              Change Password
-            </button>
-            <button
-              className="w-full border border-red-500 text-red-500 py-1.5 rounded-lg hover:bg-red-600 hover:text-white transition"
-              onClick={handleDeleteAccount}
-            >
-              Delete Account
-            </button>
-          </div>
-        </div>
-
-        {/* RIGHT CARD */}
-        <div className="md:col-span-2 bg-gray-900 rounded-xl p-6 shadow-md">
-          <h3 className="text-xl font-semibold mb-4">Profile Details</h3>
-          <div className="space-y-3 text-sm text-gray-200">
-            <p><strong>Name:</strong> {user.name}</p>
-            <p><FaEnvelope className="inline mr-2 text-gray-400" /> {user.email}</p>
-            <p><FaPhone className="inline mr-2 text-gray-400" /> {user.phone || "Not Available"}</p>
-            <p><FaLinkedin className="inline mr-2 text-blue-400" /> {user.linkedin || "Not Available"}</p>
-            <p><FaGithub className="inline mr-2 text-gray-400" /> {user.github || "Not Available"}</p>
-            <p><FaGenderless className="inline mr-2 text-gray-400" /> {user.gender || "Not Available"}</p>
-            <p>
-              <FaBirthdayCake className="inline mr-2 text-pink-400" />
-              {user.dob ? new Date(user.dob).toLocaleDateString("en-GB") : "Not Available"}
-            </p>
-            <p>
-              <strong>Joined:</strong>{" "}
-              {user.createdAt ? new Date(user.createdAt).toLocaleDateString("en-GB") : "N/A"}
-            </p>
-          </div>
-
-          {/* Edit Profile button */}
-          <div className="mt-6">
-            <button
-              onClick={() => navigate("/edit-profile")}
-              className="w-full border border-amber-500 text-amber-500 py-2 rounded-md hover:bg-amber-600 hover:text-white transition"
-            >
-              Edit Personal Info
-            </button>
-          </div>
-        </div>
+    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? "bg-gray-900 text-gray-200" : "bg-gray-100 text-gray-800"}`}>
+      {/* Mobile Menu Button */}
+      <div className="md:hidden fixed top-4 right-4 z-50">
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className={`p-2 rounded-full ${darkMode ? "bg-gray-700 text-white" : "bg-white text-gray-800"} shadow-md`}
+        >
+          {mobileMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+        </button>
       </div>
 
-      {/* Modal outside layout */}
-      {showPassModal && <ChangePasswordModal onClose={() => setShowPassModal(false)} />}
+      {/* Mobile Sidebar Menu */}
+      {mobileMenuOpen && (
+        <div className={`fixed inset-0 z-40 md:hidden ${darkMode ? "bg-gray-800" : "bg-white"}`}>
+          <div className="flex flex-col items-center justify-center h-full space-y-8">
+            <button
+              onClick={() => navigate("/")}
+              className={`text-xl ${darkMode ? "text-blue-400" : "text-indigo-600"}`}
+            >
+              Home
+            </button>
+            <button
+              onClick={() => navigate("/features")}
+              className={`text-xl ${darkMode ? "text-blue-400" : "text-indigo-600"}`}
+            >
+              Features
+            </button>
+            <button
+              onClick={() => navigate("/about")}
+              className={`text-xl ${darkMode ? "text-blue-400" : "text-indigo-600"}`}
+            >
+              About
+            </button>
+            <button
+              onClick={() => navigate("/contact")}
+              className={`text-xl ${darkMode ? "text-blue-400" : "text-indigo-600"}`}
+            >
+              Contact
+            </button>
+            <button
+              onClick={toggleDarkMode}
+              className={`p-2 rounded-full ${darkMode ? "bg-gray-700 text-yellow-300" : "bg-gray-200 text-gray-800"}`}
+            >
+              {darkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Sidebar */}
+      <div className={`hidden md:flex fixed left-0 top-0 h-full w-16 flex-col items-center py-4 space-y-8 ${darkMode ? "bg-gray-800" : "bg-gray-200"}`}>
+        <button
+          onClick={() => navigate("/")}
+          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-indigo-600 hover:bg-gray-300"}`}
+          title="Home"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+        </button>
+        <button
+          onClick={() => navigate("/features")}
+          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-indigo-600 hover:bg-gray-300"}`}
+          title="Features"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </button>
+        <button
+          onClick={() => navigate("/about")}
+          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-indigo-600 hover:bg-gray-300"}`}
+          title="About"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </button>
+        <button
+          onClick={() => navigate("/contact")}
+          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-indigo-600 hover:bg-gray-300"}`}
+          title="Contact"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </button>
+        <button
+          onClick={toggleDarkMode}
+          className={`p-2 rounded-full ${darkMode ? "text-yellow-300 hover:bg-gray-700" : "text-gray-800 hover:bg-gray-300"}`}
+          title={darkMode ? "Light Mode" : "Dark Mode"}
+        >
+          {darkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
+        </button>
+      </div>
+
+      {/* Main Content - Expanded to full screen width */}
+      <main className={`min-h-screen pt-8 pb-8 md:pl-20 transition-all duration-300 ${mobileMenuOpen ? "opacity-50" : "opacity-100"}`}>
+        <div className={`h-full w-full mx-0 rounded-none shadow-md overflow-hidden ${darkMode ? "bg-gray-800" : "bg-white"}`}>
+          {/* Profile Header */}
+          <div className={`p-8 ${darkMode ? "bg-gray-700" : "bg-gradient-to-r from-indigo-600 to-indigo-700"} text-white`}>
+            <div className="flex flex-col md:flex-row items-center">
+              <img
+                src={user.avatarUrl || "/avatar.svg"}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/avatar.svg";
+                }}
+                alt="avatar"
+                className="w-32 h-32 rounded-full object-cover border-4 border-white mb-4 md:mb-0 md:mr-8"
+              />
+              <div className="text-center md:text-left">
+                <h2 className="text-3xl font-bold">{user.name}</h2>
+                <p className={`mt-2 text-lg ${darkMode ? "text-gray-300" : "text-blue-100"}`}>
+                  <FaUniversity className="inline mr-2" />
+                  {user.college || "No college information"}
+                </p>
+                <div className="mt-4">
+                  <span className={`text-sm px-3 py-1.5 rounded-full ${darkMode ? "bg-gray-600" : "bg-blue-900"}`}>
+                    <FaIdCard className="inline mr-2" />
+                    {user.username ? `${user.username} | ` : ""}
+                    {completion}% Profile Completed
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Profile Details */}
+          <div className="p-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Personal Information */}
+              <div className={`p-6 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-50"}`}>
+                <h3 className={`text-xl font-semibold mb-6 border-b pb-3 ${darkMode ? "text-gray-200 border-gray-600" : "text-gray-800 border-gray-200"}`}>
+                  <FaUser className="inline mr-2" />
+                  Personal Information
+                </h3>
+                <div className="space-y-4 text-lg">
+                  <div className="flex justify-between">
+                    <span className={`flex items-center ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      <FaUser className="mr-2" /> First Name
+                    </span>
+                    <span className={darkMode ? "text-gray-200 font-medium" : "font-semibold"}>{user.name.split(' ')[0] || 'N/A'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className={`flex items-center ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      <FaUser className="mr-2" /> Last Name
+                    </span>
+                    <span className={darkMode ? "text-gray-200 font-medium" : "font-semibold"}>{user.name.split(' ').slice(1).join(' ') || 'N/A'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className={`flex items-center ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      <FaBirthdayCake className="mr-2" /> Happy Birthday
+                    </span>
+                    <span className={darkMode ? "text-gray-200 font-medium" : "font-semibold"}>
+                      {user.dob ? new Date(user.dob).toLocaleDateString("en-GB") : "Not Available"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className={`flex items-center ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      <FaCalendarAlt className="mr-2" /> Joined On
+                    </span>
+                    <span className={darkMode ? "text-gray-200 font-medium" : "font-semibold"}>
+                      {new Date(user.createdAt).toLocaleDateString("en-GB")}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Contact Information */}
+              <div className={`p-6 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-50"}`}>
+                <h3 className={`text-xl font-semibold mb-6 border-b pb-3 ${darkMode ? "text-gray-200 border-gray-600" : "text-gray-800 border-gray-200"}`}>
+                  <FaEnvelope className="inline mr-2" />
+                  Contact Information
+                </h3>
+                <div className="space-y-4 text-lg">
+                  <div className="flex justify-between">
+                    <span className={`flex items-center ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      <FaAt className="mr-2" /> Email
+                    </span>
+                    <span className={darkMode ? "text-gray-200 font-medium" : "font-semibold"}>{user.email}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className={`flex items-center ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      <FaMobile className="mr-2" /> Phone
+                    </span>
+                    <span className={darkMode ? "text-gray-200 font-medium" : "font-semibold"}>{user.phone || "Not Available"}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className={`flex items-center ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      <FaGithub className="mr-2" /> GitHub
+                    </span>
+                    <span className={`${darkMode ? "text-gray-200 font-medium" : "font-semibold"} break-all`}>
+                      {user.github ? (
+                        <a 
+                          href={user.github.startsWith('http') ? user.github : `https://${user.github}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="hover:underline flex items-center"
+                        >
+                          {user.github.replace(/(^\w+:|^)\/\//, '')}
+                          <FaExternalLinkAlt className="ml-2 text-sm" />
+                        </a>
+                      ) : "Not Available"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className={`flex items-center ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      <FaLinkedin className="mr-2" /> LinkedIn
+                    </span>
+                    <span className={`${darkMode ? "text-gray-200 font-medium" : "font-semibold"} break-all`}>
+                      {user.linkedin ? (
+                        <a 
+                          href={user.linkedin.startsWith('http') ? user.linkedin : `https://${user.linkedin}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="hover:underline flex items-center"
+                        >
+                          {user.linkedin.replace(/(^\w+:|^)\/\//, '')}
+                          <FaExternalLinkAlt className="ml-2 text-sm" />
+                        </a>
+                      ) : "Not Available"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="mt-12 flex flex-wrap gap-6 justify-center">
+              <button
+                onClick={() => navigate("/edit-profile")}
+                className={`flex items-center px-6 py-3 rounded-lg transition text-lg ${darkMode ? "bg-indigo-700 text-white hover:bg-blue-600" : "bg-indigo-600 text-white hover:bg-blue-700"}`}
+              >
+                <FaUserEdit className="mr-3" size={18} /> Edit Profile
+              </button>
+              <button
+                onClick={() => setShowPassModal(true)}
+                className={`flex items-center px-6 py-3 rounded-lg transition text-lg ${darkMode ? "bg-amber-600 text-white hover:bg-amber-500" : "bg-amber-500 text-white hover:bg-amber-600"}`}
+              >
+                <FaKey className="mr-3" size={18} /> Change Password
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                className={`flex items-center px-6 py-3 rounded-lg transition text-lg ${darkMode ? "bg-red-700 text-white hover:bg-red-600" : "bg-red-600 text-white hover:bg-red-700"}`}
+              >
+                <FaTrash className="mr-3" size={18} /> Delete Account
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Modal */}
+      {showPassModal && <ChangePasswordModal onClose={() => setShowPassModal(false)} darkMode={darkMode} />}
     </div>
   );
 };
