@@ -11,7 +11,7 @@ exports.getCoreTopicsBySubject = async (req, res) => {
       return res.status(400).json({ message: "Invalid or missing subject" });
     }
 
-    const topics = await CoreTopic.find({ subject });
+    const topics = await CoreTopic.find({ subject }).sort({ order: 1 });
 
     res.status(200).json({ count: topics.length, topics });
 

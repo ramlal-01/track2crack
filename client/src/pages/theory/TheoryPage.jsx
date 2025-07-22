@@ -1,13 +1,24 @@
+import API from "../../api/api";
 import React, { useEffect, useState, useRef } from "react";
 import { CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; 
-import TopRightAvatar from "../../components/TopRightAvatar";
+import "react-toastify/dist/ReactToastify.css";
 
 const TheoryPage = ({ subject, title }) => {
   const [topics, setTopics] = useState([]);
   const [progress, setProgress] = useState({});
+  const [activeTopic, setActiveTopic] = useState(null);
+  const [userKnowsTopic, setUserKnowsTopic] = useState(null);
+  const [showResources, setShowResources] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState({});
+  const [openNoteId, setOpenNoteId] = useState(null);
+  const [noteText, setNoteText] = useState("");
+  const noteRefs = useRef({});
+  const [quizHistory, setQuizHistory] = useState([]);
+  const [progressPercent, setProgressPercent] = useState(0);
+  const [quizCount, setQuizCount] = useState(0);
   const [activeFilters, setActiveFilters] = useState({
     All: true,
     Important: false,
@@ -16,49 +27,155 @@ const TheoryPage = ({ subject, title }) => {
     Remind: false,
   });
   const [searchTerm, setSearchTerm] = useState("");
-  const [showOnlyCompleted, setShowOnlyCompleted] = useState(false);
-  const [showDatePicker, setShowDatePicker] = useState({});
-  const [openNoteId, setOpenNoteId] = useState(null);
-  const [noteText, setNoteText] = useState("");
-  const noteRefs = useRef({});
-  const [quizAvailableMap, setQuizAvailableMap] = useState({});
-
 
   const token = localStorage.getItem("token");
   const userId = JSON.parse(atob(token.split(".")[1]))?.userId;
+ useEffect(() => {
+  const fetchQuizProgress = async () => {
+    try {
+      const res = await API.get(`/quiz/progress?subject=${subject}&source=Theory`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setProgressPercent(res.data.progressPercent || 0);
+      setQuizCount(res.data.attemptedTopics || 0);
+    } catch (err) {
+      console.error("❌ Failed to fetch quiz-based progress:", err);
+    }
+  };
+
+  if (token && subject) fetchQuizProgress();
+}, [token, subject]);
 
   useEffect(() => {
-   const fetchData = async () => {
-  const [topicsRes, progressRes] = await Promise.all([
-    fetch(`http://localhost:5000/api/theory/topics?subject=${subject}`),
-    fetch(`http://localhost:5000/api/theory/progress/${userId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    }),
-  ]);
+    const fetchData = async () => {
+      const [topicsRes, progressRes] = await Promise.all([
+        fetch(`http://localhost:5000/api/theory/topics?subject=${subject}`),
+        fetch(`http://localhost:5000/api/theory/progress/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
 
-  const topicsData = await topicsRes.json();
-  const progressData = await progressRes.json();
-  const subjectTopicIds = topicsData?.topics?.map((t) => t._id); // 🔍 only current subject topics
-  const progressMap = {};
+      const topicsData = await topicsRes.json();
+      const progressData = await progressRes.json();
+      const progressMap = {};
 
-  (progressData?.progress || []).forEach((p) => {
-    if (subjectTopicIds.includes(p.topicId)) {
-      progressMap[p.topicId] = {
-        isCompleted: p.isCompleted,
-        isBookmarked: p.isBookmarked,
-        remindOn: p.remindOn,
-        note: p.note || "",
-      };
-    }
-  });
+      (progressData?.progress || []).forEach((p) => {
+        progressMap[p.topicId] = {
+          isCompleted: p.isCompleted,
+          isBookmarked: p.isBookmarked,
+          remindOn: p.remindOn,
+          note: p.note || "",
+          quizTaken: p.quizTaken || false,
+          quizScore: p.quizScore || 0
+        };
+      });
 
-  setTopics(topicsData.topics || []);
-  setProgress(progressMap);
-};
-
+      setTopics(topicsData.topics || []);
+      setProgress(progressMap);
+      
+      // Find the first incomplete topic to set as active
+      const firstIncomplete = topicsData.topics?.find(t => !progressMap[t._id]?.isCompleted);
+      setActiveTopic(firstIncomplete?._id || null);
+    };
 
     if (token && userId) fetchData();
-  }, [token, userId]);
+  }, [token, userId, subject]);
+
+  useEffect(() => {
+    const handleQuizCompletion = async () => {
+      const quizData = localStorage.getItem('quizCompleted');
+      if (quizData) {
+        const { topicId, score } = JSON.parse(quizData);
+        
+        // Update progress for the quiz
+        const updatedProgress = {
+          ...progress,
+          [topicId]: {
+            ...progress[topicId] || {},
+            quizTaken: true,
+            quizScore: score
+          }
+        };
+        
+        setProgress(updatedProgress);
+        // Add this line to force re-render
+        setTimeout(() => setProgress(prev => ({ ...prev })), 100);
+        toast.success(`Quiz completed! Score: ${score}%`);
+        localStorage.removeItem('quizCompleted');
+
+        // Save to backend
+        await fetch("http://localhost:5000/api/theory/progress", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            topicId,
+            isCompleted: updatedProgress[topicId]?.isCompleted || false,
+            isBookmarked: updatedProgress[topicId]?.isBookmarked || false,
+            remindOn: updatedProgress[topicId]?.remindOn || null,
+            note: updatedProgress[topicId]?.note || "",
+            quizTaken: true,
+            quizScore: score
+          }),
+        });
+
+        // If score is >= 70, mark as completed and move to next topic
+        if (score >= 70) {
+          const completedProgress = {
+            ...updatedProgress,
+            [topicId]: {
+              ...updatedProgress[topicId],
+              isCompleted: true
+            }
+          };
+          
+          setProgress(completedProgress);
+          
+          await fetch("http://localhost:5000/api/theory/progress", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              topicId,
+              isCompleted: true,
+              isBookmarked: completedProgress[topicId]?.isBookmarked || false,
+              remindOn: completedProgress[topicId]?.remindOn || null,
+              note: completedProgress[topicId]?.note || "",
+              quizTaken: true,
+              quizScore: score
+            }),
+          });
+
+          // Find next incomplete topic
+          const currentIndex = topics.findIndex(t => t._id === topicId);
+          const nextTopics = topics.slice(currentIndex + 1);
+          const nextIncomplete = nextTopics.find(t => !completedProgress[t._id]?.isCompleted);
+          
+          if (nextIncomplete) {
+            setActiveTopic(nextIncomplete._id);
+            setUserKnowsTopic(null);
+            setShowResources(false);
+            setShowQuiz(false);
+          }
+        }
+      }
+    };
+
+    if (token && userId) handleQuizCompletion();
+  }, [activeTopic, progress, topics, token, userId]);
+
+  useEffect(() => {
+    // This will force a re-render when progress updates, ensuring the button enables
+    setTimeout(() => {
+      setProgress(prev => ({ ...prev }));
+    }, 100);
+  }, [progress]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -70,11 +187,25 @@ const TheoryPage = ({ subject, title }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [openNoteId]);
 
-  const completed = Object.values(progress).filter((p) => p?.isCompleted).length;
-  const bookmarked = Object.values(progress).filter((p) => p?.isBookmarked).length;
-  const total = topics.length;
-  const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'quizCompleted') {
+        // Force re-render to update UI after quiz completion
+        setProgress(prev => ({ ...prev }));
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
+    // Calculate subject-specific topic IDs
+  const subjectTopicIds = topics.map(t => t._id);
+  const completed = subjectTopicIds.filter(id => progress[id]?.isCompleted).length;
+  const bookmarked = subjectTopicIds.filter(id => progress[id]?.isBookmarked).length;
+  const total = subjectTopicIds.length;
+
+  // Calculate subject-specific topic IDs
+  
   const toggleFilter = (filterName) => {
     if (["All", "Important", "Other"].includes(filterName)) {
       const newFilters = {
@@ -101,44 +232,11 @@ const TheoryPage = ({ subject, title }) => {
     const prev = progress[topicId] || {};
     const updated = {
       ...prev,
-      [field]: field === "remindOn" ? value : field === "note" ? value : !prev?.[field],
+      [field]: field === "remindOn" || field === "quizScore" ? value : field === "note" ? value : !prev?.[field],
     };
-    setProgress((prev) => ({ ...prev, [topicId]: updated }));
-
-    // Show toast notifications based on action
-    if (field === "isCompleted") {
-      toast(updated.isCompleted ? "Marked as done!" : "Marked as not done!", {
-        type: updated.isCompleted ? "success" : "error",
-        position: "top-center",
-        autoClose: 2000,
-      });
-    } else if (field === "isBookmarked") {
-        if (!prev?.isBookmarked && value !== false) {
-          await fetch("http://localhost:5000/api/bookmarks/access", {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              itemType: "theory",
-              itemId: topicId,
-            }),
-          });
-        }
-
-        toast(updated.isBookmarked ? "Bookmarked!" : "Removed bookmark!", {
-          type: updated.isBookmarked ? "success" : "error",
-          position: "top-center",
-          autoClose: 2000,
-        });
-      } else if (field === "remindOn") {
-      if (value) {
-        toast("Reminder set!", { type: "success", position: "top-center", autoClose: 2000 });
-      } else if (prev.remindOn && !value) {
-        toast("Reminder removed!", { type: "error", position: "top-center", autoClose: 2000 });
-      }
-    }
+    
+    const newProgress = { ...progress, [topicId]: updated };
+    setProgress(newProgress);
 
     await fetch("http://localhost:5000/api/theory/progress", {
       method: "POST",
@@ -152,8 +250,24 @@ const TheoryPage = ({ subject, title }) => {
         isBookmarked: updated.isBookmarked,
         remindOn: updated.remindOn ?? null,
         note: updated.note ?? "",
+        quizTaken: updated.quizTaken || false,
+        quizScore: updated.quizScore || 0
       }),
     });
+
+    // If marking as complete, move to next topic
+    if (field === 'isCompleted' && value === true) {
+      const currentIndex = topics.findIndex(t => t._id === topicId);
+      const nextTopics = topics.slice(currentIndex + 1);
+      const nextIncomplete = nextTopics.find(t => !newProgress[t._id]?.isCompleted);
+      
+      if (nextIncomplete) {
+        setActiveTopic(nextIncomplete._id);
+        setUserKnowsTopic(null);
+        setShowResources(false);
+        setShowQuiz(false);
+      }
+    }
   };
 
   const handleSingleTopicQuiz = async (topicTitle) => {
@@ -166,7 +280,6 @@ const TheoryPage = ({ subject, title }) => {
         },
         body: JSON.stringify({
           subject: subject,
-
           topics: [topicTitle],
           source: "Theory",
         }),
@@ -175,7 +288,11 @@ const TheoryPage = ({ subject, title }) => {
       const data = await response.json();
       if (!response.ok) return alert(data.message || "Failed to generate quiz");
 
-      localStorage.setItem("activeQuiz", JSON.stringify(data));
+      // Store current topic ID before redirecting
+      localStorage.setItem('activeQuiz', JSON.stringify({
+        ...data,
+        topicId: activeTopic
+      }));
       window.location.href = "/quiz";
     } catch (err) {
       console.error("Error generating quiz:", err);
@@ -189,6 +306,29 @@ const TheoryPage = ({ subject, title }) => {
     return "https://img.icons8.com/ios-filled/32/000000/read.png";
   };
 
+  const handleUserResponse = (knowsTopic) => {
+    setUserKnowsTopic(knowsTopic);
+    if (knowsTopic) {
+      setShowQuiz(true);
+    } else {
+      setShowResources(true);
+    }
+  };
+
+  // Function to check if a topic is enabled (based on previous topic completion)
+  const isTopicEnabled = (topicIndex) => {
+    if (topicIndex === 0) return true; // First topic is always enabled
+    
+    const prevTopic = topics[topicIndex - 1];
+    const prevProgress = progress[prevTopic._id] || {};
+    
+    // Topic is enabled if previous topic has:
+    // 1. Quiz taken with score >= 70% OR
+    // 2. Manually marked as completed
+    return (prevProgress.quizTaken && prevProgress.quizScore >= 70) || 
+           prevProgress.isCompleted;
+  };
+
   const filteredTopics = topics.filter((t) => {
     const matchTypeFilter =
       activeFilters.All ||
@@ -197,61 +337,63 @@ const TheoryPage = ({ subject, title }) => {
     const matchBookmarked = !activeFilters.Bookmarked || progress[t._id]?.isBookmarked;
     const matchRemind = !activeFilters.Remind || progress[t._id]?.remindOn;
     const matchSearch = t.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchCompleted = !showOnlyCompleted || progress[t._id]?.isCompleted;
 
-    return matchTypeFilter && matchBookmarked && matchRemind && matchSearch && matchCompleted;
+    return matchTypeFilter && matchBookmarked && matchRemind && matchSearch;
   });
 
+  const currentTopic = topics.find(t => t._id === activeTopic);
+  const topicProgress = activeTopic ? progress[activeTopic] || {} : {};
+  
+
+
   return (
-    <div className="p-6 md:p-10 min-h-screen bg-slate-50 text-xl">
-       
+    <div className="p-4 md:p-6 max-w-6xl mx-auto text-sm bg-gray-50 min-h-screen">
+      <ToastContainer />
       
-      {/* 🎯 Dashboard Cards */}
-       
-      <div className="relative mb-6">
-        <h2 className="text-4xl font-semibold text-center text-indigo-800">Theory Dashboard</h2>
-        <div className="absolute right-0 top-0">
-          <TopRightAvatar />
+      {/* Dashboard */}
+      <h2 className="text-2xl md:text-3xl font-bold text-center text-indigo-800 mb-6">{title} Learning Path</h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8 text-center">
+        <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-3 md:p-4 rounded-lg border border-indigo-200 shadow-md hover:shadow-lg transition-shadow">
+          <div className="text-xl md:text-2xl font-bold text-indigo-700">{total}</div>
+          <div className="text-xs md:text-sm text-indigo-600 font-medium">Total Topics</div>
         </div>
-      </div>
-      
-      <div className="grid grid-cols-4 gap-4 mb-8 text-center">
-        <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-lg border border-indigo-200 shadow-md hover:shadow-lg transition-shadow">
-          <div className="text-2xl font-bold text-indigo-700">{total}</div>
-          <div className="text-indigo-600 font-medium">Total Topics</div>
+        <div className="bg-gradient-to-br from-green-50 to-green-100 p-3 md:p-4 rounded-lg border border-green-200 shadow-md hover:shadow-lg transition-shadow">
+          <div className="text-xl md:text-2xl font-bold text-green-700">{completed}</div>
+          <div className="text-xs md:text-sm text-green-600 font-medium">Completed</div>
         </div>
-        <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200 shadow-md hover:shadow-lg transition-shadow">
-          <div className="text-2xl font-bold text-green-700">{completed}</div>
-          <div className="text-green-600 font-medium">Completed</div>
+        <div className="bg-gradient-to-br from-amber-50 to-amber-100 p-3 md:p-4 rounded-lg border border-amber-200 shadow-md hover:shadow-lg transition-shadow">
+          <div className="text-xl md:text-2xl font-bold text-amber-700">{bookmarked}</div>
+          <div className="text-xs md:text-sm text-amber-600 font-medium">Bookmarked</div>
         </div>
-        <div className="bg-gradient-to-br from-amber-50 to-amber-100 p-4 rounded-lg border border-amber-200 shadow-md hover:shadow-lg transition-shadow">
-          <div className="text-2xl font-bold text-amber-700">{bookmarked}</div>
-          <div className="text-amber-600 font-medium">Bookmarked</div>
-        </div>
-        <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-lg border border-orange-200 shadow-md hover:shadow-lg transition-shadow flex flex-col justify-center items-center">
-          <div style={{ width: 60 }}>
+        <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-3 md:p-4 rounded-lg border border-orange-200 shadow-md hover:shadow-lg transition-shadow flex flex-col justify-center items-center">
+          <div style={{ width: 50, height: 50 }} className="md:w-15 md:h-15">
             <CircularProgressbarWithChildren 
-              value={percent} 
+              value={progressPercent} 
               styles={buildStyles({ 
                 pathColor: "#ea580c",
                 trailColor: "#fed7aa"
               })}
             >
-              <div className="text-lg font-semibold text-orange-800">{percent}%</div>
+              <div className="text-sm md:text-lg font-semibold text-orange-800">{progressPercent}%</div>
             </CircularProgressbarWithChildren>
           </div>
           <div className="text-xs mt-1 font-semibold text-orange-700">Progress</div>
+          {quizCount > 0 && (
+            <div className="text-xs text-orange-600 mt-1">
+              {quizCount} quiz taken
+            </div>
+          )}
         </div>
       </div>
 
-      {/* 🔍 Filters and Search */}
-      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <div className="flex gap-2 flex-wrap">
+      {/* Filters and Search */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-4 mb-4 md:mb-6">
+        <div className="flex flex-wrap gap-2">
           {["All", "Important", "Other", "Bookmarked", "Remind"].map((type) => (
             <button
               key={type}
               onClick={() => toggleFilter(type)}
-              className={`px-4 py-1.5 rounded-lg border transition-all shadow-md hover:shadow-lg ${
+              className={`px-3 py-1 text-xs md:text-sm md:px-4 md:py-1.5 rounded-lg border transition-all shadow-md hover:shadow-lg ${
                 activeFilters[type]
                   ? type === "Important"
                     ? "bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-700"
@@ -269,221 +411,510 @@ const TheoryPage = ({ subject, title }) => {
             </button>
           ))}
         </div>
-        <div className="flex gap-3 items-center">
-          <label className="inline-flex items-center space-x-2">
-            <input
-              type="checkbox"
-              checked={showOnlyCompleted}
-              onChange={() => setShowOnlyCompleted(!showOnlyCompleted)}
-              className="w-5 h-5 accent-emerald-500 focus:ring-emerald-500"
-            />
-            <span className="text-gray-700 font-medium">Completed Only</span>
-          </label>
-          <input
-            type="text"
-            placeholder="Search topics..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-3 py-2 rounded border border-gray-300 shadow-sm w-98 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Search topics..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="px-3 py-1.5 md:py-2 rounded border border-gray-300 shadow-sm w-full md:w-48 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs md:text-sm"
+        />
       </div>
 
-      {/* 📋 Table Header */}
-      <div className="grid grid-cols-[85px_3fr_.85fr_.85fr_.85fr_.85fr_.85fr_1.85fr] font-semibold text-lg text-gray-600 border-b-2 border-gray-200 pb-3 mb-3">
-        <div className="text-center">Status</div>
-        <div className="pl-2">Topic</div>
-        <div className="text-left">GFG</div>
-        <div className="text-left">YT</div>
-        <div className="text-left pl-4">Quiz</div>
-        <div className="text-left pl-1">Bookmark</div>
-        <div className="text-left pl-1">Reminder</div>
-        <div className="text-left">Notes</div>
-      </div>
-
-      {/* 📌 Topics List */}
-      {filteredTopics.map((topic) => {
-        const { isCompleted, isBookmarked, remindOn, note } = progress[topic._id] || {};
-        const gfg = topic.resources?.find((r) => r.url.includes("geeksforgeeks"));
-        const yt = topic.resources?.find((r) => r.type === "video");
-        const pdf = topic.resources?.find((r) => r.type === "pdf");
-
-        return (
-          <div
-            key={topic._id}
-            className={`grid grid-cols-[85px_3fr_.85fr_.85fr_.85fr_.85fr_.85fr_1.85fr] items-center p-3 mb-3 rounded-xl transition-all ${
-              isCompleted 
-                ? "bg-green-50 border-2 border-green-400 hover:border-green-500" 
-                : "bg-white border border-amber-300 hover:border-amber-400"
-            } hover:shadow-md`}
-          >
-            {/* Status Checkbox */}
-            <div className="flex justify-center items-center">
-              <input
-                type="checkbox"
-                checked={!!isCompleted}
-                onChange={() => updateProgress(topic._id, "isCompleted")}
-                className="w-5 h-5 accent-emerald-500 focus:ring-emerald-500"
-              />
-            </div>
-
-            {/* Topic Title */}
-            <div className="pl-2">
-              <div className={`font-semibold text-base ${
-                isCompleted ? "text-green-800" : "text-gray-800"
-              }`}>
-                {topic.title}
+      {/* Current Active Topic */}
+      {currentTopic && (
+        <div className="bg-white rounded-xl shadow-md p-6 mb-8 border-2 border-indigo-200">
+          <h3 className="text-xl font-bold text-indigo-700 mb-4">
+            Current Topic: {currentTopic.title}
+          </h3>
+          
+          {userKnowsTopic === null && !topicProgress.quizTaken && (
+            <div className="mb-6">
+              <p className="text-gray-700 mb-4">Do you already know this topic?</p>
+              <div className="flex gap-4">
+                <button 
+                  onClick={() => handleUserResponse(true)}
+                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                >
+                  Yes, I know it
+                </button>
+                <button 
+                  onClick={() => handleUserResponse(false)}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                >
+                  No, I need to learn
+                </button>
               </div>
-              <div className="text-xs text-gray-500 mt-0.5">{topic.notes}</div>
             </div>
+          )}
 
-            {/* GFG Link */}
-            <div>
-              {gfg ? (
-                <a href={gfg.url} target="_blank" rel="noreferrer" className="inline-block hover:scale-110 transition-transform">
-                  <img src={getIconUrl("article", gfg.url)} className="w-7 h-7" />
-                </a>
-              ) : (
-                <span className="text-gray-400">-</span>
-              )}
-            </div>
-            
-            {/* YouTube Link */}
-            <div>
-              {yt ? (
-                <a href={yt.url} target="_blank" rel="noreferrer" className="inline-block hover:scale-110 transition-transform">
-                  <img src={getIconUrl("video", yt.url)} className="w-7 h-7" />
-                </a>
-              ) : (
-                <span className="text-gray-400">-</span>
-              )}
-            </div>
-            
-            {/* Quiz Button */}
-            <div className="pl-4">
-              {topic.type === "Important" ? (
-                <button 
-                  onClick={() => handleSingleTopicQuiz(topic.title)} 
-                  className="px-2 py-1 text-lg bg-gradient-to-br from-purple-100 to-purple-50 hover:from-purple-200 hover:to-purple-100 text-purple-800 rounded border border-purple-200 transition-all"
-                >
-                  Quiz
-                </button>
-              ) : (
-                <span className="text-gray-400">-</span>
-              )}
-            </div>
-            
-            {/* Bookmark Icon */}
-            <div className="pl-5">
-              <button 
-                onClick={() => updateProgress(topic._id, "isBookmarked")}
-                className="text-2xl hover:scale-110 transition-transform"
-                aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
-              >
-                {isBookmarked ? (
-                  <span className="text-amber-500">🔖</span>
-                ) : (
-                  <span className="text-gray-400">📑</span>
-                )}
-              </button>
-            </div>
-            
-            {/* Reminder */}
-            <div className="pl-6 relative">
-              <button 
-                onClick={() => setShowDatePicker((prev) => ({ ...prev, [topic._id]: !prev[topic._id] }))} 
-                className={`text-xl hover:scale-110 transition-transform ${
-                  remindOn ? "text-sky-500" : "text-gray-400"
-                }`}
-                aria-label={remindOn ? "Change reminder" : "Set reminder"}
-              >
-                {remindOn ? "⏰" : "🕒"}
-              </button>
-              {showDatePicker[topic._id] && (
-                <input
-                  type="date"
-                  value={remindOn ? remindOn.split("T")[0] : ""}
-                  onChange={(e) => updateProgress(topic._id, "remindOn", e.target.value)}
-                  className="absolute top-8 left-0 px-1.5 py-1 border border-gray-300 rounded text-xs bg-white z-10 shadow-md"
-                  onBlur={() => setShowDatePicker((prev) => ({ ...prev, [topic._id]: false }))}
-                />
-              )}
-            </div>
+          {/* Always show Next Topic button if there is a next topic */}
+          {(() => {
+            const currentIndex = topics.findIndex(t => t._id === activeTopic);
+            const hasNext = currentIndex !== -1 && currentIndex < topics.length - 1;
+            const latestProgress = activeTopic ? progress[activeTopic] || {} : {};
+            // Next Topic button should be enabled if quizTaken && quizScore >= 70
+            const canGoNext = latestProgress.quizTaken && (latestProgress.quizScore >= 70);
 
-            {/* Notes Column */}
-            <div ref={(el) => (noteRefs.current[topic._id] = el)} className="relative">
-              {note ? (
-                <div className="flex gap-2 items-center text-xs font-semibold">
-                  <span className="text-amber-500">📄</span>
-                  <span className="truncate max-w-[100px] text-amber-800">{note}</span>
-                  <button 
-                    onClick={() => { setOpenNoteId(topic._id); setNoteText(note); }}
-                    className="text-gray-500 hover:text-gray-700"
-                    aria-label="Edit note"
+        
+          })()}
+
+          {showResources && (
+            <div className="mb-6">
+              <h4 className="font-semibold text-gray-800 mb-3">Learning Resources:</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {currentTopic.resources?.map((resource, idx) => (
+                  <a 
+                    key={idx}
+                    href={resource.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
                   >
-                    ✏
-                  </button>
-                </div>
-              ) : (
-                <button 
-                  className="text-sm hover:text-blue-700 transition-colors flex items-center gap-1"
-                  onClick={() => { setOpenNoteId(topic._id); setNoteText(""); }}
-                >
-                  <span className="text-blue-500">📝</span>
-                  <span className="text-blue-600">Add</span>
-                </button>
-              )}
-
-              {openNoteId === topic._id && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                  <div className="bg-white border border-gray-200 shadow-xl rounded-lg p-4 w-96">
-                    <h3 className="font-semibold text-lg mb-3 text-gray-800">Notes for: {topic.title}</h3>
-                    <textarea
-                      value={noteText}
-                      onChange={(e) => setNoteText(e.target.value)}
-                      rows={5}
-                      placeholder="Type your notes here..."
-                      className="w-full p-3 border border-gray-300 rounded-lg text-sm mb-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      autoFocus
+                    <img 
+                      src={getIconUrl(resource.type, resource.url)} 
+                      alt={resource.type} 
+                      className="w-8 h-8 mr-3"
                     />
-                    <div className="flex justify-between items-center">
-                      {note && (
-                        <button
-                          onClick={() => {
-                            updateProgress(topic._id, "note", "");
-                            setOpenNoteId(null);
-                          }}
-                          className="text-xs px-3 py-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition-colors"
-                        >
-                          Clear Note
-                        </button>
-                      )}
-                      <div className="flex gap-2">
-                        <button 
-                          onClick={() => setOpenNoteId(null)} 
-                          className="text-xs px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 transition-colors"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => {
-                            updateProgress(topic._id, "note", noteText);
-                            setOpenNoteId(null);
-                            toast("Note saved!", { type: "success", position: "top-center", autoClose: 2000 });
-                          }}
-                          className="text-xs px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
-                        >
-                          Save
-                        </button>
-                      </div>
+                    <div>
+                      <p className="font-medium text-gray-800">{resource.title || resource.type}</p>
+                      <p className="text-xs text-gray-500">{new URL(resource.url).hostname}</p>
                     </div>
-                  </div>
+                  </a>
+                ))}
+              </div>
+              <button
+                onClick={() => {
+                  setShowQuiz(true);
+                  setShowResources(false);
+                }}
+                className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+              >
+                I've reviewed the resources, test me now
+              </button>
+            </div>
+          )}
+
+          {showQuiz && (
+            <div className="mb-6">
+              <h4 className="font-semibold text-gray-800 mb-3">Test Your Knowledge:</h4>
+              <p className="text-gray-700 mb-4">
+                Take a short quiz on this topic to assess your understanding.
+              </p>
+              <button
+                onClick={() => handleSingleTopicQuiz(currentTopic.title)}
+                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                Start Quiz
+              </button>
+              {topicProgress.quizTaken && (
+                <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                  <p className="text-blue-800">
+                    Quiz score: {topicProgress.quizScore}%
+                    {topicProgress.quizScore >= 70 ? " - Great job!" : " - Keep practicing!"}
+                  </p>
                 </div>
+              )}
+            </div>
+          )}
+
+          <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={!!topicProgress.isBookmarked}
+                  onChange={() => updateProgress(currentTopic._id, "isBookmarked")}
+                  className="w-5 h-5 accent-amber-500 mr-2"
+                  id={`bookmark-${currentTopic._id}`}
+                />
+                <label htmlFor={`bookmark-${currentTopic._id}`} className="text-gray-700">
+                  Bookmark
+                </label>
+              </div>
+
+              <div className="relative">
+                <button 
+                  onClick={() => setShowDatePicker((prev) => ({ ...prev, [currentTopic._id]: !prev[currentTopic._id] }))} 
+                  className={`flex items-center gap-1 ${topicProgress.remindOn ? "text-sky-600" : "text-gray-500"}`}
+                >
+                  <span>{topicProgress.remindOn ? "⏰" : "🕒"}</span>
+                  <span>{topicProgress.remindOn ? "Change Reminder" : "Set Reminder"}</span>
+                </button>
+                {showDatePicker[currentTopic._id] && (
+                  <input
+                    type="date"
+                    value={topicProgress.remindOn ? topicProgress.remindOn.split("T")[0] : ""}
+                    onChange={(e) => updateProgress(currentTopic._id, "remindOn", e.target.value)}
+                    className="absolute top-8 left-0 px-1.5 py-1 border border-gray-300 rounded text-xs bg-white z-10 shadow-md"
+                    onBlur={() => setShowDatePicker((prev) => ({ ...prev, [currentTopic._id]: false }))}
+                  />
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => {
+                  setOpenNoteId(currentTopic._id);
+                  setNoteText(topicProgress.note || "");
+                }}
+                className="flex items-center text-indigo-600 hover:text-indigo-800"
+              >
+                <span className="mr-1">📝</span>
+                {topicProgress.note ? "Edit Notes" : "Add Notes"}
+              </button>
+
+              {topicProgress.quizTaken && (
+                <button
+                  onClick={() => {
+                    updateProgress(activeTopic, "isCompleted", true);
+                    // Find next incomplete topic
+                    const currentIndex = topics.findIndex(t => t._id === activeTopic);
+                    const nextTopics = topics.slice(currentIndex + 1);
+                    const nextIncomplete = nextTopics.find(t => !progress[t._id]?.isCompleted);
+                    
+                    if (nextIncomplete) {
+                      setActiveTopic(nextIncomplete._id);
+                      setUserKnowsTopic(null);
+                      setShowResources(false);
+                      setShowQuiz(false);
+                    }
+                  }}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  Mark as Complete
+                </button>
               )}
             </div>
           </div>
-        );
-      })}
+        </div>
+      )}
+
+      {/* All Topics List */}
+      <div className="mb-8">
+        <h3 className="text-xl font-bold text-gray-800 mb-4">All Topics</h3>
+        <div className="hidden md:grid md:grid-cols-[60px_2fr_70px_70px_90px_90px_100px_120px] font-semibold text-gray-600 border-b-2 border-gray-200 pb-3 mb-3">
+          <div className="text-center">Status</div>
+          <div className="pl-2">Topic</div>
+          <div className="text-left">GFG</div>
+          <div className="text-left">YT</div>
+          <div className="text-left pl-4">Quiz</div>
+          <div className="text-left pl-1">Bookmark</div>
+          <div className="text-left pl-1">Reminder</div>
+          <div className="text-left">Notes</div>
+        </div>
+
+        {filteredTopics.map((topic, index) => {
+          const { isCompleted, isBookmarked, remindOn, note, quizTaken } = progress[topic._id] || {};
+          const gfg = topic.resources?.find((r) => r.url.includes("geeksforgeeks"));
+          const yt = topic.resources?.find((r) => r.type === "video");
+          const isEnabled = isTopicEnabled(index);
+          const isCurrentTopic = topic._id === activeTopic;
+          const canAttemptQuiz = isEnabled && (isCurrentTopic || progress[topic._id]?.isCompleted);
+
+
+          return (
+            <div
+              key={topic._id}
+              className={`grid grid-cols-1 md:grid-cols-[60px_2fr_70px_70px_90px_90px_100px_120px] gap-2 md:gap-0 p-3 mb-3 rounded-xl transition-all ${
+                isCompleted 
+                  ? "bg-green-50 border-2 border-green-400 hover:border-green-500" 
+                  : isCurrentTopic
+                  ? "bg-indigo-50 border-2 border-indigo-400"
+                  : !isEnabled
+                  ? "bg-gray-100 border border-gray-300 opacity-60"
+                  : "bg-white border border-gray-200 hover:border-gray-300"
+              } hover:shadow-md`}
+            >
+              {/* Mobile View */}
+              <div className="flex justify-between items-center md:hidden">
+                <div className={`font-semibold text-sm ${
+                  isCompleted ? "text-green-800" : 
+                  isCurrentTopic ? "text-indigo-800" : 
+                  !isEnabled ? "text-gray-500" : "text-gray-800"
+                }`}>
+                  {topic.title}
+                </div>
+                <div className="flex flex-col items-center">
+                  {!isEnabled && <span className="text-gray-400 text-sm mb-1">🔒</span>}
+                  {isCompleted ? (
+                    <span className="text-green-600">✓</span>
+                  ) : (
+                    <span className="text-gray-400">○</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-4 gap-2 md:hidden">
+                <div className="flex justify-center">
+                  {gfg ? (
+                    <a href={gfg.url} target="_blank" rel="noreferrer" className={`w-5 h-5 ${!isEnabled ? 'opacity-50' : ''}`}>
+                      <img src={getIconUrl("article", gfg.url)} className="w-5 h-5" alt="GFG" />
+                    </a>
+                  ) : (
+                    <span className="text-gray-400">-</span>
+                  )}
+                </div>
+                <div className="flex justify-center">
+                  {yt ? (
+                    <a href={yt.url} target="_blank" rel="noreferrer" className={`w-5 h-5 ${!isEnabled ? 'opacity-50' : ''}`}>
+                      <img src={getIconUrl("video", yt.url)} className="w-5 h-5" alt="YouTube" />
+                    </a>
+                  ) : (
+                    <span className="text-gray-400">-</span>
+                  )}
+                </div>
+                <div className="flex justify-center">
+  <button
+  onClick={() => handleSingleTopicQuiz(topic.title)}
+  disabled={!canAttemptQuiz}
+  className={`... ${
+    canAttemptQuiz
+      ? "bg-gradient-to-br from-purple-100 ..."
+      : "bg-gray-100 text-gray-400 cursor-not-allowed"
+  }`}
+>
+  Quiz
+</button>
+
+
+</div>
+                <div className="flex justify-center">
+                  <button 
+                    onClick={() => updateProgress(topic._id, "isBookmarked")}
+                    disabled={!isEnabled}
+                    className={`text-xl ${isEnabled ? 'hover:scale-110 transition-transform' : ''}`}
+                    aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+                  >
+                    {isBookmarked ? (
+                      <span className="text-amber-500">🔖</span>
+                    ) : (
+                      <span className="text-gray-400">📑</span>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center md:hidden">
+                <div className="relative">
+                  <button 
+                    onClick={() => setShowDatePicker((prev) => ({ ...prev, [topic._id]: !prev[topic._id] }))} 
+                    disabled={!isEnabled}
+                    className={`text-xl ${isEnabled ? 'hover:scale-110 transition-transform' : ''} ${
+                      !isEnabled ? "text-gray-300" : remindOn ? "text-sky-500" : "text-gray-400"
+                    }`}
+                    aria-label={remindOn ? "Change reminder" : "Set reminder"}
+                  >
+                    {remindOn ? "⏰" : "🕒"}
+                  </button>
+                  {showDatePicker[topic._id] && isEnabled && (
+                    <input
+                      type="date"
+                      value={remindOn ? remindOn.split("T")[0] : ""}
+                      onChange={(e) => updateProgress(topic._id, "remindOn", e.target.value)}
+                      className="absolute top-8 left-0 px-1.5 py-1 border border-gray-300 rounded text-xs bg-white z-10 shadow-md"
+                      onBlur={() => setShowDatePicker((prev) => ({ ...prev, [topic._id]: false }))}
+                    />
+                  )}
+                </div>
+                <div ref={(el) => (noteRefs.current[topic._id] = el)} className="relative">
+                  {note ? (
+                    <div className="flex gap-1 items-center text-xs font-semibold">
+                      <span className={isEnabled ? "text-amber-500" : "text-gray-400"}>📄</span>
+                      <button 
+                        onClick={() => { setOpenNoteId(topic._id); setNoteText(note); }}
+                        disabled={!isEnabled}
+                        className={`${isEnabled ? 'text-gray-500 hover:text-gray-700' : 'text-gray-300'}`}
+                        aria-label="Edit note"
+                      >
+                        ✏
+                      </button>
+                    </div>
+                  ) : (
+                    <button 
+                      disabled={!isEnabled}
+                      className={`text-sm flex items-center gap-1 ${isEnabled ? 'hover:text-blue-700 transition-colors' : ''}`}
+                      onClick={() => { setOpenNoteId(topic._id); setNoteText(""); }}
+                    >
+                      <span className={isEnabled ? "text-blue-500" : "text-gray-300"}>📝</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Desktop View */}
+              <div className="hidden md:flex justify-center items-center">
+                {!isEnabled && <span className="text-gray-400 text-sm mb-1">🔒</span>}
+                {isCompleted ? (
+                  <span className="text-green-600 text-xl">✓</span>
+                ) : (
+                  <span className="text-gray-400 text-xl">○</span>
+                )}
+              </div>
+
+              <div className="hidden md:block pl-2">
+                <div className={`font-semibold text-base ${
+                  isCompleted ? "text-green-800" : 
+                  isCurrentTopic ? "text-indigo-800" : 
+                  !isEnabled ? "text-gray-500" : "text-gray-800"
+                }`}>
+                  {topic.title}
+                </div>
+                <div className="text-xs text-gray-500 mt-0.5">{topic.notes}</div>
+              </div>
+
+              <div className="hidden md:block">
+                {gfg ? (
+                  <a href={gfg.url} target="_blank" rel="noreferrer" className={`inline-block hover:scale-110 transition-transform`}>
+                    <img src={getIconUrl("article", gfg.url)} className={`w-6 h-6 ${!isEnabled ? 'opacity-50' : ''}`} alt="GFG" />
+                  </a>
+                ) : (
+                  <span className="text-gray-400">-</span>
+                )}
+              </div>
+              
+              <div className="hidden md:block">
+                {yt ? (
+                  <a href={yt.url} target="_blank" rel="noreferrer" className={`inline-block hover:scale-110 transition-transform`}>
+                    <img src={getIconUrl("video", yt.url)} className={`w-6 h-6 ${!isEnabled ? 'opacity-50' : ''}`} alt="YouTube" />
+                  </a>
+                ) : (
+                  <span className="text-gray-400">-</span>
+                )}
+              </div>
+              
+              <div className="hidden md:block pl-4">
+  <button
+  onClick={() => handleSingleTopicQuiz(topic.title)}
+  disabled={!canAttemptQuiz}
+  className={`... ${
+    canAttemptQuiz
+      ? "bg-gradient-to-br from-purple-100 ..."
+      : "bg-gray-100 text-gray-400 cursor-not-allowed"
+  }`}
+>
+  Quiz
+</button>
+
+
+</div>
+              
+              <div className="hidden md:block pl-5">
+                <button 
+                  onClick={() => updateProgress(topic._id, "isBookmarked")}
+                  disabled={!isEnabled}
+                  className={`text-2xl ${isEnabled ? 'hover:scale-110 transition-transform' : ''}`}
+                  aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+                >
+                  {isBookmarked ? (
+                    <span className="text-amber-500">🔖</span>
+                  ) : (
+                    <span className="text-gray-400">📑</span>
+                  )}
+                </button>
+              </div>
+              
+              <div className="hidden md:block pl-6 relative">
+                <button 
+                  onClick={() => setShowDatePicker((prev) => ({ ...prev, [topic._id]: !prev[topic._id] }))} 
+                  disabled={!isEnabled}
+                  className={`text-xl ${isEnabled ? 'hover:scale-110 transition-transform' : ''} ${
+                    !isEnabled ? "text-gray-300" : remindOn ? "text-sky-500" : "text-gray-400"
+                  }`}
+                  aria-label={remindOn ? "Change reminder" : "Set reminder"}
+                >
+                  {remindOn ? "⏰" : "🕒"}
+                </button>
+                {showDatePicker[topic._id] && isEnabled && (
+                  <input
+                    type="date"
+                    value={remindOn ? remindOn.split("T")[0] : ""}
+                    onChange={(e) => updateProgress(topic._id, "remindOn", e.target.value)}
+                    className="absolute top-8 left-0 px-1.5 py-1 border border-gray-300 rounded text-xs bg-white z-10 shadow-md"
+                    onBlur={() => setShowDatePicker((prev) => ({ ...prev, [topic._id]: false }))}
+                  />
+                )}
+              </div>
+
+              <div ref={(el) => (noteRefs.current[topic._id] = el)} className="hidden md:block relative">
+                {note ? (
+                  <div className="flex gap-2 items-center text-xs font-semibold">
+                    <span className={isEnabled ? "text-amber-500" : "text-gray-400"}>📄</span>
+                    <span className={`truncate max-w-[100px] ${isEnabled ? 'text-amber-800' : 'text-gray-500'}`}>{note}</span>
+                    <button 
+                      onClick={() => { setOpenNoteId(topic._id); setNoteText(note); }}
+                      disabled={!isEnabled}
+                      className={`${isEnabled ? 'text-gray-500 hover:text-gray-700' : 'text-gray-300'}`}
+                      aria-label="Edit note"
+                    >
+                      ✏
+                    </button>
+                  </div>
+                ) : (
+                  <button 
+                    disabled={!isEnabled}
+                    className={`text-sm flex items-center gap-1 ${isEnabled ? 'hover:text-blue-700 transition-colors' : ''}`}
+                    onClick={() => { setOpenNoteId(topic._id); setNoteText(""); }}
+                  >
+                    <span className={isEnabled ? "text-blue-500" : "text-gray-300"}>📝</span>
+                    <span className={isEnabled ? "text-blue-600" : "text-gray-400"}>Add</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Note Modal */}
+      {openNoteId && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white border border-gray-200 shadow-xl rounded-lg p-4 w-11/12 md:w-96">
+            <h3 className="font-semibold text-lg mb-3 text-gray-800">
+              Notes for: {topics.find(t => t._id === openNoteId)?.title}
+            </h3>
+            <textarea
+              value={noteText}
+              onChange={(e) => setNoteText(e.target.value)}
+              rows={5}
+              placeholder="Type your notes here..."
+              className="w-full p-3 border border-gray-300 rounded-lg text-sm mb-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              autoFocus
+            />
+            <div className="flex justify-between items-center">
+              {progress[openNoteId]?.note && (
+                <button
+                  onClick={() => {
+                    updateProgress(openNoteId, "note", "");
+                    setOpenNoteId(null);
+                  }}
+                  className="text-xs px-3 py-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition-colors"
+                >
+                  Clear Note
+                </button>
+              )}
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => setOpenNoteId(null)} 
+                  className="text-xs px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    updateProgress(openNoteId, "note", noteText);
+                    setOpenNoteId(null);
+                    toast("Note saved!", { type: "success" });
+                  }}
+                  className="text-xs px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

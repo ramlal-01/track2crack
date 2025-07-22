@@ -21,13 +21,17 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import VerifyEmail from './pages/VerifyEmail';
 import { useEffect, useState } from 'react';
-import CN from './pages/CoreCN';
-import DBMS from './pages/CoreDBMS';
-import OS from './pages/CoreOS'; 
+import CN from './pages/core/CoreCN';
+import DBMS from './pages/core/CoreDBMS';
+import OS from './pages/core/CoreOS'; 
 import { messaging, getToken, onMessage } from "./firebase";  
 import API from './api/api';
 import { toast } from 'react-toastify'; 
 import Feedback from './pages/FeedbackPage';
+import ProtectedRoute from './components/ProtectedRoute';
+import { useAuth } from './context/AuthContext';
+
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -53,7 +57,7 @@ const AppContent = () => {
 
       try {
         const token = await getToken(messaging, {
-          vapidKey: "BFC2XaAuXY6Xco3qHbXHH-iA2dsZUWM1cccmnD9jm2w8lH1rx1QgmgYfOndUoZyfVLAOgIS-FMBFWAjjT8rhfoE",
+          vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
         });
 
         if (token) {
@@ -102,32 +106,33 @@ const AppContent = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard  />} />
-          <Route path="/dashboard/dsa" element={<DSASheet />} />
-          {/* Theory Routes */}
-          <Route path="/dashboard/theory/dsa" element={<DSA />} />
-          <Route path="/dashboard/theory/java" element={<Java />} />
-          <Route path="/dashboard/theory/oops" element={<OOPS />} />
-          {/* Quiz Route */}
-          <Route path="/quiz" element={<Quiz />} />
-          <Route path="/quiz/history" element={<QuizHistory />} />
-
-          {/* Core Routes and Core Quiz Routes  */}
-          <Route path="/dashboard/core/cn" element={<CN />} />
-          <Route path="/dashboard/core/dbms" element={<DBMS />} />
-          <Route path="/dashboard/core/os" element={<OS />} />
-          
-
-          <Route path="/dashboard/quizhistory" element={<MainHistory />} />
-          <Route path="/dashboard/revision-Planner" element={<RevisionPlanner />} />
-          <Route path="/profile/" element={<ProfilePage />} />
-          <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/verify-email/:token" element={<VerifyEmail />} />
+
+          <Route path="/dashboard" element={<Dashboard  />} />
+          <Route path="/dashboard/dsa" element={<ProtectedRoute><DSASheet /> </ProtectedRoute>} />
+          {/* Theory Routes */}
+          <Route path="/dashboard/theory/dsa" element={ <ProtectedRoute><DSA /> </ProtectedRoute>} />
+          <Route path="/dashboard/theory/java" element={ <ProtectedRoute><Java /> </ProtectedRoute>} />
+          <Route path="/dashboard/theory/oops" element={  <OOPS />  } />
+          {/* Quiz Route */}
+          <Route path="/quiz" element={   <Quiz />  } />
+          <Route path="/quiz/history" element={<ProtectedRoute><QuizHistory /> </ProtectedRoute>} />
+
+          {/* Core Routes and Core Quiz Routes  */}
+          <Route path="/dashboard/core/cn" element={<ProtectedRoute><CN /> </ProtectedRoute>} />
+          <Route path="/dashboard/core/dbms" element={<ProtectedRoute><DBMS /> </ProtectedRoute>} />
+          <Route path="/dashboard/core/os" element={<ProtectedRoute><OS /> </ProtectedRoute>} />
+          
+
+          <Route path="/dashboard/quizhistory" element={<ProtectedRoute><MainHistory /> </ProtectedRoute>} />
+          <Route path="/dashboard/revision-Planner" element={<ProtectedRoute><RevisionPlanner /> </ProtectedRoute>} />
+          <Route path="/profile/" element={<ProtectedRoute><ProfilePage /> </ProtectedRoute>} />
+          <Route path="/edit-profile" element={ <ProtectedRoute><EditProfile /> </ProtectedRoute>} />
+          
           {/* Redirect root to dashboard */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} /> 
-          {/* <Route path='/deskboard' element={<Deskboard />} /> */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />  
           <Route path="/dashboard/feedback" element = {<Feedback />} />
 
         </Routes>

@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import SubjectProgressChart from "../components/SubjectProgressChart";
 import { useEffect, useState } from "react";
 import API from "../api/api"; // your API utility
+import { Navigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { theme } = useTheme(); // dark / light 
@@ -19,7 +20,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
+    if (!user) return <Navigate to="/login" />;
  const [progress, setProgress] = useState({
     Java: 0,
     OOPS: 0,

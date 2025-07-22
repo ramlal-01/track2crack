@@ -14,6 +14,7 @@ build/
 # Environment variables
 .env
 .env.local
+.env.development
 
 # Logs
 logs/
@@ -38,3 +39,4 @@ client/.env
 client/coverage/
 client/.DS_Store
 client/Thumbs.db
+.env.local

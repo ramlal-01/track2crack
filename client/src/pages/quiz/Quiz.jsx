@@ -110,6 +110,26 @@ const Quiz = () => {
 
       const data = await res.json();
       if (res.ok) {
+        // Store quiz completion data for TheoryPage progress calculation
+        const quizCompletionData = {
+          topicId: quizData.topicId, // This was stored when quiz was generated
+          score: correctCount,
+          totalQuestions: questions.length,
+          percentage: Math.round((correctCount / questions.length) * 100),
+          completedAt: new Date().toISOString()
+        };
+        
+        // Store in localStorage for TheoryPage to access
+        const existingQuizData = JSON.parse(localStorage.getItem("quizProgressData") || "{}");
+        existingQuizData[quizData.topicId] = quizCompletionData;
+        localStorage.setItem("quizProgressData", JSON.stringify(existingQuizData));
+        
+        // Also store in the format that TheoryPage expects
+        localStorage.setItem("quizCompleted", JSON.stringify({
+          topicId: quizData.topicId,
+          score: Math.round((correctCount / questions.length) * 100)
+        }));
+        
         toast.success(`Quiz submitted! Score: ${correctCount}/${questions.length}`);
         localStorage.setItem("viewHistoryFor", quizData.subject);
         localStorage.setItem("viewHistorySource", quizData.source); 
@@ -137,20 +157,42 @@ const Quiz = () => {
   const seconds = timeLeft % 60;
   const timePercentage = Math.round((timeLeft / 1200) * 100);
   const answeredCount = Object.keys(selectedAnswers).length;
-  const completionPercentage = Math.round((answeredCount / quizData.questions.length) * 100);
+  
+  // Calculate progress based on correct answers, not just answered questions
+  const correctAnswers = Object.entries(selectedAnswers).filter(([index, selectedIdx]) => {
+    return selectedIdx === quizData.questions[index].correctAnswerIndex;
+  }).length;
+  
+  const completionPercentage = Math.round((correctAnswers / quizData.questions.length) * 100);
 
   return (
     <div className={`min-h-screen p-4 md:p-6 ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gradient-to-br from-blue-50 to-pink-50"}`}>
       <ToastContainer position="top-center" theme={darkMode ? "dark" : "light"} />
       
-      {/* Header with dark mode toggle */}
+      {/* Header with back button and dark mode toggle */}
       <div className="flex justify-between items-start mb-4">
-        <button 
-          onClick={() => setDarkMode(!darkMode)}
-          className={`px-3 py-1 rounded-full text-sm ${darkMode ? "bg-gray-700 text-white" : "bg-white text-blue-600 shadow-md"}`}
-        >
-          {darkMode ? "☀️ Light" : "🌙 Dark"}
-        </button>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => {
+              const fallbackSubject = localStorage.getItem("viewHistoryFor") || "java";
+              const fallbackSource = localStorage.getItem("viewHistorySource") || "theory";
+              navigate(`/dashboard/${fallbackSource.toLowerCase()}/${fallbackSubject.toLowerCase()}`);
+            }}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              darkMode 
+                ? "bg-gray-700 text-white hover:bg-gray-600" 
+                : "bg-white text-blue-600 hover:bg-blue-50 shadow-md"
+            }`}
+          >
+            ← Back
+          </button>
+          <button 
+            onClick={() => setDarkMode(!darkMode)}
+            className={`px-3 py-1 rounded-full text-sm ${darkMode ? "bg-gray-700 text-white" : "bg-white text-blue-600 shadow-md"}`}
+          >
+            {darkMode ? "☀️ Light" : "🌙 Dark"}
+          </button>
+        </div>
         <div className="text-right">
           <div className="flex items-center justify-end space-x-2">
             <FiClock className={`${darkMode ? "text-blue-300" : "text-blue-500"}`} />
@@ -201,7 +243,7 @@ const Quiz = () => {
       <div className="mb-8">
         <div className="flex justify-between mb-2">
           <span className={`text-sm font-medium ${darkMode ? "text-blue-300" : "text-blue-500"}`}>
-            Questions answered: {answeredCount}/{quizData.questions.length}
+            Correct answers: {correctAnswers}/{quizData.questions.length}
           </span>
           <span className={`text-sm font-medium ${darkMode ? "text-blue-300" : "text-pink-500"}`}>
             {completionPercentage}% complete
@@ -422,21 +464,23 @@ const Quiz = () => {
               </div>
             </div>
             
-            {/* Moved View Quiz History button here with better styling */}
-            <Link
-              to="/quiz/history"
-              onClick={() => {
-                localStorage.setItem("viewHistoryFor", quizData.subject);
-                localStorage.setItem("viewHistorySource", quizData.source); 
-              }}
-              className={`inline-block px-6 py-3 rounded-lg font-medium text-lg ${
-                darkMode 
-                  ? "bg-indigo-600 hover:bg-indigo-700 text-white" 
-                  : "bg-blue-500 hover:bg-blue-600 text-white"
-              } shadow-md transition-all transform hover:-translate-y-0.5`}
-            >
-              View All Quiz History
-            </Link>
+            {/* Sticky View Quiz History button */}
+            <div className="sticky bottom-4 left-0 right-0 z-50">
+              <Link
+                to="/quiz/history"
+                onClick={() => {
+                  localStorage.setItem("viewHistoryFor", quizData.subject);
+                  localStorage.setItem("viewHistorySource", quizData.source); 
+                }}
+                className={`block w-full max-w-md mx-auto px-6 py-3 rounded-lg font-medium text-lg text-center ${
+                  darkMode 
+                    ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg" 
+                    : "bg-blue-500 hover:bg-blue-600 text-white shadow-lg"
+                } transition-all transform hover:-translate-y-0.5`}
+              >
+                View All Quiz History
+              </Link>
+            </div>
           </div>
         )}
       </div>

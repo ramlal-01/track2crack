@@ -1,6 +1,9 @@
 // Imports
 const Quiz = require('../models/Quiz');
 const QuizQuestion = require('../models/QuizQuestion');
+const CoreTopic = require('../models/CoreTopic');
+const TheoryTopic = require('../models/TheoryTopic');
+
 
 /**
  * @route   POST /api/quiz/generate
@@ -137,5 +140,77 @@ exports.getRecentQuizzes = async (req, res) => {
     // error handling
      console.error("Error fetching recent quizzes:", err);
     res.status(500).json({ message: "Failed to load recent quizzes", error: err.message });
+  }
+};
+
+
+
+exports.getQuizBasedProgress = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { subject, source } = req.query;
+
+    if (!subject || !source) {
+      return res.status(400).json({ message: "Subject and source are required." });
+    }
+
+    const topicModel = source === 'Theory' ? TheoryTopic : CoreTopic;
+    const topics = await topicModel.find({ subject }).select('title');
+
+    if (!topics.length) {
+      return res.status(404).json({ message: "No topics found for this subject." });
+    }
+
+    const topicTitles = topics.map(t => t.title); // using 'title' not 'name'
+    const quizzes = await Quiz.find({ userId, subject, source });
+
+    // Track highest score per topic
+    const highestScores = {}; // topicTitle => { score, total }
+
+    quizzes.forEach(quiz => {
+      const perTopicScore = quiz.score / quiz.topicsCovered.length;
+      const perTopicTotal = quiz.totalQuestions / quiz.topicsCovered.length;
+
+      quiz.topicsCovered.forEach(topicTitle => {
+        if (!highestScores[topicTitle] || perTopicScore > highestScores[topicTitle].score) {
+          highestScores[topicTitle] = {
+            score: perTopicScore,
+            total: perTopicTotal
+          };
+        }
+      });
+    });
+
+    // Calculate progress across all topics (untouched ones contribute 0%)
+    let totalProgress = 0;
+    topicTitles.forEach(title => {
+      const t = highestScores[title];
+      if (t && t.total > 0) {
+        totalProgress += (t.score / t.total) * 100;
+      }
+      // if no score, contributes 0%
+    });
+
+    const progressPercent = parseFloat((totalProgress / topicTitles.length).toFixed(2));
+
+    res.status(200).json({
+      subject,
+      source,
+      totalTopics: topicTitles.length,
+      attemptedTopics: Object.keys(highestScores).length,
+      progressPercent
+    });
+
+    console.log("🧪 All topic titles:", topicTitles);
+    console.log("🧪 Quizzes fetched:", quizzes.map(q => ({
+      score: q.score,
+      total: q.totalQuestions,
+      topics: q.topicsCovered
+    })));
+    console.log("🧪 Highest topic scores:", highestScores);
+
+  } catch (err) {
+    console.error("❌ Error calculating quiz progress:", err);
+    res.status(500).json({ message: "Progress fetch failed", error: err.message });
   }
 };

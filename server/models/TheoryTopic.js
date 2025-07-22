@@ -33,7 +33,8 @@ const theoryTopicSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  order: { type: Number, required: true },
 }, {
   timestamps: true
 });

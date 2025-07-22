@@ -5,42 +5,32 @@ require('dotenv').config(); // if using .env for DB_URI
 // Replace this with your MongoDB Atlas URI
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://ramlal0801:trackpass123@track2crack.5habq7c.mongodb.net/track2crack?retryWrites=true&w=majority&appName=Track2Crack';
 
-const UserDSAProgress = require('./models/UserDSAProgress');
-const UserCoreProgress = require('./models/UserCoreProgress');
-const UserTheoryProgress = require('./models/UserTheoryProgress');
+ 
 
-async function cleanup() {
+ 
+const CoreTopic = require('./models/CoreTopic');      // Adjust the path if different
+const TheoryTopic = require('./models/TheoryTopic');  // Only if you're storing CN here
+
+ 
+
+async function deleteCNTopics() {
   try {
-    await mongoose.connect(MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log("✅ MongoDB connected");
+    await mongoose.connect(MONGODB_URI);
+    console.log('✅ Connected to MongoDB');
 
-    const deletedDSA = await UserDSAProgress.deleteMany({
-      remindOn: { $ne: null },
-      $or: [{ questionId: null }, { questionId: { $exists: false } }]
-    });
+    // Delete from CoreTopic
+    const coreResult = await CoreTopic.deleteMany({ subject: 'DSA' });
+    console.log(`🗑️ Deleted ${coreResult.deletedCount} CN topics from CoreTopic`);
 
-    const deletedCore = await UserCoreProgress.deleteMany({
-      remindOn: { $ne: null },
-      $or: [{ coreTopicId: null }, { coreTopicId: { $exists: false } }]
-    });
-
-    const deletedTheory = await UserTheoryProgress.deleteMany({
-      remindOn: { $ne: null },
-      $or: [{ topicId: null }, { topicId: { $exists: false } }]
-    });
-
-    console.log(`🧹 Deleted DSA junk: ${deletedDSA.deletedCount}`);
-    console.log(`🧹 Deleted Core junk: ${deletedCore.deletedCount}`);
-    console.log(`🧹 Deleted Theory junk: ${deletedTheory.deletedCount}`);
+    // If CN was also inserted into TheoryTopic accidentally
+    const theoryResult = await TheoryTopic.deleteMany({ subject: 'DSA' });
+    console.log(`🗑️ Deleted ${theoryResult.deletedCount} CN topics from TheoryTopic`);
 
     await mongoose.disconnect();
-    console.log("✅ Disconnected");
-  } catch (err) {
-    console.error("❌ Error:", err.message);
+    console.log('🔌 Disconnected from MongoDB');
+  } catch (error) {
+    console.error('❌ Error deleting CN topics:', error);
   }
 }
 
-cleanup();
+deleteCNTopics();
