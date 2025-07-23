@@ -121,6 +121,11 @@ const fetchNotifications = async (userId, page = 1) => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('avatarUrl');
+    localStorage.removeItem('quizCompleted');
+    localStorage.removeItem('fcmToken');
+
     window.location.href = '/login';
   };
 
@@ -151,7 +156,7 @@ const handleSettingsClick = () => {
   };
 
   return (
-    <div className="flex items-center justify-end mb-6 gap-3">
+    <div className="flex items-center justify-end gap-3 h-full">
       {/* Dark/Light Toggle */}
        
       <ThemeToggle />
@@ -230,7 +235,7 @@ const handleSettingsClick = () => {
         <Menu.Button className="inline-flex items-center gap-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow hover:shadow-md border border-gray-200 dark:border-gray-600 focus:outline-none transition-all duration-200">
           {avatarURL ? (
             <img
-      src={avatarURL || "/avatar.png"}
+      src={avatarURL || "/avatar.svg"}
       alt="avatar"
       className="w-8 h-8 rounded-full object-cover"
     />

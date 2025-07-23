@@ -4,7 +4,7 @@ import API from '../api/api';
 import { FaEnvelope, FaLock, FaGoogle, FaGithub, FaLinkedin } from 'react-icons/fa';
 import { auth, googleProvider, githubProvider } from '../firebase';
 import { signInWithPopup } from 'firebase/auth';
-
+import { useAuth } from '../context/AuthContext'; 
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -13,7 +13,7 @@ const Login = () => {
   const [showResend, setShowResend] = useState(false);
   const [unverifiedEmail, setUnverifiedEmail] = useState('');
   const [resending, setResending] = useState(false);
-
+  const { login } = useAuth(); 
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -33,39 +33,48 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setShowResend(false); // Reset in case previously shown
-    try {
-      const response = await API.post('/auth/login', formData);
-      const { token, user } = response.data;
-      localStorage.setItem('token', token);
-      localStorage.setItem('userId', user._id);
-      localStorage.setItem('user', JSON.stringify({
-        _id: user._id,
-        name: user.name || user.email.split('@')[0], // Fallback to email prefix if name not available
-        email: user.email
-      }));
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setShowResend(false);
 
-      navigate('/dashboard');
-    } catch (err) {
-      const msg = err.response?.data?.message || err.message;
-      console.error('Login error:', msg);
+  try {
+    const response = await API.post('/auth/login', formData);
+    const { accessToken, user } = response.data;
+    localStorage.setItem('token', accessToken);
+    localStorage.setItem('userId', user._id);
+    localStorage.setItem('user', JSON.stringify({
+      _id: user._id,
+      name: user.name || user.email.split('@')[0],
+      email: user.email
+    }));
 
-      if (err.response?.status === 403 && msg === 'Please verify your email before logging in.') {
-        alert('❗ Please verify your email before logging in.');
-        setShowResend(true);
-        setUnverifiedEmail(formData.email);
-      } else if (err.response?.status === 401) {
-        alert('❌ Invalid credentials. Please try again.');
-      } else {
-        alert('🚨 Server error. Please try again later.');
-      }
-    } finally {
-      setLoading(false);
+    // ✅ FIXED: Inform global auth context
+    login({
+      _id: user._id,
+      name: user.name || user.email.split('@')[0],
+      email: user.email
+    },accessToken);
+
+    navigate('/dashboard');
+  } catch (err) {
+    const msg = err.response?.data?.message || err.message;
+    console.error('Login error:', msg);
+
+    if (err.response?.status === 403 && msg === 'Please verify your email before logging in.') {
+      alert('❗ Please verify your email before logging in.');
+      setShowResend(true);
+      setUnverifiedEmail(formData.email);
+    } else if (err.response?.status === 401) {
+      alert('❌ Invalid credentials. Please try again.');
+    } else {
+      alert('🚨 Server error. Please try again later.');
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
+
 
 
 
@@ -101,19 +110,31 @@ const handleOAuthLogin = async (providerName) => {
       provider: user.providerData[0]?.providerId || providerName,
       emailVerified: user.emailVerified,
     };
+ 
+    const response = await API.post('/auth/social-login', payload); 
 
-    console.log("🔐 Firebase user:", payload); // Add this
-    const response = await API.post('/auth/social-login', payload);
-    console.log("✅ Backend response:", response.data); // Add this
+    const { accessToken, user: backendUser } = response.data;
 
-    const { token: backendToken, user: backendUser } = response.data;
-    localStorage.setItem('token', backendToken);
+    if (!accessToken || !backendUser) {
+      console.error("❌ Invalid OAuth response structure");
+      alert('OAuth login failed. Invalid response from server.');
+      return;
+    }
+
+    localStorage.setItem('token', accessToken);
     localStorage.setItem('userId', backendUser._id);
     localStorage.setItem('user', JSON.stringify({
-        _id: user._id,
-        name: user.name || user.email.split('@')[0], 
-        email: user.email
-      }));
+      _id: backendUser._id,
+      name: backendUser.name || backendUser.email.split('@')[0],
+      email: backendUser.email
+    }));
+
+    login({
+      _id: backendUser._id,
+      name: backendUser.name || backendUser.email.split('@')[0],
+      email: backendUser.email
+    },accessToken);
+
     navigate('/dashboard');
   } catch (error) {
     console.error('❌ OAuth login error:', error.response?.data || error.message);

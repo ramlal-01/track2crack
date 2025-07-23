@@ -11,6 +11,9 @@ import {
 } from 'react-icons/fa';
 import { auth, googleProvider, githubProvider } from '../firebase';
 import { signInWithPopup } from 'firebase/auth';
+import { useAuth } from '../context/AuthContext';
+ 
+
 
 // Password strength logic
 const getPasswordStrength = (password) => {
@@ -47,7 +50,7 @@ const Register = () => {
     password: '',
     confirmPassword: ''
   });
-
+const { login } = useAuth();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -126,6 +129,12 @@ const Register = () => {
 
         localStorage.setItem('token', backendToken);
         localStorage.setItem('userId', backendUser._id);
+        login({
+  _id: backendUser._id,
+  name: backendUser.name || backendUser.email.split('@')[0],
+  email: backendUser.email
+}, backendToken); // ✅ now token will persist
+
         navigate('/dashboard');
       } catch (error) {
         console.error('OAuth signup failed:', error);

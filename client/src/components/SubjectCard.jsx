@@ -28,11 +28,7 @@ const SubjectCard = ({ icon, title, progress, onClick }) => {
     >
       {/* Decorative left border - now gradient blue */}
       <div className="absolute top-0 left-0 h-full w-1 bg-gradient-to-b from-blue-400 to-blue-600"></div>
-      
-      {/* Decorative circle element
-      <div className={`absolute -right-10 -top-10 w-32 h-32 rounded-full opacity-10 
-                      ${theme === "dark" ? "bg-blue-400" : "bg-blue-500"} 
-                      group-hover:opacity-20 transition-opacity`}></div> */}
+       
 
       {/* Animated background highlight */}
       <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 bg-gradient-to-br ${getProgressColor(progress)} 
@@ -54,7 +50,7 @@ const SubjectCard = ({ icon, title, progress, onClick }) => {
             <img
               src={icon}
               alt={`${title} icon`}
-              className="w-8 h-8 dark:invert opacity-80 dark:opacity-90"
+              className="w-10 h-10 dark:invert opacity-80 dark:opacity-90"
             />
           </motion.div>
           

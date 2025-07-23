@@ -1,14 +1,23 @@
-const path = require('path');
+require("dotenv").config();   
 const express = require("express");
 const cors = require('cors');
 const app = express();
+const cookieParser = require('cookie-parser');
+ 
+const allowedOrigin =
+  process.env.NODE_ENV === 'production'
+    ? process.env.FRONTEND_URL_PROD
+    : process.env.FRONTEND_URL_DEV;
 
-// Middlewares
-app.use(cors());
+app.use(cors({
+  origin: allowedOrigin,
+  credentials: true, // Required for sending cookies
+}));
+
+
+// Middlewares 
 app.use(express.json());
-
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+app.use(cookieParser());
 
 // Routes
 

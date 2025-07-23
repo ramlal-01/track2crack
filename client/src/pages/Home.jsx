@@ -316,13 +316,13 @@ const Home = () => {
             Have a question, feedback, or need support? We'd love to hear from you.
           </p>
           <p className="text-blue-600 font-medium text-lg">
-            Email: <a href="mailto:support@track2crack.in" className="underline hover:text-blue-700 transition-colors duration-300">support@track2crack.in</a>
+            Email: <a href="mailto:track2crackapp@gmail.com?subject=Support%20Request" className="underline hover:text-blue-700 transition-colors duration-300">track2crackapp@gmail.com</a>
           </p>
         </div>
       </section>
 
       {/* Animation Styles */}
-      <style jsx>{`
+      <style >{`
         .animate-fadeIn {
           opacity: 0;
           transition: opacity 0.4s ease-out, transform 0.4s ease-out;

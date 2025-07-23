@@ -12,8 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { SiLeetcode, SiGeeksforgeeks } from "react-icons/si";
 import { toast } from 'react-toastify';   
 import { FaChevronRight, FaChevronDown } from "react-icons/fa";
-
-import TopRightAvatar from "../components/TopRightAvatar";
+ 
 const DSASheet = () => {
   const [groupedQuestions, setGroupedQuestions] = useState({});
   const [progressMap, setProgressMap] = useState({});
@@ -357,7 +356,7 @@ useEffect(() => {
   return (
     <div className="p-6 md:p-10 min-h-screen bg-slate-50">
       
-      <div className="flex justify-between items-center mb-10 px-10 py-4 bg-gradient-to-r from-purple--100 to-blue-100 rounded-2xl shadow-md">
+      <div className="flex justify-between items-center mb-10 px-10 py-4 bg-gradient-to-r from-blue-50 to-white rounded-2xl shadow-md">
         {/* LEFT: Title and Subtitle */}
         <div>
           <h1 className="text-4xl font-extrabold text-indigo-700 flex items-center gap-2 tracking-tight">

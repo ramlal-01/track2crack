@@ -177,7 +177,7 @@ const SubjectProgressChart = ({ data }) => {
             <span className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-xl shadow-sm">
               <span className="text-xl">📊</span>
             </span>
-            Subject Progress Tracker
+            Quiz Progress Tracker
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
             Visual overview of your learning progress

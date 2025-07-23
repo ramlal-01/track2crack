@@ -163,39 +163,24 @@ useEffect(() => {
 
 
   return (
-    <div className={`flex min-h-screen ${theme === "dark" ? "bg-gray-900 text-white" : "bg-blue-50 text-gray-900"}`}>
+    <div className={`flex min-h-screen ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}>
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main content */}
-      <div className="flex-1 p-6">
+      <div className="flex-1 p-10">
         {/* Header */}
-        <div className="sticky top-0 z-30 bg-gray-100 dark:bg-gray-900 py-4 px-2 mb-6 shadow-sm">
-          <div className="flex items-center justify-between"> 
+        
 
-            {/* Center - Welcome Message */}
-            <div className="text-center hidden sm:block">
-              <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+          {/* Center - Welcome Message */}
+            <div className=" hidden sm:block mb-10">
+              <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
                 Welcome back, <span className="text-indigo-600 dark:text-blue-300">{user?.name || "Coder"}</span>
               </h2>
               <p className="text-sb italic text-gray-800 dark:text-gray-400">
                 "Track your progress. Crack your placements."
               </p>
             </div>
-
-            {/* Right - Streak + Avatar */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1 bg-orange-100 dark:bg-orange-800 px-3 py-1 rounded-full shadow-sm">
-                <FaFire className="text-orange-500 dark:text-orange-300" />
-                <span className="font-semibold text-sm text-orange-700 dark:text-orange-200">5-Day Streak</span>
-              </div>
-              <TopRightAvatar />
-            </div>
-
-          </div>
-        </div>
-
-
 
         {/* --- From here, actual content starts (Step 2 onward) --- */}
          

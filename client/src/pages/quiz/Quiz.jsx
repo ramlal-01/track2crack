@@ -7,7 +7,7 @@ import { FiBookmark, FiClock, FiAward, FiHelpCircle } from "react-icons/fi";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { FiArrowLeft, } from "react-icons/fi";
 const Quiz = () => {
   const navigate = useNavigate();
   const [quizData, setQuizData] = useState(null);
@@ -169,8 +169,8 @@ const Quiz = () => {
     <div className={`min-h-screen p-4 md:p-6 ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gradient-to-br from-blue-50 to-pink-50"}`}>
       <ToastContainer position="top-center" theme={darkMode ? "dark" : "light"} />
       
-      {/* Header with back button and dark mode toggle */}
-      <div className="flex justify-between items-start mb-4">
+      {/* Enhanced Header with back button and dark mode toggle */}
+      <div className="sticky top-0 z-20 bg-white dark:bg-gray-900 flex justify-between items-center mb-6 px-6 py-3 shadow-sm dark:shadow-gray-800/30 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center gap-3">
           <button 
             onClick={() => {
@@ -178,31 +178,38 @@ const Quiz = () => {
               const fallbackSource = localStorage.getItem("viewHistorySource") || "theory";
               navigate(`/dashboard/${fallbackSource.toLowerCase()}/${fallbackSubject.toLowerCase()}`);
             }}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-              darkMode 
-                ? "bg-gray-700 text-white hover:bg-gray-600" 
-                : "bg-white text-blue-600 hover:bg-blue-50 shadow-md"
-            }`}
+            className={`px-4 py-2.5 rounded-xl text-lg font-semibold transition-all flex items-center gap-2
+              ${darkMode 
+                ? "bg-gray-800 text-gray-100 hover:bg-gray-700 active:bg-gray-600" 
+                : "bg-white text-blue-600 hover:bg-blue-50 active:bg-blue-100 shadow-sm border border-gray-200"
+              }`}
           >
-            ← Back
+            <FiArrowLeft className="inline" />
+            <span>Back</span>
           </button>
+          
           <button 
             onClick={() => setDarkMode(!darkMode)}
-            className={`px-3 py-1 rounded-full text-sm ${darkMode ? "bg-gray-700 text-white" : "bg-white text-blue-600 shadow-md"}`}
+            className={`p-2.5 rounded-xl transition-all ${darkMode 
+              ? "bg-gray-800 text-amber-300 hover:bg-gray-700 active:bg-gray-600" 
+              : "bg-white text-blue-600 hover:bg-blue-50 active:bg-blue-100 shadow-sm border border-gray-200"
+            }`}
           >
             {darkMode ? "☀️ Light" : "🌙 Dark"}
           </button>
         </div>
-        <div className="text-right">
-          <div className="flex items-center justify-end space-x-2">
-            <FiClock className={`${darkMode ? "text-blue-300" : "text-blue-500"}`} />
-            <span className={`font-mono ${timeLeft < 300 ? "text-red-500" : darkMode ? "text-white" : "text-blue-600"}`}>
+        
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-lg">
+            <FiClock className={`${darkMode ? "text-blue-400" : "text-blue-500"}`} />
+            <span className={`font-extrabold text-lg ${timeLeft < 300 ? "text-red-600 animate-pulse" : darkMode ? "text-gray-100" : "text-gray-800"}`}>
               {minutes}:{seconds < 10 ? "0" : ""}{seconds}
             </span>
           </div>
-          <div className="flex items-center justify-end space-x-2 mt-1">
-            <FiAward className={`${darkMode ? "text-yellow-300" : "text-pink-500"}`} />
-            <span className={darkMode ? "text-white" : "text-blue-600"}>
+          
+          <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-lg">
+            <FiAward className={`${darkMode ? "text-amber-300" : "text-pink-500"}`} />
+            <span className={darkMode ? "text-gray-100" : "text-gray-800"}>
               {submitted ? `${score}/${quizData.questions.length}` : "--"}
             </span>
           </div>
@@ -210,7 +217,7 @@ const Quiz = () => {
       </div>
 
       {/* Main quiz header */}
-      <div className={`rounded-2xl p-6 mb-8 ${darkMode ? "bg-gray-800" : "bg-gradient-to-r from-indigo-400 to-blue-400"} text-white shadow-xl`}>
+      <div className={`rounded-2xl p-6 mb-8 ${darkMode ? "bg-gray-800" : "bg-gradient-to-r from-indigo-600 to-blue-400"} text-white shadow-xl`}>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold mb-2">

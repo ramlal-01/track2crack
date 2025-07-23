@@ -5,7 +5,6 @@ import {
   CodeBracketIcon,
   ServerIcon,
   BookOpenIcon,
-  Cog6ToothIcon,
   LifebuoyIcon,
   Bars3Icon,
   XMarkIcon,
@@ -15,7 +14,10 @@ import {
   BoltIcon,
   CubeIcon,
   ClockIcon,
-  DocumentTextIcon
+  DocumentTextIcon,
+  PuzzlePieceIcon,
+  LightBulbIcon,
+  Cog6ToothIcon // Added the missing import
 } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
 import API from "../api/api";
@@ -74,7 +76,7 @@ const Sidebar = () => {
   };
 
   const theoryIcons = {
-    "DSA": <CodeBracketIcon className="w-5 h-5 mr-3 text-rose-500 group-hover:text-rose-600 dark:group-hover:text-rose-300" />,
+    "DSA": <PuzzlePieceIcon className="w-5 h-5 mr-3 text-rose-500 group-hover:text-rose-600 dark:group-hover:text-rose-300" />,
     "Java": <BoltIcon className="w-5 h-5 mr-3 text-amber-500 group-hover:text-amber-600 dark:group-hover:text-amber-300" />,
     "OOPS": <CubeIcon className="w-5 h-5 mr-3 text-indigo-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-300" />
   };
@@ -85,6 +87,7 @@ const Sidebar = () => {
       <button 
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         className="lg:hidden fixed top-4 left-4 z-50 p-3 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+        aria-label="Toggle sidebar"
       >
         {isSidebarOpen ? (
           <XMarkIcon className="w-6 h-6" />
@@ -95,7 +98,7 @@ const Sidebar = () => {
 
       {/* Sidebar Overlay */}
       <div 
-        className={`fixed inset-0 z-40 bg-black/70 backdrop-blur-md lg:hidden transition-all duration-300 ${
+        className={`fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden transition-all duration-300 ease-in-out ${
           isSidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`} 
         onClick={() => setIsSidebarOpen(false)}
@@ -103,48 +106,41 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed lg:sticky top-0 z-40 w-72 h-screen flex flex-col transition-all duration-300 ease-in-out bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 shadow-2xl dark:shadow-gray-900/70 border-r border-gray-200/80 dark:border-gray-700 ${
+        className={`fixed lg:sticky top-18 z-40 w-72 h-[calc(100vh-4rem)]  flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
-        <div className="flex-1 flex flex-col p-5 overflow-y-auto">
-          {/* Logo Section */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between p-4 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="text-white text-2xl font-bold tracking-wider">
-                <span className="text-indigo-200">Track</span>
-                <span className="text-white">2</span>
-                <span className="text-amber-300 animate-pulse">Crack</span>
-              </div>
-              <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_2px_rgba(74,222,128,0.5)]"></div>
-            </div>
-          </div>
+         
 
+        <div className="flex-1 flex flex-col p-5 overflow-y-auto">
           {/* Navigation */}
-          <nav className="flex-1 flex flex-col gap-2">
+          <nav className="flex-1 flex flex-col gap-4">
             {/* Dashboard */}
             <button 
               onClick={() => {
                 navigate("/dashboard");
                 setIsSidebarOpen(false);
               }}
-              className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-gray-700/80 dark:to-gray-800/80 transition-all group hover:shadow-sm border border-gray-200/60 dark:border-gray-700/50 hover:border-blue-200/80 dark:hover:border-gray-600"
+              className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
             >
-              <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 shadow-md group-hover:shadow-lg transition-shadow">
+              <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 shadow-md group-hover:shadow-lg transition-all">
                 <ChartBarIcon className="w-5 h-5 text-white" />
               </div>
               <span className="font-medium">Dashboard</span>
-              <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-transform group-hover:translate-x-1" />
+              <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-transform group-hover:translate-x-1" />
             </button>
 
+            {/* Divider */}
+            <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+
             {/* Theory Subjects */}
-            <div className="rounded-xl overflow-hidden border border-gray-200/60 dark:border-gray-700/50 hover:border-blue-200/80 dark:hover:border-gray-600">
+            <div className="rounded-xl overflow-hidden">
               <button 
                 onClick={() => setShowTheoryMenu(!showTheoryMenu)} 
-                className="flex justify-between items-center w-full px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-gray-700/80 dark:to-gray-800/80 transition-all group hover:shadow-sm"
+                className="flex justify-between items-center w-full px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group"
               >
                 <div className="flex items-center">
-                  <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 shadow-md group-hover:shadow-lg transition-shadow">
+                  <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 shadow-md group-hover:shadow-lg transition-all">
                     <BookOpenIcon className="w-5 h-5 text-white" />
                   </div>
                   <span className="font-medium">Theory Subjects</span>
@@ -152,11 +148,11 @@ const Sidebar = () => {
                 {showTheoryMenu ? (
                   <ChevronDownIcon className="w-5 h-5 text-blue-500 dark:text-blue-400 transition-transform duration-300" />
                 ) : (
-                  <ChevronRightIcon className="w-5 h-5 text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-transform duration-300 group-hover:translate-x-1" />
+                  <ChevronRightIcon className="w-5 h-5 text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-transform duration-300" />
                 )}
               </button>
               {showTheoryMenu && (
-                <div className="ml-2 mt-1 mb-2 space-y-1 pl-2">
+                <div className="ml-4 mt-1 mb-2 space-y-1 pl-2 border-l-2 border-gray-200 dark:border-gray-700">
                   {["DSA", "Java", "OOPS"].map(subject => (
                     <button 
                       key={subject} 
@@ -164,7 +160,7 @@ const Sidebar = () => {
                         handleTheoryClick(subject);
                         setIsSidebarOpen(false);
                       }} 
-                      className="flex items-center w-full px-4 py-2.5 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r from-blue-50/70 to-indigo-50/70 dark:from-gray-700/70 dark:to-gray-800/70 text-sm transition-all hover:translate-x-2 group border-l-2 border-transparent hover:border-blue-300 dark:hover:border-blue-500"
+                      className="flex items-center w-full px-4 py-2.5 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50 text-sm transition-all hover:translate-x-1 group"
                     >
                       {theoryIcons[subject]}
                       <span className="font-medium">{subject}</span>
@@ -176,25 +172,25 @@ const Sidebar = () => {
             </div>
 
             {/* Core Subjects */}
-            <div className="rounded-xl overflow-hidden border border-gray-200/60 dark:border-gray-700/50 hover:border-blue-200/80 dark:hover:border-gray-600">
+            <div className="rounded-xl overflow-hidden">
               <button 
                 onClick={() => setShowCoreMenu(!showCoreMenu)} 
-                className="flex justify-between items-center w-full px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-gray-700/80 dark:to-gray-800/80 transition-all group hover:shadow-sm"
+                className="flex justify-between items-center w-full px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group"
               >
                 <div className="flex items-center">
-                  <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 shadow-md group-hover:shadow-lg transition-shadow">
+                  <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 shadow-md group-hover:shadow-lg transition-all">
                     <ServerIcon className="w-5 h-5 text-white" />
                   </div>
                   <span className="font-medium">Core Subjects</span>
                 </div>
                 {showCoreMenu ? (
-                  <ChevronDownIcon className="w-5 h-5 text-blue-500 dark:text-blue-400 transition-transform duration-300" />
+                  <ChevronDownIcon className="w-5 h-5 text-purple-500 dark:text-purple-400 transition-transform duration-300" />
                 ) : (
-                  <ChevronRightIcon className="w-5 h-5 text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-transform duration-300 group-hover:translate-x-1" />
+                  <ChevronRightIcon className="w-5 h-5 text-gray-400 group-hover:text-purple-500 dark:group-hover:text-purple-400 transition-transform duration-300" />
                 )}
               </button>
               {showCoreMenu && (
-                <div className="ml-2 mt-1 mb-2 space-y-1 pl-2">
+                <div className="ml-4 mt-1 mb-2 space-y-1 pl-2 border-l-2 border-gray-200 dark:border-gray-700">
                   {["CN", "DBMS", "OS"].map(subject => (
                     <button 
                       key={subject} 
@@ -202,16 +198,19 @@ const Sidebar = () => {
                         handleCoreClick(subject);
                         setIsSidebarOpen(false);
                       }} 
-                      className="flex items-center w-full px-4 py-2.5 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r from-blue-50/70 to-indigo-50/70 dark:from-gray-700/70 dark:to-gray-800/70 text-sm transition-all hover:translate-x-2 group border-l-2 border-transparent hover:border-blue-300 dark:hover:border-blue-500"
+                      className="flex items-center w-full px-4 py-2.5 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50 text-sm transition-all hover:translate-x-1 group"
                     >
                       {coreIcons[subject]}
                       <span className="font-medium">{subject}</span>
-                      <ChevronRightIcon className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 text-blue-500 dark:text-blue-400 transition-all" />
+                      <ChevronRightIcon className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 text-purple-500 dark:text-purple-400 transition-all" />
                     </button>
                   ))}
                 </div>
               )}
             </div>
+
+            {/* Divider */}
+            <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
 
             {/* Quiz History */}
             <button 
@@ -219,13 +218,13 @@ const Sidebar = () => {
                 navigate("/dashboard/quizhistory");
                 setIsSidebarOpen(false);
               }}
-              className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-gray-700/80 dark:to-gray-800/80 transition-all group hover:shadow-sm border border-gray-200/60 dark:border-gray-700/50 hover:border-blue-200/80 dark:hover:border-gray-600"
+              className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
             >
-              <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 shadow-md group-hover:shadow-lg transition-shadow">
+              <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 shadow-md group-hover:shadow-lg transition-all">
                 <DocumentTextIcon className="w-5 h-5 text-white" />
               </div>
               <span className="font-medium">Quiz History</span>
-              <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-transform group-hover:translate-x-1" />
+              <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-transform group-hover:translate-x-1" />
             </button>
 
             {/* Revision Planner */}
@@ -234,13 +233,13 @@ const Sidebar = () => {
                 navigate("/dashboard/revision-planner");
                 setIsSidebarOpen(false);
               }}
-              className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-gray-700/80 dark:to-gray-800/80 transition-all group hover:shadow-sm border border-gray-200/60 dark:border-gray-700/50 hover:border-blue-200/80 dark:hover:border-gray-600"
+              className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
             >
-              <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 shadow-md group-hover:shadow-lg transition-shadow">
+              <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 shadow-md group-hover:shadow-lg transition-all">
                 <ClockIcon className="w-5 h-5 text-white" />
               </div>
               <span className="font-medium">Revision Planner</span>
-              <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-transform group-hover:translate-x-1" />
+              <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-amber-500 dark:group-hover:text-amber-400 transition-transform group-hover:translate-x-1" />
             </button>
 
             {/* Feedback */}
@@ -249,15 +248,33 @@ const Sidebar = () => {
                 navigate("/dashboard/feedback");
                 setIsSidebarOpen(false);
               }}
-              className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-gray-700/80 dark:to-gray-800/80 transition-all group hover:shadow-sm border border-gray-200/60 dark:border-gray-700/50 hover:border-blue-200/80 dark:hover:border-gray-600"
+              className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
             >
-              <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 shadow-md group-hover:shadow-lg transition-shadow">
+              <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-rose-500 to-pink-500 shadow-md group-hover:shadow-lg transition-all">
                 <LifebuoyIcon className="w-5 h-5 text-white" />
               </div>
               <span className="font-medium">Feedback</span>
-              <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-transform group-hover:translate-x-1" />
+              <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-rose-500 dark:group-hover:text-rose-400 transition-transform group-hover:translate-x-1" />
             </button>
           </nav>
+
+          {/* Bottom spacer */}
+          <div className="flex-1"></div>
+
+          {/* Settings
+          <button 
+            onClick={() => {
+              navigate("/dashboard/settings");
+              setIsSidebarOpen(false);
+            }}
+            className="flex items-center px-4 py-3 mt-4 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group border border-gray-200 dark:border-gray-700"
+          >
+            <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-gray-500 to-gray-600 shadow-md group-hover:shadow-lg transition-all">
+              <Cog6ToothIcon className="w-5 h-5 text-white" />
+            </div>
+            <span className="font-medium">Settings</span>
+            <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-transform group-hover:translate-x-1" />
+          </button> */}
         </div>
       </aside>
     </>

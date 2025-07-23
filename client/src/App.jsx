@@ -30,6 +30,7 @@ import { toast } from 'react-toastify';
 import Feedback from './pages/FeedbackPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './context/AuthContext';
+import DashboardHeader from './components/DashboardHeader';
 
 
 const App = () => {
@@ -98,9 +99,29 @@ const AppContent = () => {
   // Show navbar only on specific routes
   const showNavbar = ['/', '/login', '/register', '/forgot-password', '/reset-password', '/verify-email'].includes(location.pathname);
 
+  const dashboardRoutes = [
+  "/dashboard",
+  "/dashboard/dsa",
+  "/dashboard/theory/dsa",
+  "/dashboard/theory/java",
+  "/dashboard/theory/oops",
+  "/dashboard/core/os",
+  "/dashboard/core/dbms",
+  "/dashboard/core/cn",
+  "/dashboard/quizhistory",
+  "/dashboard/revision-planner",
+  "/dashboard/feedback",
+  "/profile",
+  "/edit-profile" 
+];
+
+
   return (
     <div className="flex flex-col min-h-screen">
       {showNavbar && <Navbar  />}
+
+      {dashboardRoutes.includes(location.pathname) && <DashboardHeader />}
+
       <div className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -147,7 +168,7 @@ const AppContent = () => {
         closeOnClick
         pauseOnHover
         draggable
-        theme="colored"
+        theme="light"
       />
     </div>
   );

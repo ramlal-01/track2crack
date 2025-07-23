@@ -41,6 +41,24 @@ const CoreSubjectPage = ({ subject, title }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
 
+
+
+  useEffect(() => {
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+    };
+  }, []);
+
+
+
   useEffect(() => {
     const fetchQuizProgress = async () => {
       try {
@@ -290,7 +308,7 @@ const CoreSubjectPage = ({ subject, title }) => {
         topicId: activeTopic,
       }));
 
-      window.location.href = "/quiz";
+      navigate("/quiz" );
     } catch (err) {
       console.error("Error generating quiz:", err);
       const msg = err?.response?.data?.message || "Something went wrong while generating the quiz";
@@ -321,23 +339,21 @@ const CoreSubjectPage = ({ subject, title }) => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-      <ToastContainer position="top-right" autoClose={3000} />
+    <div className="px-10 py-3 max-w-8xl mx-auto min-h-screen bg-gradient-to-br from-gray-50 to-blue-50"> 
       
       <div 
-        className="text-center mb-8 p-6 rounded-2xl shadow-lg"
+        className="text-center mb-8 p-6 rounded-2xl shadow-lg max-w-xl mx-auto"
         style={{ background: '#043E86' }}
       >
-        <h2 className="text-4xl font-bold text-white mb-3 font-serif tracking-wide">{title}</h2>
-        <p className="text-blue-100 font-medium">Master the fundamentals with this interactive learning tracker</p>
+        <h2 className="text-3xl font-bold text-white mb-3 font-serif tracking-wide">{title}</h2> 
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white p-4 rounded-xl shadow-md border-l-4 border-blue-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-blue-600">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-10 ">
+        <div className="bg-white p-4 rounded-xl min-h-[100px] shadow-md border-l-4 border-blue-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-blue-600">
           <div className="flex justify-between items-center">
             <div>
-              <div className="text-xl font-bold text-blue-800">{total}</div>
-              <div className="text-gray-600 text-xs">Total Topics</div>
+              <div className="text-2xl font-bold text-blue-800">{total}</div>
+              <div className="text-gray-600 text-lg">Total Topics</div>
             </div>
             <div className="bg-blue-100 p-2 rounded-full transition-all duration-300 group-hover:bg-blue-200">
               <div className="w-5 h-5 bg-blue-500 rounded-full"></div>
@@ -348,8 +364,8 @@ const CoreSubjectPage = ({ subject, title }) => {
         <div className="bg-white p-4 rounded-xl shadow-md border-l-4 border-green-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-green-600">
           <div className="flex justify-between items-center">
             <div>
-              <div className="text-xl font-bold text-green-800">{completed}</div>
-              <div className="text-gray-600 text-xs">Completed</div>
+              <div className="text-2xl font-bold text-green-800">{completed}</div>
+              <div className="text-gray-600 text-lg">Completed</div>
             </div>
             <div className="bg-green-100 p-2 rounded-full transition-all duration-300 group-hover:bg-green-200">
               <div className="w-5 h-5 bg-green-500 rounded-full"></div>
@@ -360,8 +376,8 @@ const CoreSubjectPage = ({ subject, title }) => {
         <div className="bg-white p-4 rounded-xl shadow-md border-l-4 border-amber-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-amber-600">
           <div className="flex justify-between items-center">
             <div>
-              <div className="text-xl font-bold text-amber-700">{bookmarked}</div>
-              <div className="text-gray-600 text-xs">Bookmarked</div>
+              <div className="text-2xl font-bold text-amber-700">{bookmarked}</div>
+              <div className="text-gray-600 text-lg">Bookmarked</div>
             </div>
             <div className="bg-amber-100 p-2 rounded-full transition-all duration-300 group-hover:bg-amber-200">
               <div className="w-5 h-5 bg-amber-500 rounded-full"></div>
@@ -372,8 +388,8 @@ const CoreSubjectPage = ({ subject, title }) => {
         <div className="bg-white p-4 rounded-xl shadow-md border-l-4 border-purple-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-purple-600">
           <div className="flex justify-between items-center">
             <div>
-              <div className="text-xl font-bold text-purple-800">{progressPercent}%</div>
-              <div className="text-gray-600 text-xs">Progress</div>
+              <div className="text-2xl font-bold text-purple-800">{progressPercent}%</div>
+              <div className="text-gray-600 text-lg">Progress</div>
             </div>
             <div style={{ width: 50, height: 50 }}>
               <CircularProgressbarWithChildren 
@@ -386,7 +402,7 @@ const CoreSubjectPage = ({ subject, title }) => {
               />
             </div>
             {quizCount > 0 && (
-              <div className="text-xs text-purple-600 mt-1">
+              <div className="text-lg text-purple-600 mt-1">
                 {quizCount} quiz taken
               </div>
             )}
@@ -397,7 +413,7 @@ const CoreSubjectPage = ({ subject, title }) => {
       {/* Current Active Topic Section */}
       {currentTopic && (
         <div className="bg-white rounded-xl shadow-md p-6 mb-8 border-2 border-indigo-200">
-          <h3 className="text-xl font-bold text-indigo-700 mb-4">
+          <h3 className="text-2xl font-bold text-indigo-700 mb-4">
             Current Topic: {currentTopic.title}
           </h3>
           
@@ -611,15 +627,15 @@ const CoreSubjectPage = ({ subject, title }) => {
       </div>
 
       <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
-        <div className="grid grid-cols-[80px_2fr_76px_68px_90px_90px_100px_130px] font-medium text-gray-700 bg-gray-100 p-4 border-b border-gray-300">
-          <div className="text-center text-sm uppercase tracking-wider">Status</div>
-          <div className="pl-3 text-sm uppercase tracking-wider">Topic</div>
-          <div className="text-center text-sm uppercase tracking-wider">GFG</div>
-          <div className="text-center text-sm uppercase tracking-wider">YT</div>
-          <div className="text-center text-sm uppercase tracking-wider">Quiz</div>
-          <div className="text-center text-sm uppercase tracking-wider">Bookmark</div>
-          <div className="text-center text-sm uppercase tracking-wider">Reminder</div>
-          <div className="text-center text-sm uppercase tracking-wider">Notes</div>
+        <div className="grid grid-cols-[100px_6fr_1fr_1fr_1fr_1.5fr_1fr_200px] font-bold text-gray-700 bg-gray-100 p-4 border-b border-gray-300">
+          <div className="text-center text-lg uppercase tracking-wider">Status</div>
+          <div className="pl-3 text-lg uppercase tracking-wider">Topic</div>
+          <div className="text-center text-lg uppercase tracking-wider">GFG</div>
+          <div className="text-center text-lg uppercase tracking-wider">YT</div>
+          <div className="text-center text-lg uppercase tracking-wider">Quiz</div>
+          <div className="text-center text-lg uppercase tracking-wider">Bookmark</div>
+          <div className="text-center text-lg uppercase tracking-wider">Reminder</div>
+          <div className="text-center text-lg uppercase tracking-wider">Notes</div>
         </div>
 
         {filteredTopics.map((topic, index) => {
@@ -641,7 +657,7 @@ const CoreSubjectPage = ({ subject, title }) => {
           return (
             <div
               key={topic._id}
-              className={`grid grid-cols-[60px_2fr_70px_70px_90px_90px_100px_120px] items-center p-4 border-b border-gray-200 ${
+              className={`grid grid-cols-[100px_6fr_1fr_1fr_1fr_1.5fr_1fr_200px] items-center p-4 border-b border-gray-200 ${
                 isCompleted ? "bg-green-50 hover:bg-green-100" : 
                 isCurrentTopic ? "bg-indigo-50" :
                 !isEnabled ? "bg-gray-100 opacity-60" : "hover:bg-blue-50"
@@ -656,15 +672,15 @@ const CoreSubjectPage = ({ subject, title }) => {
               </div>
 
               <div className="pl-3">
-                <div className={`font-medium ${
+                <div className={`font-bold ${
                   isCompleted ? "text-green-800" : 
-                  isCurrentTopic ? "text-indigo-800" : 
-                  !isEnabled ? "text-gray-500" : "text-gray-800"
+                  isCurrentTopic ? "text-indigo-800 text-xl " : 
+                  !isEnabled ? "text-gray-500" : "text-gray-700"
                 }`}>
                   {topic.title}
                 </div>
                 {topic.notes && (
-                  <div className="text-sm text-gray-500 mt-1">{topic.notes}</div>
+                  <div className="text-sb text-gray-700 mt-1">{topic.notes}</div>
                 )}
               </div>
 
@@ -677,7 +693,7 @@ const CoreSubjectPage = ({ subject, title }) => {
                     className={`hover:scale-125 transition-transform duration-200 text-green-600 hover:text-green-700 ${!isEnabled ? 'opacity-50 pointer-events-none' : ''}`}
                     title="GeeksforGeeks Resource"
                   >
-                    <SiGeeksforgeeks className="text-xl" />
+                    <SiGeeksforgeeks className="text-3xl" />
                   </a>
                 ) : (
                   <span className="text-gray-400">-</span>
@@ -693,7 +709,7 @@ const CoreSubjectPage = ({ subject, title }) => {
                     className={`hover:scale-125 transition-transform duration-200 text-red-500 hover:text-red-600 ${!isEnabled ? 'opacity-50 pointer-events-none' : ''}`}
                     title="YouTube Resource"
                   >
-                    <SiYoutube className="text-xl" />
+                    <SiYoutube className="text-2xl" />
                   </a>
                 ) : (
                   <span className="text-gray-400">-</span>
@@ -710,7 +726,7 @@ const CoreSubjectPage = ({ subject, title }) => {
                       : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
                   }`}
                 >
-                  <MdQuiz />
+                  <MdQuiz className="text-2xl" />
                 </button>
               </div>
               
@@ -777,7 +793,7 @@ const CoreSubjectPage = ({ subject, title }) => {
               <div ref={(el) => (noteRefs.current[topic._id] = el)} className="relative flex justify-center">
                 {note ? (
                   <div className="flex items-center gap-1 group">
-                    <span className={`text-sm text-yellow-600 max-w-[100px] truncate ${!isEnabled ? 'opacity-50' : ''}`}>
+                    <span className={`text-lg text-yellow-600 max-w-[100px] truncate ${!isEnabled ? 'opacity-50' : ''}`}>
                       {note}
                     </span>
                     {isEnabled && (

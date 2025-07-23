@@ -1,9 +1,12 @@
+require('dotenv').config(); // ⬅ force .env loading
+
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const sendResetEmail = require('../utils/sendResetEmail');
 const sendVerificationEmail = require('../utils/sendVerificationEmail');
+const { generateTokens } = require('../utils/tokenUtils');
 
 const FRONTEND_URL = process.env.USE_PROD_URL === "true"
   ? process.env.FRONTEND_URL_PROD
@@ -42,11 +45,9 @@ exports.registerUser = async (req, res) => {
     await newUser.save();
 
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: '7d'
+      expiresIn: '1h'
     });
-
-    console.log(`🔑 Raw verification token: ${rawToken}`);
-    console.log(`🔐 Hashed verification token stored: ${hashedToken}`);
+ 
     const encodedToken = encodeURIComponent(rawToken);
     const verificationURL = `${FRONTEND_URL}/verify-email/${encodedToken}`;
 
@@ -82,23 +83,21 @@ exports.loginUser = async (req, res) => {
     }
 
     const user = await User.findOne({ email });
-
-    if (!user) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    // 👇 Explicit check with clear message
     if (!user.isVerified) {
       return res.status(403).json({ message: "Please verify your email before logging in." });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '7d'
+    const { accessToken, refreshToken } = generateTokens(user._id);
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     res.status(200).json({
@@ -106,13 +105,12 @@ exports.loginUser = async (req, res) => {
       user: {
         _id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
       },
-      token
+      accessToken, // still send access token in body
     });
 
   } catch (error) {
-    console.error("Login error:", error);
     res.status(500).json({ message: "Login failed", error: error.message });
   }
 };
@@ -257,12 +255,10 @@ exports.socialLogin = async (req, res) => {
     const { email, uid, name, provider, avatarUrl, emailVerified } = req.body;
 
     if (!email || !uid || !provider) {
-      console.error("❌ Missing required fields", req.body);
       return res.status(400).json({ message: "Missing required fields." });
     }
 
     let user = await User.findOne({ email });
-
     if (!user) {
       user = new User({
         name: name || 'No Name',
@@ -272,18 +268,45 @@ exports.socialLogin = async (req, res) => {
         password: crypto.randomBytes(32).toString("hex"),
         username: email.split('@')[0] + Math.floor(Math.random() * 10000),
       });
-
       await user.save();
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d"
+    const { accessToken, refreshToken } = generateTokens(user._id);
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: '/api/auth/refresh'
     });
 
-    console.log("✅ Social login successful:", user.email);
-    res.json({ token, user });
+    res.json({
+      message: "Social login successful",
+      user,
+      accessToken,
+    });
+
   } catch (err) {
-    console.error("❌ Social login server error:", err);
     res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+
+// GET /api/auth/refresh
+exports.refreshToken = (req, res) => {
+  const token = req.cookies.refreshToken;
+
+  if (!token) return res.status(401).json({ message: "No refresh token" });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+    const newAccessToken = jwt.sign({ userId: decoded.userId }, process.env.JWT_SECRET, {
+      expiresIn: '15m',
+    });
+
+    res.status(200).json({ token: newAccessToken });
+  } catch (err) {
+    res.status(403).json({ message: "Invalid refresh token" });
   }
 };
