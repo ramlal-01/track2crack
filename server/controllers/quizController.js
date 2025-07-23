@@ -198,7 +198,8 @@ exports.getQuizBasedProgress = async (req, res) => {
       source,
       totalTopics: topicTitles.length,
       attemptedTopics: Object.keys(highestScores).length,
-      progressPercent
+      progressPercent,
+      highestScoresPerTopic: highestScores 
     });
 
     console.log("🧪 All topic titles:", topicTitles);

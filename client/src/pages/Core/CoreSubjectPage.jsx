@@ -19,6 +19,8 @@ const CoreSubjectPage = ({ subject, title }) => {
   const [showResources, setShowResources] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
   const [userHasAnswered, setUserHasAnswered] = useState(false);
+  const [topicScores, setTopicScores] = useState({});
+
 
   const [activeFilters, setActiveFilters] = useState({
     All: true,
@@ -69,6 +71,9 @@ const CoreSubjectPage = ({ subject, title }) => {
         });
         setProgressPercent(res.data.progressPercent || 0);
         setQuizCount(res.data.attemptedTopics || 0);
+        if (res.data.highestScoresPerTopic) {
+        setTopicScores(res.data.highestScoresPerTopic);
+      }
       } catch (err) {
         console.error("❌ Failed to fetch quiz-based progress:", err);
       }
@@ -202,18 +207,19 @@ const CoreSubjectPage = ({ subject, title }) => {
   };
 
   // Function to check if a topic is enabled (based on previous topic completion)
-  const isTopicEnabled = (topicIndex) => {
-    if (topicIndex === 0) return true; // First topic is always enabled
-    
-    const prevTopic = topics[topicIndex - 1];
-    const prevProgress = progress[prevTopic._id] || {};
-    
-    // Topic is enabled if previous topic has:
-    // 1. Quiz taken with score >= 70% OR
-    // 2. Manually marked as completed
-    return (prevProgress.quizTaken && prevProgress.quizScore >= 70) || 
-           prevProgress.isCompleted;
-  };
+  const isTopicEnabled = (topicId, index, filteredList) => {
+  if (index === 0) return true;
+
+  const prevTopic = filteredList[index - 1];
+  const prevProgress = progress[prevTopic._id] || {};
+
+  return (
+    (prevProgress.quizTaken && prevProgress.quizScore >= 70) ||
+    prevProgress.isCompleted
+  );
+};
+
+
 
   // Calculate subject-specific topic IDs
   const subjectTopicIds = topics.map(t => t._id);
@@ -409,94 +415,122 @@ const CoreSubjectPage = ({ subject, title }) => {
           </div>
         </div>
       </div>
+{/* Current Active Topic Section */}
+{/* Current Active Topic Section */}
+{currentTopic && (
+  <div className="bg-white rounded-xl shadow-md p-6 mb-8 border-2 border-indigo-200 relative">
+    <div className="flex justify-between">
+      <div className="flex-1">
+        <h3 className="text-2xl font-bold text-indigo-700 mb-4">
+          Current Topic: {currentTopic.title}
+        </h3>
 
-      {/* Current Active Topic Section */}
-      {currentTopic && (
-        <div className="bg-white rounded-xl shadow-md p-6 mb-8 border-2 border-indigo-200">
-          <h3 className="text-2xl font-bold text-indigo-700 mb-4">
-            Current Topic: {currentTopic.title}
-          </h3>
-          
-          {userKnowsTopic === null && !topicProgress.quizTaken && (
-            <div className="mb-6">
-              <p className="text-gray-700 mb-4">Do you already know this topic?</p>
-              <div className="flex gap-4">
-                <button 
-                  onClick={() => handleUserResponse(true)}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
-                >
-                  Yes, I know it
-                </button>
-                <button 
-                  onClick={() => handleUserResponse(false)}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-                >
-                  No, I need to learn
-                </button>
-              </div>
-            </div>
-          )}
-
-          {showResources && (
-            <div className="mb-6">
-              <h4 className="font-semibold text-gray-800 mb-3">Learning Resources:</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {currentTopic.resources?.map((resource, idx) => (
-                  <a 
-                    key={idx}
-                    href={resource.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    <img 
-                      src={getIconUrl(resource.type, resource.url)} 
-                      alt={resource.type} 
-                      className="w-8 h-8 mr-3"
-                    />
-                    <div>
-                      <p className="font-medium text-gray-800">{resource.title || resource.type}</p>
-                      <p className="text-xs text-gray-500">{new URL(resource.url).hostname}</p>
-                    </div>
-                  </a>
-                ))}
-              </div>
+        {/* Yes/No Selection */}
+        {userKnowsTopic === null && !topicProgress.quizTaken && (
+          <div className="mb-6">
+            <p className="text-gray-700 mb-4">Do you already know this topic?</p>
+            <div className="flex gap-4">
               <button
-                onClick={() => {
-                  setShowQuiz(true);
-                  setShowResources(false);
-                }}
-                className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                onClick={() => handleUserResponse(true)}
+                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
               >
-                I've reviewed the resources, test me now
+                Yes, I know it
+              </button>
+              <button
+                onClick={() => handleUserResponse(false)}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+              >
+                No, I need to learn
               </button>
             </div>
-          )}
+          </div>
+        )}
 
-          {showQuiz && (
-            <div className="mb-6">
-              <h4 className="font-semibold text-gray-800 mb-3">Test Your Knowledge:</h4>
-              <p className="text-gray-700 mb-4">
-                Take a short quiz on this topic to assess your understanding.
-              </p>
-              <button
-                onClick={() => handleSingleTopicQuiz(currentTopic.title)}
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-              >
-                Start Quiz
-              </button>
-              {topicProgress.quizTaken && (
-                <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                  <p className="text-blue-800">
-                    Quiz score: {topicProgress.quizScore}%
-                    {topicProgress.quizScore >= 70 ? " - Great job!" : " - Keep practicing!"}
-                  </p>
-                </div>
-              )}
+        {/* Back Button */}
+        {userKnowsTopic !== null && !topicProgress.quizTaken && (
+          <div className="mb-6">
+            <button
+              onClick={() => {
+                setUserKnowsTopic(null);
+                setShowResources(false);
+                setShowQuiz(false);
+              }}
+              className="mt-2 px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition-colors text-sm"
+            >
+              ⬅ Back
+            </button>
+          </div>
+        )}
+
+        {/* Resources */}
+        {showResources && (
+          <div className="mb-6">
+            <h4 className="font-semibold text-gray-800 mb-3">Learning Resources:</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {currentTopic.resources?.map((resource, idx) => (
+                <a
+                  key={idx}
+                  href={resource.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <img
+                    src={getIconUrl(resource.type, resource.url)}
+                    alt={resource.type}
+                    className="w-8 h-8 mr-3"
+                  />
+                  <div>
+                    <p className="font-medium text-gray-800">
+                      {resource.title || resource.type}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {new URL(resource.url).hostname}
+                    </p>
+                  </div>
+                </a>
+              ))}
             </div>
-          )}
+            <button
+              onClick={() => {
+                setShowQuiz(true);
+                setShowResources(false);
+              }}
+              className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              I've reviewed the resources, test me now
+            </button>
+          </div>
+        )}
 
-          <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+        {/* Quiz Block */}
+        {showQuiz && (
+          <div className="mb-6">
+            <h4 className="font-semibold text-gray-800 mb-3">Test Your Knowledge:</h4>
+            <p className="text-gray-700 mb-4">
+              Take a short quiz on this topic to assess your understanding.
+            </p>
+            <button
+              onClick={() => handleSingleTopicQuiz(currentTopic.title)}
+              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              Start Quiz
+            </button>
+            {topicProgress.quizTaken && (
+              <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                <p className="text-blue-800">
+                  Quiz score: {topicProgress.quizScore}%
+                  {topicProgress.quizScore >= 70
+                    ? " - Great job!"
+                    : " - Keep practicing!"}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Bookmark, Reminder, Notes, Mark Complete */}
+        <div className="flex justify-between items-center pt-4 border-t border-gray-200">
             <div className="flex items-center gap-4">
               <div className="flex items-center">
                 <input
@@ -544,32 +578,48 @@ const CoreSubjectPage = ({ subject, title }) => {
                 <span className="mr-1">📝</span>
                 {topicProgress.note ? "Edit Notes" : "Add Notes"}
               </button>
-
-              {topicProgress.quizTaken && (
-                <button
-                  onClick={() => {
-                    updateProgress(currentTopic._id, "isCompleted", true);
-                    // Find next incomplete topic
-                    const currentIndex = topics.findIndex(t => t._id === currentTopic._id);
-                    const nextTopics = topics.slice(currentIndex + 1);
-                    const nextIncomplete = nextTopics.find(t => !progress[t._id]?.isCompleted);
-                    
-                    if (nextIncomplete) {
-                      setActiveTopic(nextIncomplete._id);
-                      setUserKnowsTopic(null);
-                      setShowResources(false);
-                      setShowQuiz(false);
-                    }
-                  }}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  Mark as Complete
-                </button>
-              )}
             </div>
           </div>
         </div>
-      )}
+
+
+      {/* Current Highest Score Card - Right Side */}
+      <div className="ml-6 w-64">
+  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 shadow-sm sticky top-6">
+    <h4 className="text-lg font-bold text-blue-700 mb-2">Current Topic Highest Score</h4>
+
+    {topicScores[currentTopic?.title] ? (
+      <div className="text-4xl font-extrabold text-blue-600 mb-2">
+        {`${topicScores[currentTopic.title].score}/${topicScores[currentTopic.title].total}`}
+      </div>
+    ) : (
+      <div className="text-2xl font-semibold text-gray-500 mb-2">
+        Not Attempted
+      </div>
+    )}
+
+    {topicScores[currentTopic?.title] ? (
+      topicScores[currentTopic.title].score >= (0.7 * topicScores[currentTopic.title].total) ? (
+        <p className="text-sm text-green-600">
+          You've passed! You can move to next topic.
+        </p>
+      ) : (
+        <p className="text-sm text-red-600">
+          Score below 70%. Retake quiz to proceed.
+        </p>
+      )
+    ) : (
+      <p className="text-sm text-gray-600">
+        Take quiz to assess your knowledge
+      </p>
+    )}
+  </div>
+</div>
+
+    </div>
+  </div>
+)}
+
 
       <div className="bg-white p-5 rounded-xl shadow-md mb-8">
         <div className="flex flex-wrap justify-between items-center gap-4">
@@ -650,7 +700,8 @@ const CoreSubjectPage = ({ subject, title }) => {
             r.label?.toLowerCase().includes("yt") || 
             r.url?.toLowerCase().includes("youtu.be")
           );
-          const isEnabled = isTopicEnabled(index);
+          const isEnabled = isTopicEnabled(topic._id, index, filteredTopics);
+
           const isCurrentTopic = topic._id === activeTopic;
           const canAttemptQuiz = isEnabled && (isCurrentTopic || progress[topic._id]?.isCompleted);
 
