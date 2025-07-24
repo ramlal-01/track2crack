@@ -14,9 +14,9 @@ exports.getReminderItems = async (req, res) => {
     }
 
     const [dsa, core, theory] = await Promise.all([
-      UserDSAProgress.find({ userId: requestedUserId, remindOn: { $ne: null } }).populate('questionId'),
-      UserCoreProgress.find({ userId: requestedUserId, remindOn: { $ne: null } }).populate('coreTopicId'),
-      UserTheoryProgress.find({ userId: requestedUserId, remindOn: { $ne: null } }).populate('topicId'),
+      UserDSAProgress.find({ userId: requestedUserId, remindOn: { $ne: null } }).populate('questionId','title'),
+      UserCoreProgress.find({ userId: requestedUserId, remindOn: { $ne: null } }).populate('coreTopicId','title subject'),
+      UserTheoryProgress.find({ userId: requestedUserId, remindOn: { $ne: null } }).populate('topicId','title subject'),
     ]);
 
     res.status(200).json({
@@ -42,25 +42,26 @@ exports.getOverdueReminders = async (req, res) => {
     if (requestedUserId !== loggedInUserId) {
       return res.status(403).json({ message: "Forbidden: Access denied" });
     }
-
+    const cutoff = new Date();
+    cutoff.setHours(0, 0, 0, 0);
     const [dsa, core, theory] = await Promise.all([
       UserDSAProgress.find({
         userId: requestedUserId,
-        remindOn: { $lt: cutoff },
-        isCompleted: false
+        remindOn: { $lt: cutoff }
+         
       }).populate('questionId', 'title'),
 
       UserCoreProgress.find({
         userId: requestedUserId,
-        remindOn: { $lt: cutoff },
-        isCompleted: false
-      }).populate('coreTopicId'),
+        remindOn: { $lt: cutoff }
+        
+      }).populate('coreTopicId' ,'title subject'),
 
       UserTheoryProgress.find({
         userId: requestedUserId,
-        remindOn: { $lt: cutoff },
-        isCompleted: false
-      }).populate('topicId')
+        remindOn: { $lt: cutoff }
+         
+      }).populate('topicId','title subject')
     ]);
 
     res.status(200).json({
@@ -93,21 +94,21 @@ exports.getTodayReminders = async (req, res) => {
     const [dsa, core, theory] = await Promise.all([
       UserDSAProgress.find({
         userId: requestedUserId,
-        remindOn: { $gte: startOfDay, $lte: endOfDay },
-        isCompleted: false
+        remindOn: { $gte: startOfDay, $lte: endOfDay }
+        
       }).populate('questionId', 'title'),
 
       UserCoreProgress.find({
         userId: requestedUserId,
-        remindOn: { $gte: startOfDay, $lte: endOfDay },
-        isCompleted: false
-      }).populate('coreTopicId'),
+        remindOn: { $gte: startOfDay, $lte: endOfDay }
+        
+      }).populate('coreTopicId','title subject'),
 
       UserTheoryProgress.find({
         userId: requestedUserId,
-        remindOn: { $gte: startOfDay, $lte: endOfDay },
-        isCompleted: false
-      }).populate('topicId')
+        remindOn: { $gte: startOfDay, $lte: endOfDay }
+        
+      }).populate('topicId','title subject')
     ]);
 
     res.status(200).json({
@@ -143,21 +144,21 @@ exports.getUpcomingReminders = async (req, res) => {
     const [dsa, core, theory] = await Promise.all([
       UserDSAProgress.find({
         userId: requestedUserId,
-        remindOn: { $gte: start, $lte: end },
-        isCompleted: false
+        remindOn: { $gte: start, $lte: end }
+        
       }).populate('questionId', 'title'),
 
       UserCoreProgress.find({
         userId: requestedUserId,
-        remindOn: { $gte: start, $lte: end },
-        isCompleted: false
-      }).populate('coreTopicId'),
+        remindOn: { $gte: start, $lte: end }
+        
+      }).populate('coreTopicId','title subject'),
 
       UserTheoryProgress.find({
         userId: requestedUserId,
-        remindOn: { $gte: start, $lte: end },
-        isCompleted: false
-      }).populate('topicId')
+        remindOn: { $gte: start, $lte: end }
+         
+      }).populate('topicId','title subject')
     ]);
 
     res.status(200).json({
@@ -192,20 +193,20 @@ exports.getRemindersByDate = async (req, res) => {
   const [dsa, core, theory] = await Promise.all([
     UserDSAProgress.find({
       userId: requestedUserId,
-      remindOn: { $gte: start, $lte: end },
-      isCompleted: false
+      remindOn: { $gte: start, $lte: end }
+     
     }).populate('questionId'),
 
     UserCoreProgress.find({
       userId: requestedUserId,
-      remindOn: { $gte: start, $lte: end },
-      isCompleted: false
+      remindOn: { $gte: start, $lte: end }
+      
     }).populate('coreTopicId'),
 
     UserTheoryProgress.find({
       userId: requestedUserId,
-      remindOn: { $gte: start, $lte: end },
-      isCompleted: false
+      remindOn: { $gte: start, $lte: end }
+      
     }).populate('topicId')
   ]);
 
@@ -240,8 +241,8 @@ exports.updateReminder = async (req, res) => {
       if (action === "complete") {
         doc.isCompleted = true;
         doc.remindOn = null;
-      } else if (action === "reschedule" && newDate) {
-        doc.remindOn = newDate;
+      } else if (action === "reschedule" && newDate===null) {
+        doc.remindOn = null;
       } else {
         return res.status(400).json({ message: "Invalid action or missing newDate" });
       }

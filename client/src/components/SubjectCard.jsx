@@ -21,7 +21,7 @@ const SubjectCard = ({ icon, title, progress, onClick }) => {
       whileHover={{ y: -4, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className={`relative cursor-pointer bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 
+      className={`relative cursor-pointer bg-gradient-to-br from-white to-purple-50 dark:from-gray-900 dark:to-gray-800 
                  rounded-2xl p-5 shadow-lg hover:shadow-xl border border-gray-100 dark:border-gray-700 
                  flex flex-col justify-between transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] 
                  min-h-[140px] overflow-hidden group`}

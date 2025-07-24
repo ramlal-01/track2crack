@@ -106,31 +106,31 @@ const ProfilePage = () => {
           <div className="flex flex-col items-center justify-center h-full space-y-8">
             <button
               onClick={() => navigate("/")}
-              className={`text-xl ${darkMode ? "text-blue-400" : "text-indigo-600"}`}
+              className={`text-xl ${darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}`}
             >
               Home
             </button>
             <button
               onClick={() => navigate("/features")}
-              className={`text-xl ${darkMode ? "text-blue-400" : "text-indigo-600"}`}
+              className={`text-xl ${darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}`}
             >
               Features
             </button>
             <button
               onClick={() => navigate("/about")}
-              className={`text-xl ${darkMode ? "text-blue-400" : "text-indigo-600"}`}
+              className={`text-xl ${darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}`}
             >
               About
             </button>
             <button
               onClick={() => navigate("/contact")}
-              className={`text-xl ${darkMode ? "text-blue-400" : "text-indigo-600"}`}
+              className={`text-xl ${darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}`}
             >
               Contact
             </button>
             <button
               onClick={toggleDarkMode}
-              className={`p-2 rounded-full ${darkMode ? "bg-gray-700 text-yellow-300" : "bg-gray-200 text-gray-800"}`}
+              className={`p-2 rounded-full ${darkMode ? "bg-gray-700 text-yellow-300 hover:bg-gray-600" : "bg-gray-200 text-gray-800 hover:bg-gray-300"}`}
             >
               {darkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
             </button>
@@ -142,7 +142,7 @@ const ProfilePage = () => {
       <div className={`hidden md:flex fixed left-0 top-0 h-full w-16 flex-col items-center py-4 space-y-8 ${darkMode ? "bg-gray-800" : "bg-gray-200"}`}>
         <button
           onClick={() => navigate("/")}
-          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-indigo-600 hover:bg-gray-300"}`}
+          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-blue-600 hover:bg-gray-300"}`}
           title="Home"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -151,7 +151,7 @@ const ProfilePage = () => {
         </button>
         <button
           onClick={() => navigate("/features")}
-          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-indigo-600 hover:bg-gray-300"}`}
+          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-blue-600 hover:bg-gray-300"}`}
           title="Features"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -160,7 +160,7 @@ const ProfilePage = () => {
         </button>
         <button
           onClick={() => navigate("/about")}
-          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-indigo-600 hover:bg-gray-300"}`}
+          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-blue-600 hover:bg-gray-300"}`}
           title="About"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,7 +169,7 @@ const ProfilePage = () => {
         </button>
         <button
           onClick={() => navigate("/contact")}
-          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-indigo-600 hover:bg-gray-300"}`}
+          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-blue-600 hover:bg-gray-300"}`}
           title="Contact"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,12 +185,12 @@ const ProfilePage = () => {
         </button>
       </div>
 
-      {/* Main Content - Expanded to full screen width */}
-      <main className={`min-h-screen pt-8 pb-8 md:pl-20 transition-all duration-300 ${mobileMenuOpen ? "opacity-50" : "opacity-100"}`}>
-        <div className={`h-full w-full mx-0 rounded-none shadow-md overflow-hidden ${darkMode ? "bg-gray-800" : "bg-white"}`}>
+      {/* Main Content */}
+      <main className={`min-h-screen transition-all duration-300 ${mobileMenuOpen ? "opacity-50" : "opacity-100"}`}>
+        <div className={`h-full w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ${darkMode ? "bg-gray-800" : "bg-white"} rounded-lg shadow-md overflow-hidden`}>
           {/* Profile Header */}
-          <div className={`p-8 ${darkMode ? "bg-gray-700" : "bg-gradient-to-r from-indigo-600 to-indigo-700"} text-white`}>
-            <div className="flex flex-col md:flex-row items-center">
+          <div className={`p-6 md:p-8 ${darkMode ? "bg-gray-700" : "bg-gradient-to-r from-[#000C40] to-[#F0F2F0]"} text-white`}>
+            <div className="flex flex-col md:flex-row items-center pl-3">
               <img
                 src={user.avatarUrl || "/avatar.svg"}
                 onError={(e) => {
@@ -198,16 +198,16 @@ const ProfilePage = () => {
                   e.target.src = "/avatar.svg";
                 }}
                 alt="avatar"
-                className="w-32 h-32 rounded-full object-cover border-4 border-white mb-4 md:mb-0 md:mr-8"
+                className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-white mb-4 md:mb-0 md:mr-8"
               />
               <div className="text-center md:text-left">
-                <h2 className="text-3xl font-bold">{user.name}</h2>
-                <p className={`mt-2 text-lg ${darkMode ? "text-gray-300" : "text-blue-100"}`}>
+                <h2 className="text-2xl md:text-3xl font-bold">{user.name}</h2>
+                <p className={`mt-2 text-base md:text-lg ${darkMode ? "text-gray-300" : "text-blue-100"}`}>
                   <FaUniversity className="inline mr-2" />
                   {user.college || "No college information"}
                 </p>
                 <div className="mt-4">
-                  <span className={`text-sm px-3 py-1.5 rounded-full ${darkMode ? "bg-gray-600" : "bg-blue-900"}`}>
+                  <span className={`text-xs md:text-sm px-3 py-1.5 rounded-full ${darkMode ? "bg-gray-600 text-gray-200" : "bg-blue-900 text-white"}`}>
                     <FaIdCard className="inline mr-2" />
                     {user.username ? `${user.username} | ` : ""}
                     {completion}% Profile Completed
@@ -218,15 +218,15 @@ const ProfilePage = () => {
           </div>
 
           {/* Profile Details */}
-          <div className="p-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="p-4 sm:p-6 md:p-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Personal Information */}
-              <div className={`p-6 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-50"}`}>
-                <h3 className={`text-xl font-semibold mb-6 border-b pb-3 ${darkMode ? "text-gray-200 border-gray-600" : "text-gray-800 border-gray-200"}`}>
+              <div className={`p-4 sm:p-6 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-50"} shadow-sm`}>
+                <h3 className={`text-lg md:text-xl font-semibold mb-4 md:mb-6 border-b pb-2 md:pb-3 ${darkMode ? "text-gray-200 border-gray-600" : "text-gray-800 border-gray-200"}`}>
                   <FaUser className="inline mr-2" />
                   Personal Information
                 </h3>
-                <div className="space-y-4 text-lg">
+                <div className="space-y-3 md:space-y-4 text-base md:text-lg">
                   <div className="flex justify-between">
                     <span className={`flex items-center ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
                       <FaUser className="mr-2" /> First Name
@@ -259,12 +259,12 @@ const ProfilePage = () => {
               </div>
 
               {/* Contact Information */}
-              <div className={`p-6 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-50"}`}>
-                <h3 className={`text-xl font-semibold mb-6 border-b pb-3 ${darkMode ? "text-gray-200 border-gray-600" : "text-gray-800 border-gray-200"}`}>
+              <div className={`p-4 sm:p-6 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-50"} shadow-sm`}>
+                <h3 className={`text-lg md:text-xl font-semibold mb-4 md:mb-6 border-b pb-2 md:pb-3 ${darkMode ? "text-gray-200 border-gray-600" : "text-gray-800 border-gray-200"}`}>
                   <FaEnvelope className="inline mr-2" />
                   Contact Information
                 </h3>
-                <div className="space-y-4 text-lg">
+                <div className="space-y-3 md:space-y-4 text-base md:text-lg">
                   <div className="flex justify-between">
                     <span className={`flex items-center ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
                       <FaAt className="mr-2" /> Email
@@ -281,7 +281,7 @@ const ProfilePage = () => {
                     <span className={`flex items-center ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
                       <FaGithub className="mr-2" /> GitHub
                     </span>
-                    <span className={`${darkMode ? "text-gray-200 font-medium" : "font-semibold"} break-all`}>
+                    <span className={`${darkMode ? "text-blue-400 font-medium" : "text-blue-600 font-semibold"} break-all`}>
                       {user.github ? (
                         <a 
                           href={user.github.startsWith('http') ? user.github : `https://${user.github}`} 
@@ -299,7 +299,7 @@ const ProfilePage = () => {
                     <span className={`flex items-center ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
                       <FaLinkedin className="mr-2" /> LinkedIn
                     </span>
-                    <span className={`${darkMode ? "text-gray-200 font-medium" : "font-semibold"} break-all`}>
+                    <span className={`${darkMode ? "text-blue-400 font-medium" : "text-blue-600 font-semibold"} break-all`}>
                       {user.linkedin ? (
                         <a 
                           href={user.linkedin.startsWith('http') ? user.linkedin : `https://${user.linkedin}`} 
@@ -318,24 +318,24 @@ const ProfilePage = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="mt-12 flex flex-wrap gap-6 justify-center">
+            <div className="mt-8 md:mt-12 flex flex-wrap gap-4 md:gap-6 justify-center">
               <button
                 onClick={() => navigate("/edit-profile")}
-                className={`flex items-center px-6 py-3 rounded-lg transition text-lg ${darkMode ? "bg-indigo-700 text-white hover:bg-blue-600" : "bg-indigo-600 text-white hover:bg-blue-700"}`}
+                className={`flex items-center px-4 py-2 md:px-6 md:py-3 rounded-lg transition text-base md:text-lg ${darkMode ? "bg-indigo-700 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
               >
-                <FaUserEdit className="mr-3" size={18} /> Edit Profile
+                <FaUserEdit className="mr-2 md:mr-3" size={16} /> Edit Profile
               </button>
               <button
                 onClick={() => setShowPassModal(true)}
-                className={`flex items-center px-6 py-3 rounded-lg transition text-lg ${darkMode ? "bg-amber-600 text-white hover:bg-amber-500" : "bg-amber-500 text-white hover:bg-amber-600"}`}
+                className={`flex items-center px-4 py-2 md:px-6 md:py-3 rounded-lg transition text-base md:text-lg ${darkMode ? "bg-amber-600 text-white hover:bg-amber-500" : "bg-amber-500 text-white hover:bg-amber-600"}`}
               >
-                <FaKey className="mr-3" size={18} /> Change Password
+                <FaKey className="mr-2 md:mr-3" size={16} /> Change Password
               </button>
               <button
                 onClick={handleDeleteAccount}
-                className={`flex items-center px-6 py-3 rounded-lg transition text-lg ${darkMode ? "bg-red-700 text-white hover:bg-red-600" : "bg-red-600 text-white hover:bg-red-700"}`}
+                className={`flex items-center px-4 py-2 md:px-6 md:py-3 rounded-lg transition text-base md:text-lg ${darkMode ? "bg-red-700 text-white hover:bg-red-600" : "bg-red-600 text-white hover:bg-red-700"}`}
               >
-                <FaTrash className="mr-3" size={18} /> Delete Account
+                <FaTrash className="mr-2 md:mr-3" size={16} /> Delete Account
               </button>
             </div>
           </div>

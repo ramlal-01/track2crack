@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
@@ -8,17 +9,24 @@ import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { FiArrowLeft, } from "react-icons/fi";
+import API from '../../api/api';
 const Quiz = () => {
   const navigate = useNavigate();
   const [quizData, setQuizData] = useState(null);
+  const questionLockedRef = useRef(false);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [bookmarked, setBookmarked] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(200); // 20 minutes
+  const [timeLeft, setTimeLeft] = useState(200); // 3 min 20 sec
   const [timerActive, setTimerActive] = useState(true);
   const [showExplanation, setShowExplanation] = useState({});
   const [darkMode, setDarkMode] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [questionTimeLeft, setQuestionTimeLeft] = useState(15);
+  const [optionsDisabled, setOptionsDisabled] = useState(false);
+  const [questionLocked, setQuestionLocked] = useState(false);
+  const timerRef = useRef(null);
 
   const token = localStorage.getItem("token");
 
@@ -37,25 +45,83 @@ const Quiz = () => {
     setQuizData(saved);
   }, []);
 
-  // Timer logic
+  // Timer logic for per-question
   useEffect(() => {
-    let timer;
-    if (timerActive && timeLeft > 0) {
-      timer = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-      }, 1000);
-    } else if (timeLeft === 0) {
+    if (!quizData || submitted) return;
+  
+    setQuestionTimeLeft(15);
+    setOptionsDisabled(false);
+    setQuestionLocked(false);
+    questionLockedRef.current = false; // 🔄 keep ref in sync
+  
+    if (timerRef.current) clearInterval(timerRef.current);
+  
+    timerRef.current = setInterval(() => {
+      setQuestionTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timerRef.current);
+          if (!questionLockedRef.current) {
+            setOptionsDisabled(true);
+            setQuestionLocked(true);
+            questionLockedRef.current = true;
+  
+            setTimeout(() => {
+              setQuestionLocked(false);
+              questionLockedRef.current = false;
+              goToNextQuestion();
+            }, 1000);
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [currentQuestionIndex, quizData, submitted]);
+  
+  // Global timer for the whole quiz
+  useEffect(() => {
+    if (submitted) return;
+    if (timeLeft <= 0) {
+      submitQuiz();
+      return;
+    }
+    const globalTimer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(globalTimer);
+  }, [timeLeft, submitted]);
+
+  const handleAnswer = (selectedIdx) => {
+    if (optionsDisabled || submitted || questionLockedRef.current) return;
+  
+    setSelectedAnswers((prev) => ({
+      ...prev,
+      [currentQuestionIndex]: selectedIdx,
+    }));
+  
+    setQuestionLocked(true);
+    questionLockedRef.current = true;
+  
+    if (timerRef.current) clearInterval(timerRef.current);
+  
+    setTimeout(() => {
+      setQuestionLocked(false);
+      questionLockedRef.current = false;
+      goToNextQuestion();
+    }, 200);
+  };
+  
+
+  const goToNextQuestion = () => {
+    if (currentQuestionIndex < quizData.questions.length - 1) {
+      setCurrentQuestionIndex((prev) => prev + 1);
+    } else {
       submitQuiz();
     }
-    return () => clearInterval(timer);
-  }, [timeLeft, timerActive]);
-
-  const handleAnswer = (index, selectedIdx) => {
-    if (submitted) return;
-    setSelectedAnswers((prev) => {
-      const newAnswers = { ...prev, [index]: selectedIdx };
-      return newAnswers;
-    });
   };
 
   const toggleBookmark = (index) => {
@@ -67,80 +133,78 @@ const Quiz = () => {
   };
 
   const submitQuiz = async () => {
-    if (!quizData || submitted) return;
-    setTimerActive(false);
 
-    const questions = quizData.questions.map((q, index) => ({
-      questionText: q.questionText,
-      options: q.options,
-      correctAnswerIndex: q.correctAnswerIndex,
-      selectedAnswerIndex: selectedAnswers[index] ?? null,
-      topicTag: q.topicTag,
+    if (!token) {
+    toast.error("Session expired. Please login again");
+    navigate('/login');
+    return;
+  }
+
+  if (!quizData || submitted) return;
+  setTimerActive(false);
+
+  const questions = quizData.questions.map((q, index) => ({
+    questionText: q.questionText,
+    options: q.options,
+    correctAnswerIndex: q.correctAnswerIndex,
+    selectedAnswerIndex: selectedAnswers[index] ?? null,
+    topicTag: q.topicTag,
+  }));
+
+  const bookmarkedQuestions = Object.entries(bookmarked)
+    .filter(([_, val]) => val)
+    .map(([index]) => ({
+      questionText: quizData.questions[index].questionText,
+      topicTag: quizData.questions[index].topicTag,
     }));
 
-    const bookmarkedQuestions = Object.entries(bookmarked)
-      .filter(([_, val]) => val)
-      .map(([index]) => ({
-        questionText: quizData.questions[index].questionText,
-        topicTag: quizData.questions[index].topicTag,
-      }));
+  const correctCount = questions.filter(
+    (q) => q.selectedAnswerIndex === q.correctAnswerIndex
+  ).length;
 
-    const correctCount = questions.filter(
-      (q) => q.selectedAnswerIndex === q.correctAnswerIndex
-    ).length;
+  setScore(correctCount);
+  setSubmitted(true);
 
-    setScore(correctCount);
-    setSubmitted(true);
+  try {
+    const res = await API.post("/quiz/submit", {
+      subject: quizData.subject,
+      source: quizData.source,
+      topics: quizData.topicsCovered,
+      questions,
+      bookmarkedQuestions,
+    });
 
-    try {
-      const res = await fetch("http://localhost:5000/api/quiz/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          subject: quizData.subject,
-          source: quizData.source,
-          topics: quizData.topicsCovered,
-          questions,
-          bookmarkedQuestions,
-        }),
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        // Store quiz completion data for TheoryPage progress calculation
-        const quizCompletionData = {
-          topicId: quizData.topicId, // This was stored when quiz was generated
-          score: correctCount,
-          totalQuestions: questions.length,
-          percentage: Math.round((correctCount / questions.length) * 100),
-          completedAt: new Date().toISOString()
-        };
-        
-        // Store in localStorage for TheoryPage to access
-        const existingQuizData = JSON.parse(localStorage.getItem("quizProgressData") || "{}");
-        existingQuizData[quizData.topicId] = quizCompletionData;
-        localStorage.setItem("quizProgressData", JSON.stringify(existingQuizData));
-        
-        // Also store in the format that TheoryPage expects
-        localStorage.setItem("quizCompleted", JSON.stringify({
-          topicId: quizData.topicId,
-          score: Math.round((correctCount / questions.length) * 100)
-        }));
-        
-        toast.success(`Quiz submitted! Score: ${correctCount}/${questions.length}`);
-        localStorage.setItem("viewHistoryFor", quizData.subject);
-        localStorage.setItem("viewHistorySource", quizData.source); 
-        localStorage.removeItem("activeQuiz");
-      } else {
-        toast.error(data.message || "Submission failed.");
-      }
-    } catch (err) {
-      toast.error("Error submitting quiz.");
-    }
-  };
+    if (!res.data) {
+  throw new Error("Empty response from server");
+}
+    // Store quiz completion data for TheoryPage progress calculation
+    const quizCompletionData = {
+      topicId: quizData.topicId,
+      score: correctCount,
+      totalQuestions: questions.length,
+      percentage: Math.round((correctCount / questions.length) * 100),
+      completedAt: new Date().toISOString()
+    };
+    
+    // Store in localStorage
+    const existingQuizData = JSON.parse(localStorage.getItem("quizProgressData") || "{}");
+    existingQuizData[quizData.topicId] = quizCompletionData;
+    localStorage.setItem("quizProgressData", JSON.stringify(existingQuizData));
+    
+    // Also store in the format that TheoryPage expects
+    localStorage.setItem("quizCompleted", JSON.stringify({
+      topicId: quizData.topicId,
+      score: Math.round((correctCount / questions.length) * 100)
+    }));
+    
+    toast.success(`Quiz submitted! Score: ${correctCount}/${questions.length}`);
+    localStorage.setItem("viewHistoryFor", quizData.subject);
+    localStorage.setItem("viewHistorySource", quizData.source); 
+    localStorage.removeItem("activeQuiz");
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Error submitting quiz");
+  }
+};
 
   if (!quizData) {
     return (
@@ -202,8 +266,8 @@ const Quiz = () => {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-lg">
             <FiClock className={`${darkMode ? "text-blue-400" : "text-blue-500"}`} />
-            <span className={`font-extrabold text-lg ${timeLeft < 300 ? "text-red-600 animate-pulse" : darkMode ? "text-gray-100" : "text-gray-800"}`}>
-              {minutes}:{seconds < 10 ? "0" : ""}{seconds}
+            <span className={`font-extrabold text-lg ${timeLeft < 30 ? "text-red-600 animate-pulse" : darkMode ? "text-gray-100" : "text-gray-800"}`}>
+              {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
             </span>
           </div>
           
@@ -266,159 +330,216 @@ const Quiz = () => {
 
       {/* Questions list */}
       <div className="space-y-6">
-        {quizData.questions.map((q, index) => {
-          const selected = selectedAnswers[index];
-          const isCorrect = selected === q.correctAnswerIndex;
-          const isBookmarked = bookmarked[index];
-          const explanationVisible = showExplanation[index];
-
-          return (
-            <div
-              key={index}
-              className={`p-6 rounded-xl border-2 transition-all ${
-                submitted
-                  ? isCorrect
-                    ? darkMode 
-                      ? "border-emerald-500 bg-gray-800 hover:shadow-[0_5px_15px_rgba(16,185,129,0.3)]" 
-                      : "border-blue-300 bg-gradient-to-br from-blue-50 to-pink-50 hover:shadow-[0_5px_15px_rgba(147,197,253,0.3)]"
-                    : darkMode
-                      ? "border-rose-500 bg-gray-800 hover:shadow-[0_5px_15px_rgba(244,63,94,0.3)]"
-                      : "border-pink-300 bg-gradient-to-br from-pink-50 to-blue-50 hover:shadow-[0_5px_15px_rgba(244,114,182,0.3)]"
+        {!submitted ? (
+          // Show only current question if not submitted
+          (() => {
+            const q = quizData.questions[currentQuestionIndex];
+            const selected = selectedAnswers[currentQuestionIndex];
+            const isCorrect = selected === q.correctAnswerIndex;
+            const isBookmarked = bookmarked[currentQuestionIndex];
+            const explanationVisible = showExplanation[currentQuestionIndex];
+            return (
+              <div
+                key={currentQuestionIndex}
+                className={`p-6 rounded-xl border-2 transition-all ${
+                  submitted
+                    ? isCorrect
+                      ? darkMode 
+                        ? "border-emerald-500 bg-gray-800 hover:shadow-[0_5px_15px_rgba(16,185,129,0.3)]" 
+                        : "border-blue-300 bg-gradient-to-br from-blue-50 to-pink-50 hover:shadow-[0_5px_15px_rgba(147,197,253,0.3)]"
+                      : darkMode
+                        ? "border-rose-500 bg-gray-800 hover:shadow-[0_5px_15px_rgba(244,63,94,0.3)]"
+                        : "border-pink-300 bg-gradient-to-br from-pink-50 to-blue-50 hover:shadow-[0_5px_15px_rgba(244,114,182,0.3)]"
                   : darkMode
                     ? "border-gray-700 bg-gray-800 hover:border-gray-600 hover:shadow-[0_5px_15px_rgba(0,0,0,0.3)]"
                     : "border-blue-100 bg-white hover:border-pink-200 hover:shadow-[0_5px_15px_rgba(219,234,254,0.3)]"
-              }`}
-            >
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex items-start">
-                  <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full mr-3 ${
-                    submitted
-                      ? isCorrect
-                        ? darkMode
-                          ? "bg-emerald-600 text-white"
-                          : "bg-blue-400 text-white"
+                }`}
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex items-start">
+                    <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full mr-3 ${
+                      submitted
+                        ? isCorrect
+                          ? darkMode
+                            ? "bg-emerald-600 text-white"
+                            : "bg-blue-400 text-white"
+                          : darkMode
+                            ? "bg-rose-600 text-white"
+                            : "bg-pink-400 text-white"
                         : darkMode
-                          ? "bg-rose-600 text-white"
-                          : "bg-pink-400 text-white"
-                      : darkMode
-                        ? "bg-gray-700 text-white"
-                        : "bg-blue-100 text-blue-600"
-                  } font-bold`}>
-                    {index + 1}
-                  </span>
-                  <h3 className={`font-medium text-lg ${darkMode ? "text-white" : "text-blue-800"}`}>
-                    {q.questionText}
-                  </h3>
-                </div>
-                <div className="flex space-x-2">
-                  <button 
-                    onClick={() => toggleBookmark(index)}
-                    className={`text-xl transition-colors ${isBookmarked ? "text-pink-400" : darkMode ? "text-gray-400 hover:text-pink-400" : "text-blue-300 hover:text-pink-400"}`}
-                    aria-label={isBookmarked ? "Remove bookmark" : "Bookmark question"}
-                  >
-                    {isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
-                  </button>
-                  {q.explanation && (
-                    <button
-                      onClick={() => toggleExplanation(index)}
-                      className={`text-xl ${darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-500 hover:text-blue-600"}`}
-                      aria-label={explanationVisible ? "Hide explanation" : "Show explanation"}
+                          ? "bg-gray-700 text-white"
+                          : "bg-blue-100 text-blue-600"
+                    } font-bold`}>
+                      {currentQuestionIndex + 1}
+                    </span>
+                    <h3 className={`font-medium text-lg ${darkMode ? "text-white" : "text-blue-800"}`}>
+                      {q.questionText}
+                    </h3>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button 
+                      onClick={() => toggleBookmark(currentQuestionIndex)}
+                      className={`text-xl transition-colors ${isBookmarked ? "text-pink-400" : darkMode ? "text-gray-400 hover:text-pink-400" : "text-blue-300 hover:text-pink-400"}`}
+                      aria-label={isBookmarked ? "Remove bookmark" : "Bookmark question"}
                     >
-                      <FiHelpCircle />
+                      {isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
                     </button>
-                  )}
+                    {q.explanation && (
+                      <button
+                        onClick={() => toggleExplanation(currentQuestionIndex)}
+                        className={`text-xl ${darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-500 hover:text-blue-600"}`}
+                        aria-label={explanationVisible ? "Hide explanation" : "Show explanation"}
+                      >
+                        <FiHelpCircle />
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              {q.explanation && explanationVisible && (
-                <div className={`ml-11 mb-4 p-3 rounded-lg ${darkMode ? "bg-gray-700 text-blue-200" : "bg-blue-100 text-blue-800"}`}>
-                  <p className="font-medium">Explanation:</p>
-                  <p className="mt-1">{q.explanation}</p>
-                </div>
-              )}
+                {q.explanation && explanationVisible && (
+                  <div className={`ml-11 mb-4 p-3 rounded-lg ${darkMode ? "bg-gray-700 text-blue-200" : "bg-blue-100 text-blue-800"}`}>
+                    <p className="font-medium">Explanation:</p>
+                    <p className="mt-1">{q.explanation}</p>
+                  </div>
+                )}
 
-              <ul className="mt-4 space-y-3 ml-11">
-                {q.options.map((opt, idx) => {
-                  const isSelected = selected === idx;
-                  const isCorrectAnswer = q.correctAnswerIndex === idx;
-                  let optionClasses = "p-3 border rounded-lg flex items-center";
+                <ul className="mt-4 space-y-3 ml-11">
+                  {q.options.map((opt, idx) => {
+                    const isSelected = selected === idx;
+                    const isCorrectAnswer = q.correctAnswerIndex === idx;
+                    let optionClasses = "p-3 border rounded-lg flex items-center";
 
-                  if (submitted) {
-                    if (isSelected) {
-                      optionClasses += isCorrectAnswer
-                        ? darkMode
-                          ? " bg-emerald-900/50 border-emerald-500 hover:shadow-[0_5px_15px_rgba(16,185,129,0.3)]"
-                          : " bg-blue-100 border-blue-300 hover:shadow-[0_5px_15px_rgba(147,197,253,0.3)]"
-                        : darkMode
-                          ? " bg-rose-900/50 border-rose-500 hover:shadow-[0_5px_15px_rgba(244,63,94,0.3)]"
-                          : " bg-pink-100 border-pink-300 hover:shadow-[0_5px_15px_rgba(249,168,212,0.3)]";
-                    } else if (isCorrectAnswer) {
+                    if (submitted) {
+                      if (isSelected) {
+                        optionClasses += isCorrectAnswer
+                          ? darkMode
+                            ? " bg-emerald-900/50 border-emerald-500 hover:shadow-[0_5px_15px_rgba(16,185,129,0.3)]"
+                            : " bg-blue-100 border-blue-300 hover:shadow-[0_5px_15px_rgba(147,197,253,0.3)]"
+                          : darkMode
+                            ? " bg-rose-900/50 border-rose-500 hover:shadow-[0_5px_15px_rgba(244,63,94,0.3)]"
+                            : " bg-pink-100 border-pink-300 hover:shadow-[0_5px_15px_rgba(249,168,212,0.3)]";
+                      } else if (isCorrectAnswer) {
+                        optionClasses += darkMode
+                          ? " bg-emerald-900/30 border-emerald-400 hover:shadow-[0_5px_15px_rgba(16,185,129,0.3)]"
+                          : " bg-blue-50 border-blue-200 hover:shadow-[0_5px_15px_rgba(147,197,253,0.3)]";
+                      } else {
+                        optionClasses += darkMode
+                          ? " bg-gray-700 border-gray-600 hover:shadow-[0_5px_15px_rgba(0,0,0,0.3)]"
+                          : " bg-white border-blue-100 hover:shadow-[0_5px_15px_rgba(219,234,254,0.1)]";
+                      }
+                    } else if (isSelected) {
                       optionClasses += darkMode
-                        ? " bg-emerald-900/30 border-emerald-400 hover:shadow-[0_5px_15px_rgba(16,185,129,0.3)]"
-                        : " bg-blue-50 border-blue-200 hover:shadow-[0_5px_15px_rgba(147,197,253,0.3)]";
+                        ? " bg-blue-900/30 border-blue-500 hover:shadow-[0_5px_15px_rgba(59,130,246,0.3)]"
+                        : " bg-blue-100 border-blue-300 hover:shadow-[0_5px_15px_rgba(147,197,253,0.3)]";
                     } else {
                       optionClasses += darkMode
-                        ? " bg-gray-700 border-gray-600 hover:shadow-[0_5px_15px_rgba(0,0,0,0.3)]"
-                        : " bg-white border-blue-100 hover:shadow-[0_5px_15px_rgba(219,234,254,0.1)]";
+                        ? " bg-gray-700 border-gray-600 hover:border-gray-500 hover:shadow-[0_5px_15px_rgba(0,0,0,0.3)]"
+                        : " bg-white border-blue-100 hover:border-pink-200 hover:shadow-[0_5px_15px_rgba(219,234,254,0.1)]";
                     }
-                  } else if (isSelected) {
-                    optionClasses += darkMode
-                      ? " bg-blue-900/30 border-blue-500 hover:shadow-[0_5px_15px_rgba(59,130,246,0.3)]"
-                      : " bg-blue-100 border-blue-300 hover:shadow-[0_5px_15px_rgba(147,197,253,0.3)]";
-                  } else {
-                    optionClasses += darkMode
-                      ? " bg-gray-700 border-gray-600 hover:border-gray-500 hover:shadow-[0_5px_15px_rgba(0,0,0,0.3)]"
-                      : " bg-white border-blue-100 hover:border-pink-200 hover:shadow-[0_5px_15px_rgba(219,234,254,0.1)]";
-                  }
 
-                  return (
+                    return (
+                      <li
+                        key={idx}
+                        onClick={() => handleAnswer(idx)}
+                        className={`${optionClasses} cursor-pointer transition-all`}
+                      >
+                        <button
+                          className={`inline-flex items-center justify-center w-6 h-6 rounded-full mr-3 font-medium text-sm ${
+                            submitted
+                              ? isCorrectAnswer
+                                ? darkMode
+                                  ? "bg-emerald-500 text-white"
+                                  : "bg-blue-400 text-white"
+                                : isSelected
+                                  ? darkMode
+                                    ? "bg-rose-500 text-white"
+                                    : "bg-pink-400 text-white"
+                                  : darkMode
+                                    ? "bg-gray-600 text-gray-300"
+                                    : "bg-blue-100 text-blue-600"
+                              : isSelected
+                                ? darkMode
+                                  ? "bg-blue-500 text-white"
+                                  : "bg-blue-400 text-white"
+                                : darkMode
+                                  ? "bg-gray-600 text-gray-300"
+                                  : "bg-blue-100 text-blue-600"
+                          }`}
+                          disabled={optionsDisabled || submitted}
+                          style={{ pointerEvents: optionsDisabled || submitted ? 'none' : 'auto' }}
+                        >
+                          {String.fromCharCode(65 + idx)}
+                        </button>
+                        <span className={darkMode ? "text-gray-100" : "text-blue-800"}>{opt}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+
+                {!submitted && (
+                  <div className="mt-4 ml-11">
+                    <span className={`font-semibold ${optionsDisabled ? 'text-red-500' : 'text-blue-500'}`}>Time left: {questionTimeLeft}s</span>
+                    {optionsDisabled && <span className="ml-4 text-gray-400">Time's up! Option disabled.</span>}
+                  </div>
+                )}
+
+                {submitted && selected !== q.correctAnswerIndex && (
+                  <div className={`mt-4 ml-11 p-3 rounded-lg ${darkMode ? "bg-rose-900/30 border-rose-700" : "bg-pink-50 border-pink-200"}`}>
+                    <p className={`font-medium ${darkMode ? "text-rose-300" : "text-pink-700"}`}>
+                      ❌ Your answer was incorrect.
+                    </p>
+                    <p className={`mt-1 ${darkMode ? "text-rose-200" : "text-pink-800"}`}>
+                      <span className="font-semibold">Correct answer:</span> {q.options[q.correctAnswerIndex]}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })()
+        ) : (
+          // Show all questions with result after submission
+          quizData.questions.map((q, index) => {
+            const selected = selectedAnswers[index];
+            const isCorrect = selected === q.correctAnswerIndex;
+            return (
+              <div key={index} className={`p-6 rounded-xl border-2 mb-4 ${isCorrect ? "border-emerald-500" : "border-pink-400"}`}>
+                <div className="mb-2 font-bold">
+                  Q{index + 1}: {q.questionText}
+                </div>
+                <ul>
+                  {q.options.map((opt, idx) => (
                     <li
                       key={idx}
-                      onClick={() => handleAnswer(index, idx)}
-                      className={`${optionClasses} cursor-pointer transition-all`}
+                      className={
+                        `p-2 rounded ` +
+                        (idx === q.correctAnswerIndex ? "bg-green-100" : "") +
+                        (selected === idx && selected !== q.correctAnswerIndex ? " bg-pink-100" : "") +
+                        (selected === idx ? " font-bold" : "")
+                      }
                     >
-                      <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full mr-3 ${
-                        submitted
-                          ? isCorrectAnswer
-                            ? darkMode
-                              ? "bg-emerald-500 text-white"
-                              : "bg-blue-400 text-white"
-                            : isSelected
-                              ? darkMode
-                                ? "bg-rose-500 text-white"
-                                : "bg-pink-400 text-white"
-                              : darkMode
-                                ? "bg-gray-600 text-gray-300"
-                                : "bg-blue-100 text-blue-600"
-                          : isSelected
-                            ? darkMode
-                              ? "bg-blue-500 text-white"
-                              : "bg-blue-400 text-white"
-                            : darkMode
-                              ? "bg-gray-600 text-gray-300"
-                              : "bg-blue-100 text-blue-600"
-                      } font-medium text-sm`}>
-                        {String.fromCharCode(65 + idx)}
-                      </span>
-                      <span className={darkMode ? "text-gray-100" : "text-blue-800"}>{opt}</span>
+                      {String.fromCharCode(65 + idx)}. {opt}
+                      {idx === q.correctAnswerIndex && <span className="ml-2 text-green-400 font-semibold">(Correct)</span>}
+                      {selected === idx && selected !== q.correctAnswerIndex && <span className="ml-2 text-red-400 font-semibold">(Your Answer)</span>}
                     </li>
-                  );
-                })}
-              </ul>
-
-              {submitted && selected !== q.correctAnswerIndex && (
-                <div className={`mt-4 ml-11 p-3 rounded-lg ${darkMode ? "bg-rose-900/30 border-rose-700" : "bg-pink-50 border-pink-200"}`}>
-                  <p className={`font-medium ${darkMode ? "text-rose-300" : "text-pink-700"}`}>
-                    ❌ Your answer was incorrect.
-                  </p>
-                  <p className={`mt-1 ${darkMode ? "text-rose-200" : "text-pink-800"}`}>
-                    <span className="font-semibold">Correct answer:</span> {q.options[q.correctAnswerIndex]}
-                  </p>
+                  ))}
+                </ul>
+                <div className="mt-2">
+                  {selected === undefined
+                    ? <span className="text-gray-500">Not attempted</span>
+                    : isCorrect
+                      ? <span className="border-emerald-400 font-semibold">Correct</span>
+                      : <span className="text-pink-400 font-semibold">Incorrect</span>
+                  }
                 </div>
-              )}
-            </div>
-          );
-        })}
+                {q.explanation && (
+                  <div className="mt-2 text-blue-700 bg-blue-50 p-2 rounded">
+                    <b>Explanation:</b> {q.explanation}
+                  </div>
+                )}
+              </div>
+            );
+          })
+        )}
       </div>
 
       {/* Submit section */}

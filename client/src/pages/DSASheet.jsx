@@ -205,8 +205,8 @@ useEffect(() => {
       const token = localStorage.getItem('token');
       await API.post(
         `/dsa/progress`,
-        { questionId, ...updates },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { questionId, ...updates }
+ 
       );
       // Optional: update local state
       setProgressMap((prev) => ({

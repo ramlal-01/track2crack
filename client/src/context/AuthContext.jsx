@@ -25,13 +25,34 @@ export const AuthProvider = ({ children }) => {
 
   // 👇 If user exists but token is missing (e.g., manual refresh), logout
   useEffect(() => {
+  const checkAuth = async () => {
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
 
     if (!token && storedUser) {
-      logout();
+      try {
+        // Try refresh
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/refresh`, {
+          method: "GET",
+          credentials: "include", // send cookie
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          localStorage.setItem("token", data.token);
+          // don't logout, just continue
+        } else {
+          logout(); // only logout if refresh fails
+        }
+      } catch (err) {
+        logout();
+      }
     }
-  }, []);
+  };
+
+  checkAuth();
+}, []);
+
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

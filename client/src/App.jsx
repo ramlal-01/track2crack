@@ -96,6 +96,28 @@ const AppContent = () => {
   }, []);
 
 
+
+  useEffect(() => {
+  const interval = setInterval(() => {
+    const refresh = async () => {
+      try {
+        const res = await API.get("/auth/refresh", { withCredentials: true });
+        localStorage.setItem("token", res.data.token);
+        console.log("🔄 Access token refreshed");
+      } catch (err) {
+        console.warn("⚠️ Failed to refresh token:", err.response?.data || err.message);
+        // Optional: force logout on refresh failure
+        // logout(); 
+      }
+    };
+
+    refresh();
+  }, 10 * 60 * 1000); // every 10 minutes
+
+  return () => clearInterval(interval);
+}, []);
+
+
   // Show navbar only on specific routes
   const showNavbar = ['/', '/login', '/register', '/forgot-password', '/reset-password', '/verify-email'].includes(location.pathname);
 
@@ -112,7 +134,8 @@ const AppContent = () => {
   "/dashboard/revision-planner",
   "/dashboard/feedback",
   "/profile",
-  "/edit-profile" 
+  "/edit-profile" ,
+  "/quiz/history"
 ];
 
 
@@ -131,7 +154,7 @@ const AppContent = () => {
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/verify-email/:token" element={<VerifyEmail />} />
 
-          <Route path="/dashboard" element={<Dashboard  />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/dashboard/dsa" element={<ProtectedRoute><DSASheet /> </ProtectedRoute>} />
           {/* Theory Routes */}
           <Route path="/dashboard/theory/dsa" element={ <ProtectedRoute><DSA /> </ProtectedRoute>} />

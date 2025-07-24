@@ -20,18 +20,16 @@ const RevisionPlanner = () => {
   useEffect(() => {
     const fetchReminderDates = async () => {
       try {
-        const res = await API.get(`/revision/reminders/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await API.get(`/revision/reminders/${userId}`);
         const all = [...res.data.dsaReminders, ...res.data.coreReminders, ...res.data.theoryReminders];
         const dates = all
-        .filter(
-          item =>
-            item.remindOn &&
-            !item.isCompleted &&
-            (item.questionId || item.topicId || item.coreTopicId)
-        )
-        .map(item => new Date(item.remindOn).toLocaleDateString("en-CA"));
+          .filter(
+            item =>
+              item.remindOn &&
+              !item.isCompleted &&
+              (item.questionId || item.topicId || item.coreTopicId)
+          )
+          .map(item => new Date(item.remindOn).toLocaleDateString("en-CA"));
 
         setReminderDates([...new Set(dates)]);
       } catch (err) {
@@ -44,9 +42,7 @@ const RevisionPlanner = () => {
 
   const handleSnoozeAll = async () => {
     try {
-      const res = await API.get(`/revision/overdue/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await API.get(`/revision/overdue/${userId}`);
 
       const all = [...res.data.dsa, ...res.data.core, ...res.data.theory];
       if (all.length === 0) {
@@ -64,9 +60,6 @@ const RevisionPlanner = () => {
             {
               action: "reschedule",
               newDate: twoDaysLater,
-            },
-            {
-              headers: { Authorization: `Bearer ${token}` },
             }
           )
         )
@@ -81,7 +74,7 @@ const RevisionPlanner = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 transition-colors duration-200">
       <div className="w-full px-6 space-y-6">
         <RevisionHeader onSnoozeAll={handleSnoozeAll} />
 
@@ -98,18 +91,22 @@ const RevisionPlanner = () => {
           </motion.div>
 
           <motion.div
-            className="bg-white p-4 rounded-xl shadow border border-gray-200"
+            className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow border border-gray-200 dark:border-gray-700 transition-colors duration-200"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <h2 className="text-lg font-semibold text-gray-700 mb-2">📆 Calendar</h2>
-            <MiniCalendar
-              onDateSelect={(date) => setSelectedDate(date)}
-              reminderDates={reminderDates}
-            />
+            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-100 mb-2">
+              📆 Calendar
+            </h2>
+            <div className="calendar-container dark:calendar-dark">
+              <MiniCalendar
+                onDateSelect={(date) => setSelectedDate(date)}
+                reminderDates={reminderDates}
+              />
+            </div>
             <div className="mt-4">
-              <h2 className="text-md font-semibold text-gray-700 mb-1">
+              <h2 className="text-md font-semibold text-gray-700 dark:text-gray-100 mb-1">
                 📍 Reminders on {selectedDate.toDateString()}
               </h2>
               <RemindersByDate selectedDate={selectedDate} />
@@ -122,13 +119,17 @@ const RevisionPlanner = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <div className="bg-white p-4 rounded-xl shadow border border-violet-300">
-              <h2 className="text-xl font-bold text-violet-700 mb-2">🔖 Recent Bookmarks</h2>
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow border border-violet-300 dark:border-violet-600 transition-colors duration-200">
+              <h2 className="text-xl font-bold text-violet-700 dark:text-violet-400 mb-2">
+                🔖 Recent Bookmarks
+              </h2>
               <RecentBookmarks />
             </div>
           </motion.div>
         </div>
       </div>
+
+      
     </div>
   );
 };

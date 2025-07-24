@@ -21,6 +21,7 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
 
     if (!user) return <Navigate to="/login" />;
+
  const [progress, setProgress] = useState({
     Java: 0,
     OOPS: 0,
@@ -31,7 +32,14 @@ const Dashboard = () => {
     DSASheet: 0,
   });
 
-
+const [quizProgress, setQuizProgress] = useState({
+  Java: 0,
+  OOPS: 0,
+  DSA: 0,
+  OS: 0,
+  DBMS: 0,
+  CN: 0
+});
 
 
 useEffect(() => {
@@ -142,11 +150,6 @@ useEffect(() => {
         )
       };
 
-      console.log('Enriched progress data:', {
-        theoryWithSubjects,
-        coreWithSubjects,
-        newProgress
-      });
 
       setProgress(newProgress);
 
@@ -159,6 +162,64 @@ useEffect(() => {
   };
 
   fetchProgress();
+}, []);
+
+
+
+
+
+useEffect(() => {
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+
+  if (!userId || !token) return;
+
+  const fetchQuizProgress = async () => {
+    try {
+      const quizRequests = [
+        API.get('/quiz/progress', {
+           
+          params: { subject: 'Java', source: 'Theory' }
+        }),
+        API.get('/quiz/progress', {
+           
+          params: { subject: 'OOPS', source: 'Theory' }
+        }),
+        API.get('/quiz/progress', {
+           
+          params: { subject: 'DSA', source: 'Theory' }
+        }),
+        API.get('/quiz/progress', {
+          
+          params: { subject: 'OS', source: 'Core' }
+        }),
+        API.get('/quiz/progress', {
+           
+          params: { subject: 'DBMS', source: 'Core' }
+        }),
+        API.get('/quiz/progress', {
+           
+          params: { subject: 'CN', source: 'Core' }
+        })
+      ];
+
+      const quizResponses = await Promise.all(quizRequests);
+
+      setQuizProgress({
+        Java: quizResponses[0].data.progressPercent || 0,
+        OOPS: quizResponses[1].data.progressPercent || 0,
+        DSA: quizResponses[2].data.progressPercent || 0,
+        OS: quizResponses[3].data.progressPercent || 0,
+        DBMS: quizResponses[4].data.progressPercent || 0,
+        CN: quizResponses[5].data.progressPercent || 0
+      });
+
+    } catch (err) {
+      console.error("❌ Quiz Progress Fetch Failed:", err);
+    }
+  };
+
+  fetchQuizProgress();
 }, []);
 
 
@@ -175,9 +236,9 @@ useEffect(() => {
           {/* Center - Welcome Message */}
             <div className=" hidden sm:block mb-10">
               <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
-                Welcome back, <span className="text-indigo-600 dark:text-blue-300">{user?.name || "Coder"}</span>
+                Welcome back, <span className="text-purple-700 dark:text-blue-300">{user?.name || "Coder"}</span>
               </h2>
-              <p className="text-sb italic text-gray-800 dark:text-gray-400">
+              <p className="text-sb italic text-indigo-700 dark:text-gray-400">
                 "Track your progress. Crack your placements."
               </p>
             </div>
@@ -248,13 +309,14 @@ useEffect(() => {
         </div>
  
         <SubjectProgressChart data={{
-          Java: progress.Java,
-          OOPS: progress.OOPS,
-          DSA: progress.DSA,
-          OS: progress.OS,
-          DBMS: progress.DBMS,
-          CN: progress.CN,
+          Java: quizProgress.Java,
+          OOPS: quizProgress.OOPS,
+          DSA: quizProgress.DSA,
+          OS: quizProgress.OS,
+          DBMS: quizProgress.DBMS,
+          CN: quizProgress.CN,
         }} />
+
 
 
       </div>

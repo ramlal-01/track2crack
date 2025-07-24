@@ -2,7 +2,7 @@ import React from "react";
 import TopRightAvatar from "./TopRightAvatar";
 import { FaFire } from "react-icons/fa"; 
 import { IoRocketSharp } from "react-icons/io5";
-
+import StreakBadge from "../components/StreakBadge";
 const DashboardHeader = () => {
   return (
     <header className="sticky top-0 z-50 w-full h-[72px] bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white shadow-md flex items-center px-6 md:px-10 justify-between">
@@ -24,10 +24,7 @@ const DashboardHeader = () => {
       {/* Right: Streak + Theme + Avatar */}
       <div className="flex items-center gap-4 ">
         {/* 🔥 Streak */}
-        <div className="hidden sm:flex items-center gap-2 bg-orange-100 text-orange-700 px-3 py-1 rounded-full shadow-sm dark:bg-orange-800 dark:text-orange-200">
-          <FaFire className="text-orange-500 dark:text-orange-300" />
-          <span className="text-sm font-medium">5-Day Streak</span>
-        </div>
+        <StreakBadge />
       {/* 👤 Avatar + dropdown */}
         <div className="flex items-center">
           <TopRightAvatar />

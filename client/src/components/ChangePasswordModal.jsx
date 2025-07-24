@@ -33,10 +33,7 @@ const ChangePasswordModal = ({ onClose }) => {
       const token = localStorage.getItem("token");
       const res = await API.post(
         "/users/change-password",
-        { oldPassword, newPassword },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { oldPassword, newPassword } 
       );
 
       alert("Password changed successfully");

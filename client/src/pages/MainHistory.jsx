@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import API from '../api/api';
 const MainHistory = () => {
   const [history, setHistory] = useState([]);
   const [subjectFilter, setSubjectFilter] = useState("All");
@@ -22,21 +22,17 @@ const MainHistory = () => {
   const token = localStorage.getItem("token");
   const allSubjects = ["All", "Java", "OOPS", "DSA", "CN", "DBMS", "OS"];
 
-  useEffect(() => {
-    const fetchHistory = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/quiz/history", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-        if (res.ok) setHistory(data.quizzes || []);
-        else toast.error(data.message || "Failed to fetch quiz history.");
-      } catch {
-        toast.error("Error fetching quiz history.");
-      }
-    };
-    if (token) fetchHistory();
-  }, [token]);
+useEffect(() => {
+  const fetchHistory = async () => {
+    try {
+      const res = await API.get("/quiz/history");
+      setHistory(res.data.quizzes || []);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to fetch quiz history");
+    }
+  };
+  if (token) fetchHistory();
+}, [token]);
 
   const getPerformanceLevel = (quiz) => {
     const pct = (quiz.score / quiz.totalQuestions) * 100;

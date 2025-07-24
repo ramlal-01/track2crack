@@ -25,7 +25,7 @@ API.interceptors.response.use(
 
     if (
       error.response &&
-      error.response.status === 401 &&
+      (error.response.status === 401 || error.response.status === 403) &&
       !originalRequest._retry
     ) {
       originalRequest._retry = true;
@@ -39,6 +39,7 @@ API.interceptors.response.use(
         const newToken = res.data.token;
         localStorage.setItem('token', newToken);
 
+        console.log("🔁 Session refreshed. New access token set.");
         // Update the failed request's header and retry it
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return API(originalRequest);

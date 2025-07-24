@@ -99,7 +99,16 @@ const userSchema = new mongoose.Schema({
   fcmToken: {
   type: String,
   default: null,
-}
+},
+// ✅ Daily Streak Fields
+  streak: {
+  type: Number,
+  default: 0,
+},
+lastActive: {
+  type: Date,
+},
+
 
 }, {
   timestamps: true

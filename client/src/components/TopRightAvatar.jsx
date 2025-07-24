@@ -63,9 +63,7 @@ useEffect(() => {
 const fetchNotifications = async (userId, page = 1) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await API.get(`/notifications/${userId}?limit=10&page=${page}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await API.get(`/notifications/${userId}?limit=10&page=${page}` );
       if (response.status === 200) {
         const data = response.data;
         const formatted = data.map(notif => ({
@@ -132,9 +130,7 @@ const fetchNotifications = async (userId, page = 1) => {
   const handleMarkAllRead = async () => {
     try {
       const token = localStorage.getItem("token");
-      await API.patch(`/notifications/mark-all-seen/${userId}`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await API.patch(`/notifications/mark-all-seen/${userId}`, {} );
       setNotifications((prev) => prev.map(n => ({ ...n, isSeen: true })));
     } catch (error) {
       console.error("Failed to mark all as read:", error);

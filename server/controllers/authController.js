@@ -98,6 +98,7 @@ exports.loginUser = async (req, res) => {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'Strict',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: '/api/auth/refresh'
     });
 
     res.status(200).json({
@@ -293,7 +294,7 @@ exports.socialLogin = async (req, res) => {
 };
 
 
-// GET /api/auth/refresh
+// GET /api/auth/refresh 
 exports.refreshToken = (req, res) => {
   const token = req.cookies.refreshToken;
 
@@ -301,12 +302,21 @@ exports.refreshToken = (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-    const newAccessToken = jwt.sign({ userId: decoded.userId }, process.env.JWT_SECRET, {
-      expiresIn: '15m',
+
+    const { accessToken, refreshToken: newRefreshToken } = generateTokens(decoded.userId);
+
+    res.cookie('refreshToken', newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: '/'
     });
 
-    res.status(200).json({ token: newAccessToken });
+    res.status(200).json({ token: accessToken });
+
   } catch (err) {
-    res.status(403).json({ message: "Invalid refresh token" });
+    return res.status(403).json({ message: "Invalid refresh token" });
   }
 };
+

@@ -48,6 +48,13 @@ app.use('/api/bookmarks', require('./routes/bookmarks'));
 
 // 9
 app.use("/api/notifications", require('./routes/notificationRoutes'));
+
+// 10. Streak route
+app.use('/api/streak', require('./routes/streakRoutes'));
+
+// 11. feedback 
+app.use('/api/feedback', require('./routes/feedbackRoutes'));
+
 // Root test route
 app.get("/", (req, res) => {
   res.send("Track2Crack backend is running");
