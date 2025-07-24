@@ -61,10 +61,15 @@ app.get("/", (req, res) => {
 });
 
 
+// 12. Ping route for uptime monitoring
+app.use("/api", require("./routes/ping"));
+
+
+
 const testRoutes = require("./routes/test");
 app.use("/api/test", testRoutes);
 
-// ✅ Start daily reminder cron job
-require("./cronJobs/dailyReminderJob");  
+// // ✅ Start daily reminder cron job
+// require("./cronJobs/dailyReminderJob");  
 
-module.exports = app;
+// module.exports = app;

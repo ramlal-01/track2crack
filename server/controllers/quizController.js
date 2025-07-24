@@ -202,13 +202,13 @@ exports.getQuizBasedProgress = async (req, res) => {
       highestScoresPerTopic: highestScores 
     });
 
-    console.log("🧪 All topic titles:", topicTitles);
-    console.log("🧪 Quizzes fetched:", quizzes.map(q => ({
-      score: q.score,
-      total: q.totalQuestions,
-      topics: q.topicsCovered
-    })));
-    console.log("🧪 Highest topic scores:", highestScores);
+    // console.log("🧪 All topic titles:", topicTitles);
+    // console.log("🧪 Quizzes fetched:", quizzes.map(q => ({
+    //   score: q.score,
+    //   total: q.totalQuestions,
+    //   topics: q.topicsCovered
+    // })));
+    // console.log("🧪 Highest topic scores:", highestScores);
 
   } catch (err) {
     console.error("❌ Error calculating quiz progress:", err);
