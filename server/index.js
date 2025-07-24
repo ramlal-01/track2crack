@@ -21,4 +21,4 @@ cleanupExpiredResetTokens(); // 🔁 Start the cron job
 // // Manually trigger for testing
 // runReminderJob(); // 🔥 Temporary — remove after verifying
 
-app.use('/api', require('./routes/ping'));
+ 
