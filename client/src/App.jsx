@@ -57,9 +57,12 @@ const AppContent = () => {
       }
 
       try {
-        const token = await getToken(messaging, {
-          vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
-        });
+        const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+
+      const token = await getToken(messaging, {
+        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+        serviceWorkerRegistration: registration,
+      });
 
         if (token) {
           console.log("🔥 FCM Token:", token);
