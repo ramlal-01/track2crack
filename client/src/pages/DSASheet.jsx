@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import API from "../api/api";
 import {
   FaBookmark,
@@ -12,7 +12,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { SiLeetcode, SiGeeksforgeeks } from "react-icons/si";
 import { toast } from 'react-toastify';   
 import { FaChevronRight, FaChevronDown } from "react-icons/fa";
- 
+import { useTheme } from "../context/ThemeContext";
+
 const DSASheet = () => {
   const [groupedQuestions, setGroupedQuestions] = useState({});
   const [progressMap, setProgressMap] = useState({});
@@ -31,6 +32,20 @@ const DSASheet = () => {
   const topicRef = useRef(null);
   const userId = localStorage.getItem("userId");
   const topicRefs = useRef({});
+  const { theme } = useTheme();
+  const darkMode = theme === "dark";
+
+  // Dark mode classes
+  const darkBg = "dark:bg-gray-900 dark:text-white";
+  const darkCardBg = "dark:bg-gray-800";
+  const darkBorder = "dark:border-gray-700";
+  const darkText = "dark:text-gray-200";
+  const darkInput = "dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white";
+  const darkHover = "dark:hover:bg-gray-700";
+  const darkTableHeader = "dark:bg-gray-700 dark:text-gray-200";
+  const darkTableRow = "dark:bg-gray-800 dark:hover:bg-gray-700";
+  const darkDropdown = "dark:bg-gray-700 dark:border-gray-600 dark:text-white";
+
   const fetchAll = async () => {
     try {
       const qRes = await API.get("/dsa/questions");
@@ -74,15 +89,16 @@ const DSASheet = () => {
       setLoading(false);
     }
   };
+
   const highlightMatch = (text, query) => {
-      if (!query) return text;
-      const parts = text.split(new RegExp(`(${query})`, 'gi'));
-      return parts.map((part, i) => 
-        part.toLowerCase() === query.toLowerCase() 
-          ? <mark key={i} className="bg-yellow-200">{part}</mark> 
-          : part
-      );
-    };
+    if (!query) return text;
+    const parts = text.split(new RegExp(`(${query})`, 'gi'));
+    return parts.map((part, i) => 
+      part.toLowerCase() === query.toLowerCase() 
+        ? <mark key={i} className="bg-yellow-200 dark:bg-yellow-800">{part}</mark> 
+        : part
+    );
+  };
 
   const getFilteredQuestions = () => {
     const result = {};
@@ -114,9 +130,6 @@ const DSASheet = () => {
 
   const filteredQuestions = getFilteredQuestions();
 
-  
-
-
   useEffect(() => {
     fetchAll();
   }, []);
@@ -132,7 +145,6 @@ const DSASheet = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-
   useEffect(() => {
     const newWidths = {};
     Object.keys(groupedQuestions).forEach((topic) => {
@@ -144,69 +156,68 @@ const DSASheet = () => {
     setAnimatedWidths(newWidths);
   }, [progressMap, groupedQuestions]);
 
-useEffect(() => {
-  const handleClickOutside = (e) => {
-    let clickedInsideReminder = false;
-    let clickedInsideNote = false;
-    let clickedInsideAnyTopic = false;
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      let clickedInsideReminder = false;
+      let clickedInsideNote = false;
+      let clickedInsideAnyTopic = false;
 
-    // Check reminders
-    if (openReminderId && reminderRefs.current[openReminderId]) {
-      clickedInsideReminder = reminderRefs.current[openReminderId].contains(e.target);
-    }
-
-    // Check notes
-    if (openNoteId && noteRefs.current[openNoteId]) {
-      clickedInsideNote = noteRefs.current[openNoteId].contains(e.target);
-    }
-
-    // Check if click was inside ANY expanded topic (header or content)
-    Object.keys(expandedTopics).forEach(topic => {
-      if (expandedTopics[topic]) {
-        const topicHeaderRef = topicRefs.current[topic];
-        const topicContentRef = topicRefs.current[`${topic}-content`];
-        
-        if ((topicHeaderRef && topicHeaderRef.contains(e.target)) || 
-            (topicContentRef && topicContentRef.contains(e.target))) {
-          clickedInsideAnyTopic = true;
-        }
+      // Check reminders
+      if (openReminderId && reminderRefs.current[openReminderId]) {
+        clickedInsideReminder = reminderRefs.current[openReminderId].contains(e.target);
       }
-    });
 
-    // Close reminders/notes if needed
-    if (!clickedInsideReminder) setOpenReminderId(null);
-    if (!clickedInsideNote) setOpenNoteId(null);
+      // Check notes
+      if (openNoteId && noteRefs.current[openNoteId]) {
+        clickedInsideNote = noteRefs.current[openNoteId].contains(e.target);
+      }
 
-    // Only collapse topics if click was outside ALL topic containers
-    // AND outside search/filter controls
-    const searchInput = document.querySelector('input[type="text"]');
-    const filterButtons = document.querySelectorAll('[data-filter-button]');
-    const difficultySelect = document.querySelector('select');
-    
-    const clickedInsideControls = 
-      searchInput?.contains(e.target) ||
-      Array.from(filterButtons).some(btn => btn.contains(e.target)) ||
-      difficultySelect?.contains(e.target);
+      // Check if click was inside ANY expanded topic (header or content)
+      Object.keys(expandedTopics).forEach(topic => {
+        if (expandedTopics[topic]) {
+          const topicHeaderRef = topicRefs.current[topic];
+          const topicContentRef = topicRefs.current[`${topic}-content`];
+          
+          if ((topicHeaderRef && topicHeaderRef.contains(e.target)) || 
+              (topicContentRef && topicContentRef.contains(e.target))) {
+            clickedInsideAnyTopic = true;
+          }
+        }
+      });
 
-    if (!clickedInsideAnyTopic && !clickedInsideControls) {
-      // Add the timeout here
-      setTimeout(() => {
-        setExpandedTopics({});
-      }, 100);
-    }
-  };
+      // Close reminders/notes if needed
+      if (!clickedInsideReminder) setOpenReminderId(null);
+      if (!clickedInsideNote) setOpenNoteId(null);
 
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => document.removeEventListener("mousedown", handleClickOutside);
-}, [openReminderId, openNoteId, expandedTopics]);
+      // Only collapse topics if click was outside ALL topic containers
+      // AND outside search/filter controls
+      const searchInput = document.querySelector('input[type="text"]');
+      const filterButtons = document.querySelectorAll('[data-filter-button]');
+      const difficultySelect = document.querySelector('select');
+      
+      const clickedInsideControls = 
+        searchInput?.contains(e.target) ||
+        Array.from(filterButtons).some(btn => btn.contains(e.target)) ||
+        difficultySelect?.contains(e.target);
+
+      if (!clickedInsideAnyTopic && !clickedInsideControls) {
+        // Add the timeout here
+        setTimeout(() => {
+          setExpandedTopics({});
+        }, 100);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [openReminderId, openNoteId, expandedTopics]);
 
   const updateProgress = async (questionId, updates) => {
     try {
       const token = localStorage.getItem('token');
       await API.post(
         `/dsa/progress`,
-        { questionId, ...updates }
- 
+        { questionId, ...updates } 
       );
       // Optional: update local state
       setProgressMap((prev) => ({
@@ -304,12 +315,11 @@ useEffect(() => {
     }
   };
 
-
   const getBadgeColor = (level) => {
-    if (level === "Easy") return "bg-green-100 text-green-800";
-    if (level === "Medium") return "bg-yellow-100 text-yellow-800";
-    if (level === "Hard") return "bg-red-100 text-red-800";
-    return "bg-gray-200 text-gray-800";
+    if (level === "Easy") return "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300";
+    if (level === "Medium") return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300";
+    if (level === "Hard") return "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300";
+    return "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
   };
 
   // Calculate progress statistics
@@ -332,8 +342,8 @@ useEffect(() => {
   const hardProgress = hardQuestions.length > 0 ? Math.round((hardCompleted / hardQuestions.length) * 100) : 0;
 
   const getPlatformIcon = (platform) => {
-    if (platform === "GFG") return <SiGeeksforgeeks className="text-green-600 " title="GFG" />;
-    if (platform === "LeetCode") return <SiLeetcode className="text-orange-500" title="LeetCode" />;
+    if (platform === "GFG") return <SiGeeksforgeeks className="text-green-600 dark:text-green-400" title="GFG" />;
+    if (platform === "LeetCode") return <SiLeetcode className="text-orange-500 dark:text-orange-400" title="LeetCode" />;
     return null;
   };
 
@@ -354,15 +364,14 @@ useEffect(() => {
   };
 
   return (
-    <div className="p-6 md:p-10 min-h-screen bg-slate-50">
-      
-      <div className="flex justify-between items-center mb-10 px-10 py-4 bg-gradient-to-r from-blue-50 to-white rounded-2xl shadow-md">
+    <div className={`p-6 md:p-10 min-h-screen bg-slate-50 dark:bg-gray-900 ${darkBg}`}>
+      <div className={`flex justify-between items-center mb-10 px-10 py-4 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-gray-800 dark:to-gray-700 rounded-2xl shadow-md ${darkCardBg} ${darkBorder}`}>
         {/* LEFT: Title and Subtitle */}
         <div>
-          <h1 className="text-4xl font-extrabold text-indigo-700 flex items-center gap-2 tracking-tight">
+          <h1 className={`text-4xl font-extrabold text-indigo-700 dark:text-indigo-400 flex items-center gap-2 tracking-tight`}>
             📘 <span>DSA Sheet</span>
           </h1>
-          <p className="text-sb text-gray-600 tracking-wide mt-1">
+          <p className={`text-sb text-gray-600 dark:text-gray-300 tracking-wide mt-1`}>
             Track your completion and revisit daily
           </p>
         </div>
@@ -377,16 +386,16 @@ useEffect(() => {
                 styles={buildStyles({
                   pathTransition: "stroke-dashoffset 0.5s ease 0s",
                   pathColor: "#22c55e",
-                  trailColor: "#e5e7eb",
+                  trailColor: darkMode ? "#374151" : "#e5e7eb",
                 })}
               />
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-lg font-bold text-gray-800">
+                <span className={`text-lg font-bold ${darkText}`}>
                   {easyCompleted}/{easyQuestions.length}
                 </span>
               </div>
             </div>
-            <div className="text-lg font-semibold text-green-700 mt-1">Easy</div>
+            <div className={`text-lg font-semibold text-green-700 dark:text-green-400 mt-1`}>Easy</div>
           </div>
 
           {/* Medium Progress */}
@@ -397,16 +406,16 @@ useEffect(() => {
                 styles={buildStyles({
                   pathTransition: "stroke-dashoffset 0.5s ease 0s",
                   pathColor: "#eab308",
-                  trailColor: "#e5e7eb",
+                  trailColor: darkMode ? "#374151" : "#e5e7eb",
                 })}
               />
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-lg font-bold text-gray-800">
+                <span className={`text-lg font-bold ${darkText}`}>
                   {mediumCompleted}/{mediumQuestions.length}
                 </span>
               </div>
             </div>
-            <div className="text-lg font-semibold text-yellow-700 mt-1">Medium</div>
+            <div className={`text-lg font-semibold text-yellow-700 dark:text-yellow-400 mt-1`}>Medium</div>
           </div>
 
           {/* Hard Progress */}
@@ -417,16 +426,16 @@ useEffect(() => {
                 styles={buildStyles({
                   pathTransition: "stroke-dashoffset 0.5s ease 0s",
                   pathColor: "#ef4444",
-                  trailColor: "#e5e7eb",
+                  trailColor: darkMode ? "#374151" : "#e5e7eb",
                 })}
               />
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-lg font-bold text-gray-800">
+                <span className={`text-lg font-bold ${darkText}`}>
                   {hardCompleted}/{hardQuestions.length}
                 </span>
               </div>
             </div>
-            <div className="text-lg font-semibold text-red-700 mt-1">Hard</div>
+            <div className={`text-lg font-semibold text-red-700 dark:text-red-400 mt-1`}>Hard</div>
           </div>
 
           {/* Overall Progress */}
@@ -437,25 +446,23 @@ useEffect(() => {
                 styles={buildStyles({
                   pathTransition: "stroke-dashoffset 0.5s ease 0s",
                   pathColor: "#10b981",
-                  trailColor: "#e5e7eb",
+                  trailColor: darkMode ? "#374151" : "#e5e7eb",
                 })}
               />
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-xl font-bold text-gray-800">
+                <span className={`text-xl font-bold ${darkText}`}>
                   {completed}/{total}
                 </span>
               </div>
             </div>
-            <div className="text-lg font-semibold text-emerald-700 mt-1">Overall</div>
+            <div className={`text-lg font-semibold text-emerald-700 dark:text-emerald-400 mt-1`}>Overall</div>
           </div>
-
         </div>
-        
       </div>
       
 
       {/* 🔍 Filter Tabs */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6"> 
+      <div className={`flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}> 
 
         <div className="flex flex-wrap items-center gap-3">
           {["All", "Solved", "Bookmarked", "Reminders"].map((tab) => (
@@ -468,8 +475,8 @@ useEffect(() => {
               }}
               className={`px-4 py-1.5 text-lg rounded-full border transition-all duration-200 ${
                 tab === filter
-                  ? "bg-indigo-600 text-white border-indigo-600 shadow-md scale-105"
-                  : "bg-gray-100 text-gray-800 border-gray-300 hover:bg-purple-50 hover:border-purple-400"
+                  ? "bg-indigo-600 text-white border-indigo-600 shadow-md scale-105 dark:bg-indigo-700 dark:border-indigo-800"
+                  : "bg-gray-100 text-gray-800 border-gray-300 hover:bg-purple-50 hover:border-purple-400 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600"
               }`}
             >
               {tab}
@@ -483,7 +490,11 @@ useEffect(() => {
             <select
               value={difficultyFilter}
               onChange={(e) => setDifficultyFilter(e.target.value) }
-              className="appearance-none px-4 py-1.5 pr-8 text-lg text-gray-900 rounded-full border border-gray-400 bg-white hover:bg-purple-50 hover:border-purple-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+              className={`appearance-none px-4 py-1.5 pr-8 text-lg rounded-full border transition-all duration-200 ${
+                darkMode 
+                  ? "bg-gray-700 text-gray-200 border-gray-600 hover:bg-gray-600 hover:border-gray-500"
+                  : "bg-white text-gray-900 border-gray-400 hover:bg-purple-50 hover:border-purple-400"
+              } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
             >
               <option value="All">All</option>
               <option value="Easy">Easy</option>
@@ -491,16 +502,14 @@ useEffect(() => {
               <option value="Hard">Hard</option>
             </select>
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-              <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </div>
           </div>
         
           {/* Search Bar - now properly integrated */}
-
           <div className="relative flex-1 min-w-[350px] max-w-md mt-3 md:mt-0">
-            
             <input
               type="text"
               placeholder="🔍 Search questions..."
@@ -520,7 +529,11 @@ useEffect(() => {
                   setExpandedTopics({});
                 }
               }}
-              className="w-full px-4 py-2 border border-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg bg-white hover:border-gray-600 transition-colors"
+              className={`w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg ${
+                darkMode 
+                  ? "bg-gray-700 text-gray-200 border-gray-600 hover:border-gray-500"
+                  : "bg-white text-gray-900 border-gray-400 hover:border-gray-600"
+              } transition-colors`}
             />
             {searchQuery && (
               <button
@@ -528,7 +541,7 @@ useEffect(() => {
                   setSearchQuery('');
                   setExpandedTopics({}); // Collapse all when search is cleared
                 }}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               >
                 ✕
               </button>
@@ -540,12 +553,12 @@ useEffect(() => {
       {loading ? (
         <div className="space-y-6">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="bg-indigo-50 rounded-2xl p-6 animate-pulse">
-              <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+            <div key={i} className={`bg-indigo-50 dark:bg-gray-800 rounded-2xl p-6 animate-pulse ${darkCardBg}`}>
+              <div className={`h-6 ${darkMode ? 'bg-gray-700' : 'bg-gray-200'} rounded w-1/3 mb-4`}></div>
               <div className="space-y-3">
-                <div className="h-4 bg-gray-100 rounded w-full"></div>
-                <div className="h-4 bg-gray-100 rounded w-5/6"></div>
-                <div className="h-4 bg-gray-100 rounded w-2/3"></div>
+                <div className={`h-4 ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded w-full`}></div>
+                <div className={`h-4 ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded w-5/6`}></div>
+                <div className={`h-4 ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded w-2/3`}></div>
               </div>
             </div>
           ))}
@@ -574,11 +587,11 @@ useEffect(() => {
           });
 
           return (
-              <div key={topic} className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition duration-300 mb-3">
+              <div key={topic} className={`bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition duration-300 mb-3 ${darkCardBg} ${darkBorder}`}>
             
                 <div 
                 ref={(el) => (topicRefs.current[topic] = el)}
-                className={`px-4 py-2 bg-gray-50 hover:bg-indigo-50 rounded-xl transition-all duration-200 border border-indigo-300 ${
+                className={`px-4 py-2 ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-50 hover:bg-indigo-50'} rounded-xl transition-all duration-200 border ${darkMode ? 'border-gray-600' : 'border-indigo-300'} ${
                   filter === "All" ? "flex flex-col gap-2 shadow-sm" : ""
                 } cursor-pointer`}
                 onClick={(e) => {
@@ -590,11 +603,11 @@ useEffect(() => {
                   {/* Left side - Topic name */}
                   <div className="flex items-center gap-2 flex-1 min-w-0">
                     {expandedTopics[topic] ? (
-                      <FaChevronDown className="text-gray-500 text-sm" />
+                      <FaChevronDown className={`text-gray-500 dark:text-gray-400 text-sm`} />
                     ) : (
-                      <FaChevronRight className="text-gray-500 text-sm" />
+                      <FaChevronRight className={`text-gray-500 dark:text-gray-400 text-sm`} />
                     )}
-                    <h2 className="text-base sm:text-xl font-semibold text-gray-800 truncate">{topic}</h2>
+                    <h2 className={`text-base sm:text-xl font-semibold ${darkText} truncate`}>{topic}</h2>
                   </div>
 
                   {/* Right side - Progress bar and count+icon */}
@@ -602,7 +615,7 @@ useEffect(() => {
                     {filter !== "All" && (
                       <>
                         {/* Progress bar - now first in the right section */}
-                        <div className="w-120 h-2 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
+                        <div className={`w-120 h-2 ${darkMode ? 'bg-gray-600' : 'bg-gray-200'} rounded-full overflow-hidden flex-shrink-0`}>
                           <div
                             className="h-full bg-gradient-to-r from-indigo-500 to-indigo-700 transition-all duration-700 ease-in-out"
                             style={{ 
@@ -632,7 +645,7 @@ useEffect(() => {
                             {filter === "Bookmarked" && "🔖"}
                             {filter === "Reminders" && "⏰"}
                           </span>
-                          <span className="font-mono tabular-nums tracking-tight text-2xl"> {/* Monospace numbers */}
+                          <span className={`font-mono tabular-nums tracking-tight text-2xl ${darkText}`}> {/* Monospace numbers */}
                             {filter === "Solved" && topicQs.filter(q => progressMap[q._id]?.isCompleted).length}
                             {filter === "Bookmarked" && bookmarkedCount}
                             {filter === "Reminders" && reminderCount}
@@ -654,8 +667,8 @@ useEffect(() => {
                         }}
                         className={`flex items-center gap-1 text-sb font-medium rounded-full px-3 py-1 border transition ${
                           resettingTopic === topic || !hasProgress
-                            ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-                            : "text-gray-900 border-red-600 hover:bg-red-300 hover:ring hover:ring-red-100 hover:border-red-500 hover:font-bold transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-sm" 
+                            ? `${darkMode ? 'bg-gray-600 text-gray-400 border-gray-500' : 'bg-gray-100 text-gray-400 border-gray-200'} cursor-not-allowed`
+                            : `${darkMode ? 'text-gray-200 border-red-600 hover:bg-red-700' : 'text-gray-900 border-red-600 hover:bg-red-300'} hover:ring hover:ring-red-100 hover:border-red-500 hover:font-bold transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-sm` 
                         }`}
                       >
                         {resettingTopic === topic ? "⟳ Resetting..." : "⟳ Reset"}
@@ -668,7 +681,7 @@ useEffect(() => {
                 {filter === "All" && (
                   <>
                     <div className="w-full mt-1">
-                      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className={`w-full h-2 ${darkMode ? 'bg-gray-600' : 'bg-gray-200'} rounded-full overflow-hidden`}>
                         <div
                           className="h-full bg-gradient-to-r from-indigo-500 to-indigo-700 transition-all duration-700 ease-in-out"
                           style={{ 
@@ -680,15 +693,15 @@ useEffect(() => {
                         ></div>
                       </div>
                     </div>
-                    <div className="flex justify-between items-center mt-3 text-xl text-gray-600">
-                      <div className="text-emerald-700 font-semibold text-sm">
+                    <div className={`flex justify-between items-center mt-3 text-xl ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                      <div className={`${darkMode ? 'text-emerald-400' : 'text-emerald-700'} font-semibold text-sm`}>
                         ✅ {topicQs.filter(q => progressMap[q._id]?.isCompleted).length}/{topicQs.length}
                       </div>
-                      <div className="flex gap-4 text-xl text-gray-600">
-                        <div className="flex items-center gap-1" title="Bookmarked">
+                      <div className="flex gap-4 text-xl">
+                        <div className={`flex items-center gap-1 ${darkText}`} title="Bookmarked">
                           🔖 {topicQs.filter((q) => progressMap[q._id]?.isBookmarked).length}
                         </div>
-                        <div className="flex items-center gap-1" title="Reminders">
+                        <div className={`flex items-center gap-1 ${darkText}`} title="Reminders">
                           ⏰ {topicQs.filter((q) => progressMap[q._id]?.remindOn).length}
                         </div>
                       </div>
@@ -704,7 +717,7 @@ useEffect(() => {
                    onClick={(e) => e.stopPropagation()}
                   className="w-full">
                 {/* Headers */}
-                <div className="grid grid-cols-[70px_2.5fr_.85fr_.85fr_.85fr_1fr_1.5fr] px-4 py-2 text-lg font-bold text-gray-800 border-b bg-blue-50">
+                <div className={`grid grid-cols-[70px_2.5fr_.85fr_.85fr_.85fr_1fr_1.5fr] px-4 py-2 text-lg font-bold ${darkTableHeader} border-b ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
                   <div>Status</div>
                   <div>Problem</div>
                   <div>Practice</div>
@@ -721,7 +734,7 @@ useEffect(() => {
                     return (
                       <div
                         key={q._id}
-                        className="grid grid-cols-[70px_2.5fr_.85fr_.85fr_.85fr_1fr_1.5fr] items-center bg-white rounded-xl px-4 py-2 hover:shadow-md transition duration-300"
+                        className={`grid grid-cols-[70px_2.5fr_.85fr_.85fr_.85fr_1fr_1.5fr] items-center ${darkTableRow} rounded-xl px-4 py-2 hover:shadow-md transition duration-300`}
                       >
                         {/* Status */}
                         <div>
@@ -737,7 +750,7 @@ useEffect(() => {
                         </div>
 
                         {/* Problem */}
-                        <div className="  text-black-600  cursor-pointer text-sb font-medium"
+                        <div className={`${darkMode ? 'text-gray-200' : 'text-gray-800'} cursor-pointer text-sb font-medium`}
                           onClick={() => handleToggle(q._id, "isCompleted")}
                           title={q.title}
                         >
@@ -775,7 +788,7 @@ useEffect(() => {
                         </div>
 
                         {/* Reminder */}
-                        <div ref={(el) => (reminderRefs.current[q._id] = el)} className="relative text-sm text-indigo-600 font-bold">
+                        <div ref={(el) => (reminderRefs.current[q._id] = el)} className={`relative text-sm ${darkMode ? 'text-indigo-400' : 'text-indigo-600'} font-bold`}>
                           <button
                             onClick={() => {
                               setOpenNoteId(null); // close note when reminder is opened
@@ -790,7 +803,7 @@ useEffect(() => {
                           </button>
 
                           {openReminderId === q._id && (
-                            <div className="absolute z-50 mt-2 bg-white border shadow-lg rounded p-2">
+                            <div className={`absolute z-50 mt-2 ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'} border shadow-lg rounded p-2`}>
                               <DatePicker
                                 selected={p.remindOn ? new Date(p.remindOn) : null}
                                 onChange={(date) => handleReminderChange(q._id, date)}
@@ -798,11 +811,12 @@ useEffect(() => {
                                 placeholderText="Pick a date"
                                 minDate={new Date()}
                                 inline
+                                className={darkMode ? 'dark:bg-gray-700' : ''}
                               />
                               {p.remindOn && (
                                 <button
                                   onClick={() => handleReminderChange(q._id, null)}
-                                  className="text-xs text-red-500 mt-2  font-semibold transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-sm"
+                                  className={`text-xs ${darkMode ? 'text-red-400' : 'text-red-500'} mt-2 font-semibold transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-sm`}
                                 >
                                   Clear Reminder
                                 </button>
@@ -812,7 +826,7 @@ useEffect(() => {
                         </div>
 
                         {/* Note */}
-                        <div ref={(el) => (noteRefs.current[q._id] = el)} className="relative text-sb text-blue-600 font-bold">
+                        <div ref={(el) => (noteRefs.current[q._id] = el)} className={`relative text-sb ${darkMode ? 'text-blue-400' : 'text-blue-600'} font-bold`}>
                           
                           {/* 📝 Show note if exists */}
                           {progressMap[q._id]?.note ? (
@@ -820,7 +834,7 @@ useEffect(() => {
                           {/* Note text */}
                           <div className="flex items-start gap-1 break-words">
                             <span className="text-sm ">📄</span>
-                            <span className="truncate max-w-[250px] text-sm font-semibold text-yellow-600">{progressMap[q._id].note}</span>
+                            <span className={`truncate max-w-[250px] text-sm font-semibold ${darkMode ? 'text-yellow-400' : 'text-yellow-600'}`}>{progressMap[q._id].note}</span>
                           </div>
 
                           {/* ✏️ Pencil icon */}
@@ -830,7 +844,7 @@ useEffect(() => {
                               setOpenNoteId(openNoteId === q._id ? null : q._id);
                               setNoteText(progressMap[q._id]?.note || '');
                             }}
-                            className="absolute top-0 right-0 text-blue-600 hover:text-blue-800"
+                            className={`absolute top-0 right-0 ${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'}`}
                             title="Edit Note"
                           >
                             ✏️
@@ -843,21 +857,21 @@ useEffect(() => {
                             setOpenNoteId(openNoteId === q._id ? null : q._id);
                             setNoteText('');
                           }}
-                          className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-sm"
+                          className={`flex items-center gap-1 ${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'} transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-sm`}
                         >
                           📝 Add
                         </button>
                       )}
 
                           {openNoteId === q._id && (
-                            <div className="absolute z-50 mt-2 bg-white border shadow-lg rounded p-3 w-64">
+                            <div className={`absolute z-50 mt-2 ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'} border shadow-lg rounded p-3 w-64`}>
                               <textarea
                                 ref={(el) => el && el.focus()}
                                 value={noteText}
                                 onChange={(e) => setNoteText(e.target.value)}
                                 rows={3}
                                 placeholder="Type your quick note here..."
-                                className="w-full p-2 border rounded text-sm"
+                                className={`w-full p-2 border rounded text-sm ${darkInput}`}
                               />
 
                               {noteText && (
@@ -875,7 +889,7 @@ useEffect(() => {
                                     toast.success("Note cleared!");
                                     setOpenNoteId(null);
                                   }}
-                                  className="text-xs text-red-500 mt-2 hover:underline"
+                                  className={`text-xs ${darkMode ? 'text-red-400' : 'text-red-500'} mt-2 hover:underline`}
                                 >
                                   Clear Note
                                 </button>
@@ -884,7 +898,7 @@ useEffect(() => {
                               <div className="flex justify-end gap-2 mt-2">
                                 <button
                                   onClick={() => setOpenNoteId(null)}
-                                  className="text-xs text-gray-500 hover:underline"
+                                  className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} hover:underline`}
                                 >
                                   Cancel
                                 </button>
@@ -903,14 +917,13 @@ useEffect(() => {
                                   }}
                                   className={`text-xs px-2 py-1 rounded ${
                                     noteText === (progressMap[q._id]?.note || '')
-                                      ? 'text-gray-400 border border-gray-300 cursor-not-allowed'
-                                      : 'text-green-600 border border-green-500 hover:bg-green-50'
-                                  }`}
+                                      ? `${darkMode ? 'text-gray-500 border-gray-500' : 'text-gray-400 border-gray-300'} cursor-not-allowed`
+                                      : `${darkMode ? 'text-green-400 border-green-500 hover:bg-gray-600' : 'text-green-600 border-green-500 hover:bg-green-50'}`
+                                  } border`}
                                   disabled={noteText === (progressMap[q._id]?.note || '')}
                                 >
                                   Save
                                 </button>
-
                               </div>
                             </div>
                           )}
@@ -925,7 +938,7 @@ useEffect(() => {
           );
         })
         ) : (
-        <div className="text-center py-10 text-gray-500">
+        <div className={`text-center py-10 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
           {searchQuery 
             ? `No questions found matching "${searchQuery}"`
             : `No questions match the current filter`}
