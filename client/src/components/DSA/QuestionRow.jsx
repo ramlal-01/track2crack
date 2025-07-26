@@ -96,9 +96,9 @@ const QuestionRow = ({
           </div>
         </div>
         {/* Reminder and Note Row */}
-        <div className="flex items-center justify-between gap-3 mt-2">
+        <div className="flex items-center justify-between gap-3 mt-2 relative z-[999]">
           {/* Reminder */}
-          <div className="relative flex-1 z-30">
+          <div className="relative flex-1">
             <button
               onClick={(e) => {
                 handleInteraction(e, () => {
@@ -123,7 +123,7 @@ const QuestionRow = ({
             />
           </div>
           {/* Note */}
-          <div className="relative flex-1 z-30">
+          <div className="relative flex-1">
             {progress?.note ? (
               <button
                 onClick={(e) => {
@@ -174,7 +174,7 @@ const QuestionRow = ({
       </div>
 
       {/* Desktop Layout - Like Original Backup */}
-      <div className="hidden md:block">
+      <div className="hidden md:block relative z-[999]">
         <div className="grid grid-cols-12 gap-3 items-center p-4">
           {/* Completion Checkbox */}
           <div className="col-span-1 flex justify-center">
