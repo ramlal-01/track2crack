@@ -340,7 +340,7 @@ const DSASheet = () => {
     <div className={`min-h-screen bg-slate-50 ${darkBg}`}>
       <div className="container mx-auto px-4 py-6 md:px-6 md:py-8 lg:px-8 lg:py-10">
         {/* Header */}
-        <div className={`flex justify-between items-center mb-10 px-10 py-6 bg-gradient-to-r from-blue-50 to-blue-200 rounded-3xl shadow-lg border border-blue-100 ${darkMode ? 'dark:from-gray-800 dark:to-gray-700 ' + darkCardBg + ' ' + darkBorder : ''}`}>
+        <div className={`flex justify-between items-center mb-6 px-6 py-3 bg-gradient-to-r from-blue-50 to-blue-200 rounded-3xl shadow-lg border border-blue-100 ${darkMode ? 'dark:from-gray-800 dark:to-gray-700 ' + darkCardBg + ' ' + darkBorder : ''}`}>
           {/* LEFT: Title and Subtitle */}
           <div>
             <h1 className={`text-5xl font-extrabold text-blue-700 tracking-tight mb-2 drop-shadow-sm`}>📘 DSA Sheet</h1>
