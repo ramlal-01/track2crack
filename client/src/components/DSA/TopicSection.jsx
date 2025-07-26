@@ -1,5 +1,5 @@
 import React from "react";
-import { FaChevronRight, FaChevronDown } from "react-icons/fa";
+import { FaChevronRight, FaChevronDown, FaBookmark, FaBell } from "react-icons/fa";
 import QuestionRow from "./QuestionRow";
 
 const TopicSection = ({ 
@@ -34,6 +34,10 @@ const TopicSection = ({
   const completedCount = questions.filter(q => progressMap[q._id]?.isCompleted).length;
   const totalCount = questions.length;
   const progressPercent = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
+  
+  // Calculate bookmark and reminder counts
+  const bookmarkCount = questions.filter(q => progressMap[q._id]?.isBookmarked).length;
+  const reminderCount = questions.filter(q => progressMap[q._id]?.remindOn).length;
 
   const toggleTopic = (e) => {
     // Prevent event bubbling
@@ -63,8 +67,8 @@ const TopicSection = ({
         className={`p-4 md:p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors select-none`}
         onClick={toggleTopic}
       >
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          {/* Topic Title and Progress */}
+        <div className="flex flex-col space-y-3 md:space-y-0 md:flex-row md:items-center justify-between">
+          {/* Topic Title and Stats */}
           <div className="flex items-center gap-3 min-w-0 flex-1">
             <div className={`text-lg ${darkText} hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors`}>
               {isExpanded ? <FaChevronDown /> : <FaChevronRight />}
@@ -73,9 +77,31 @@ const TopicSection = ({
               <h2 className={`text-lg md:text-xl font-semibold ${darkText} truncate`}>
                 {topic}
               </h2>
-              <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
-                {completedCount}/{totalCount} completed ({Math.round(progressPercent)}%)
-              </p>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-1">
+                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {completedCount}/{totalCount} completed ({Math.round(progressPercent)}%)
+                </p>
+                
+                {/* Stats badges */}
+                <div className="flex items-center gap-3">
+                  {bookmarkCount > 0 && (
+                    <div className="flex items-center gap-1">
+                      <FaBookmark className={`text-xs ${darkMode ? 'text-yellow-400' : 'text-yellow-500'}`} />
+                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {bookmarkCount}
+                      </span>
+                    </div>
+                  )}
+                  {reminderCount > 0 && (
+                    <div className="flex items-center gap-1">
+                      <FaBell className={`text-xs ${darkMode ? 'text-blue-400' : 'text-blue-500'}`} />
+                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {reminderCount}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 

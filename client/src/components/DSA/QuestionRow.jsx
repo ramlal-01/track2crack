@@ -38,72 +38,85 @@ const QuestionRow = ({
     if (callback) callback();
   };
 
+  // Handle question text click to toggle completion
+  const handleQuestionClick = (e) => {
+    e.stopPropagation();
+    handleToggle(question._id, "isCompleted");
+  };
+
   return (
     <div className={`border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${darkTableRow}`}>
       {/* Mobile Layout */}
-      <div className="block md:hidden p-4 space-y-3">
+      <div className="block md:hidden p-5 space-y-4">
         {/* Question Title and Difficulty */}
-        <div className="flex flex-col space-y-2">
-          <div className="flex items-center justify-between">
-            <h3 className="font-medium text-sm leading-tight pr-2">{question.title}</h3>
-            <span className={`text-xs font-semibold px-2 py-1 rounded ${getDifficultyColor(question.difficulty)}`}>
+        <div className="flex flex-col space-y-3">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start gap-3 flex-1 min-w-0">
+              <input
+                type="checkbox"
+                checked={progress?.isCompleted || false}
+                onChange={(e) => handleInteraction(e, () => handleToggle(question._id, "isCompleted"))}
+                onClick={(e) => e.stopPropagation()}
+                className="w-5 h-5 mt-0.5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 flex-shrink-0"
+              />
+              <h3 
+                className={`font-medium text-sm leading-tight cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ${
+                  progress?.isCompleted ? 'line-through opacity-75' : ''
+                }`}
+                onClick={handleQuestionClick}
+              >
+                {question.title}
+              </h3>
+            </div>
+            <span className={`text-xs font-semibold px-2 py-1 rounded flex-shrink-0 ${getDifficultyColor(question.difficulty)}`}>
               {question.difficulty}
             </span>
           </div>
-        </div>
 
-        {/* Actions Row */}
-        <div className="flex items-center justify-between">
-          {/* Left side - Completion and Bookmark */}
-          <div className="flex items-center space-x-4">
-            <input
-              type="checkbox"
-              checked={progress?.isCompleted || false}
-              onChange={(e) => handleInteraction(e, () => handleToggle(question._id, "isCompleted"))}
-              onClick={(e) => e.stopPropagation()}
-              className="w-5 h-5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            />
+          {/* Links Row */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              {question.leetcodeLink && (
+                <a
+                  href={question.leetcodeLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-orange-500 hover:text-orange-600 text-sm font-medium transition-colors bg-orange-50 dark:bg-orange-900/20 px-3 py-1.5 rounded-md"
+                  title="LeetCode"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <SiLeetcode className="text-lg" />
+                  <span>LeetCode</span>
+                </a>
+              )}
+              {question.geeksforgeeksLink && (
+                <a
+                  href={question.geeksforgeeksLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-green-600 hover:text-green-700 text-sm font-medium transition-colors bg-green-50 dark:bg-green-900/20 px-3 py-1.5 rounded-md"
+                  title="GeeksforGeeks"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <SiGeeksforgeeks className="text-lg" />
+                  <span>GFG</span>
+                </a>
+              )}
+            </div>
+
             <button
               onClick={(e) => handleInteraction(e, () => handleToggle(question._id, "isBookmarked"))}
-              className={`text-lg ${progress?.isBookmarked ? 'text-yellow-500' : 'text-gray-400'} hover:text-yellow-500 transition-colors`}
+              className={`text-xl ${progress?.isBookmarked ? 'text-yellow-500' : 'text-gray-400'} hover:text-yellow-500 transition-colors p-1`}
             >
               {progress?.isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
             </button>
           </div>
-
-          {/* Right side - Links */}
-          <div className="flex items-center space-x-3">
-            {question.leetcodeLink && (
-              <a
-                href={question.leetcodeLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-orange-500 hover:text-orange-600 text-lg transition-colors"
-                title="LeetCode"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <SiLeetcode />
-              </a>
-            )}
-            {question.geeksforgeeksLink && (
-              <a
-                href={question.geeksforgeeksLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-green-600 hover:text-green-700 text-lg transition-colors"
-                title="GeeksforGeeks"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <SiGeeksforgeeks />
-              </a>
-            )}
-          </div>
         </div>
 
         {/* Reminder and Note Row */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           {/* Reminder */}
-          <div className="relative">
+          <div className="relative flex-1">
             <button
               onClick={(e) => {
                 handleInteraction(e, () => {
@@ -111,16 +124,20 @@ const QuestionRow = ({
                   setOpenReminderId(openReminderId === question._id ? null : question._id);
                 });
               }}
-              className={`text-sm px-2 py-1 rounded border ${
+              className={`w-full text-sm px-3 py-2 rounded-lg border transition-colors ${
                 progress?.remindOn 
                   ? 'bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-900 dark:text-blue-300 dark:border-blue-700' 
                   : 'text-blue-600 border-blue-300 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-600 dark:hover:bg-blue-900'
               }`}
             >
-              <FaBell className="inline mr-1" />
-              {progress?.remindOn
-                ? new Date(progress.remindOn).toLocaleDateString()
-                : "Remind"}
+              <div className="flex items-center justify-center gap-2">
+                <FaBell className="text-sm" />
+                <span>
+                  {progress?.remindOn
+                    ? new Date(progress.remindOn).toLocaleDateString()
+                    : "Set Reminder"}
+                </span>
+              </div>
             </button>
             <ReminderModal
               openReminderId={openReminderId === question._id ? question._id : null}
@@ -131,26 +148,24 @@ const QuestionRow = ({
           </div>
 
           {/* Note */}
-          <div className="relative">
+          <div className="relative flex-1">
             {progress?.note ? (
-              <div className="flex items-center gap-2">
-                <span className="text-sm">📄</span>
-                <span className={`text-xs max-w-[100px] truncate ${darkMode ? 'text-yellow-400' : 'text-yellow-600'}`}>
-                  {progress.note}
-                </span>
-                <button
-                  onClick={(e) => {
-                    handleInteraction(e, () => {
-                      setOpenReminderId(null);
-                      setOpenNoteId(openNoteId === question._id ? null : question._id);
-                      setNoteText(progress.note || '');
-                    });
-                  }}
-                  className={`text-xs ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}
-                >
-                  ✏️
-                </button>
-              </div>
+              <button
+                onClick={(e) => {
+                  handleInteraction(e, () => {
+                    setOpenReminderId(null);
+                    setOpenNoteId(openNoteId === question._id ? null : question._id);
+                    setNoteText(progress.note || '');
+                  });
+                }}
+                className={`w-full text-sm px-3 py-2 rounded-lg border transition-colors bg-yellow-50 text-yellow-700 border-yellow-300 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-600`}
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <span>📄</span>
+                  <span className="truncate max-w-[80px]">{progress.note}</span>
+                  <span>✏️</span>
+                </div>
+              </button>
             ) : (
               <button
                 onClick={(e) => {
@@ -160,9 +175,12 @@ const QuestionRow = ({
                     setNoteText('');
                   });
                 }}
-                className={`text-sm px-2 py-1 rounded border ${darkMode ? 'text-blue-400 border-blue-600 hover:bg-blue-900' : 'text-blue-600 border-blue-300 hover:bg-blue-50'}`}
+                className={`w-full text-sm px-3 py-2 rounded-lg border transition-colors ${darkMode ? 'text-blue-400 border-blue-600 hover:bg-blue-900' : 'text-blue-600 border-blue-300 hover:bg-blue-50'}`}
               >
-                📝 Note
+                <div className="flex items-center justify-center gap-2">
+                  <span>📝</span>
+                  <span>Add Note</span>
+                </div>
               </button>
             )}
             <NoteModal
@@ -196,7 +214,14 @@ const QuestionRow = ({
 
           {/* Question Title */}
           <div className="col-span-4">
-            <span className="font-medium text-sm">{question.title}</span>
+            <span 
+              className={`font-medium text-sm cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ${
+                progress?.isCompleted ? 'line-through opacity-75' : ''
+              }`}
+              onClick={handleQuestionClick}
+            >
+              {question.title}
+            </span>
           </div>
 
           {/* Difficulty */}
@@ -207,34 +232,34 @@ const QuestionRow = ({
           </div>
 
           {/* Links */}
-          <div className="col-span-2 flex justify-center items-center space-x-4">
+          <div className="col-span-2 flex justify-center items-center gap-3">
             {question.leetcodeLink ? (
               <a
                 href={question.leetcodeLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-orange-500 hover:text-orange-600 text-xl transition-colors p-1"
+                className="flex items-center justify-center w-8 h-8 text-orange-500 hover:text-orange-600 bg-orange-50 dark:bg-orange-900/20 rounded-lg transition-colors hover:scale-110"
                 title="LeetCode"
                 onClick={(e) => e.stopPropagation()}
               >
-                <SiLeetcode />
+                <SiLeetcode className="text-lg" />
               </a>
             ) : (
-              <div className="w-6 h-6"></div>
+              <div className="w-8 h-8"></div>
             )}
             {question.geeksforgeeksLink ? (
               <a
                 href={question.geeksforgeeksLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-green-600 hover:text-green-700 text-xl transition-colors p-1"
+                className="flex items-center justify-center w-8 h-8 text-green-600 hover:text-green-700 bg-green-50 dark:bg-green-900/20 rounded-lg transition-colors hover:scale-110"
                 title="GeeksforGeeks"
                 onClick={(e) => e.stopPropagation()}
               >
-                <SiGeeksforgeeks />
+                <SiGeeksforgeeks className="text-lg" />
               </a>
             ) : (
-              <div className="w-6 h-6"></div>
+              <div className="w-8 h-8"></div>
             )}
           </div>
 
@@ -242,7 +267,7 @@ const QuestionRow = ({
           <div className="col-span-1 flex justify-center">
             <button
               onClick={(e) => handleInteraction(e, () => handleToggle(question._id, "isBookmarked"))}
-              className={`text-lg ${progress?.isBookmarked ? 'text-yellow-500' : 'text-gray-400'} hover:text-yellow-500 transition-colors p-1`}
+              className={`text-lg ${progress?.isBookmarked ? 'text-yellow-500' : 'text-gray-400'} hover:text-yellow-500 transition-colors p-1 hover:scale-110`}
             >
               {progress?.isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
             </button>
@@ -257,12 +282,12 @@ const QuestionRow = ({
                   setOpenReminderId(openReminderId === question._id ? null : question._id);
                 });
               }}
-              className={`text-sm p-2 rounded transition-colors ${
+              className={`text-sm p-2 rounded transition-colors hover:scale-110 ${
                 progress?.remindOn 
                   ? 'text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900' 
                   : 'text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900'
               }`}
-              title={progress?.remindOn ? `Reminder set for ${new Date(progress.remindOn).toLocaleDateString()}` : "Set reminder"}
+              title={progress?.remindOn ? `Reminder: ${new Date(progress.remindOn).toLocaleDateString()}` : "Set reminder"}
             >
               <FaBell />
             </button>
@@ -293,7 +318,7 @@ const QuestionRow = ({
                       setNoteText(progress.note || '');
                     });
                   }}
-                  className={`text-xs ${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'} transition-colors p-1`}
+                  className={`text-xs ${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'} transition-colors p-1 hover:scale-110`}
                 >
                   ✏️
                 </button>
@@ -307,7 +332,7 @@ const QuestionRow = ({
                     setNoteText('');
                   });
                 }}
-                className={`text-xs px-2 py-1 rounded border transition-colors ${
+                className={`text-xs px-2 py-1 rounded border transition-colors hover:scale-105 ${
                   darkMode 
                     ? 'text-blue-400 border-blue-600 hover:bg-blue-900' 
                     : 'text-blue-600 border-blue-300 hover:bg-blue-50'
