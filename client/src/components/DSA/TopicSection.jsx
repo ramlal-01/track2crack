@@ -124,13 +124,15 @@ const TopicSection = ({
             </div>
           </div>
           {/* Progress Bar and Reset Button (desktop) */}
-          <div className="flex items-center gap-4 mt-3 md:mt-0">
+          <div className="flex flex-col md:flex-row items-center gap-4 mt-3 md:mt-0">
             {/* Progress Bar */}
-            <div className="w-32 md:w-48 bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full transition-all duration-1000 ease-out"
-                style={{ width: `${animatedWidths[topic] || 0}%` }}
-              />
+            <div className="w-full flex justify-center md:justify-start">
+              <div className="w-32 md:w-48 bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full transition-all duration-1000 ease-out"
+                  style={{ width: `${animatedWidths[topic] || 0}%` }}
+                />
+              </div>
             </div>
             {/* Reset Button for desktop */}
             <div className="hidden md:block">
@@ -138,67 +140,4 @@ const TopicSection = ({
                 <button
                   onClick={handleResetClick}
                   disabled={resettingTopic === topic}
-                  className={`px-3 py-1 text-xs md:text-sm rounded border transition-colors ${
-                    resettingTopic === topic
-                      ? 'opacity-50 cursor-not-allowed'
-                      : `${darkMode 
-                          ? 'text-red-400 border-red-500 hover:bg-red-900/20' 
-                          : 'text-red-600 border-red-300 hover:bg-red-50'
-                        }`
-                  }`}
-                >
-                  {resettingTopic === topic ? 'Resetting...' : 'Reset'}
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Questions Table */}
-      {isExpanded && (
-        <div className="border-t border-gray-200 dark:border-gray-700">
-          {/* Desktop Table Header */}
-          <div className={`hidden md:block ${darkTableHeader} border-b border-gray-200 dark:border-gray-700`}>
-            <div className="grid grid-cols-12 gap-3 items-center p-4 text-sm font-semibold">
-              <div className="col-span-1 text-center">Done</div>
-              <div className="col-span-4">Question</div>
-              <div className="col-span-1 text-center">Level</div>
-              <div className="col-span-2 text-center">Links</div>
-              <div className="col-span-1 text-center">Save</div>
-              <div className="col-span-1 text-center">Remind</div>
-              <div className="col-span-2 text-center">Note</div>
-            </div>
-          </div>
-
-          {/* Questions List */}
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
-            {questions.map((question) => (
-              <QuestionRow
-                key={question._id}
-                question={question}
-                progress={progressMap[question._id]}
-                handleToggle={handleToggle}
-                setOpenReminderId={setOpenReminderId}
-                setOpenNoteId={setOpenNoteId}
-                openReminderId={openReminderId}
-                openNoteId={openNoteId}
-                noteText={noteText}
-                setNoteText={setNoteText}
-                progressMap={progressMap}
-                updateProgress={updateProgress}
-                setProgressMap={setProgressMap}
-                handleReminderChange={handleReminderChange}
-                darkMode={darkMode}
-                darkTableRow={darkTableRow}
-                darkInput={darkInput}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default TopicSection;
+                  className={`
