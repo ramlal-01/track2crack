@@ -53,6 +53,11 @@ const TopicSection = ({
     handleResetTopic(topic);
   };
 
+  const hasProgress = questions.some(q => {
+    const p = progressMap[q._id] || {};
+    return p.isCompleted || p.isBookmarked || p.remindOn || p.note;
+  });
+
   return (
     <div 
       ref={(el) => {
@@ -69,7 +74,7 @@ const TopicSection = ({
       >
         <div className="flex flex-col space-y-3 md:space-y-0 md:flex-row md:items-center justify-between">
           {/* Topic Title and Stats */}
-          <div className="flex items-center gap-3 min-w-0 flex-1">
+          <div className="flex items-center gap-3 min-w-0 flex-1 w-full justify-between md:justify-start">
             <div className={`text-lg ${darkText} hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors`}>
               {isExpanded ? <FaChevronDown /> : <FaChevronRight />}
             </div>
@@ -78,7 +83,7 @@ const TopicSection = ({
                 {topic}
               </h2>
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-1">
-                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}> 
                   {completedCount}/{totalCount} completed ({Math.round(progressPercent)}%)
                 </p>
                 {/* Stats badges */}
@@ -98,10 +103,28 @@ const TopicSection = ({
                 </div>
               </div>
             </div>
+            {/* Reset Button for mobile view (right aligned) */}
+            <div className="block md:hidden ml-auto">
+              {hasProgress && (
+                <button
+                  onClick={handleResetClick}
+                  disabled={resettingTopic === topic}
+                  className={`px-3 py-1 text-xs md:text-sm rounded border transition-colors ${
+                    resettingTopic === topic
+                      ? 'opacity-50 cursor-not-allowed'
+                      : `${darkMode 
+                          ? 'text-red-400 border-red-500 hover:bg-red-900/20' 
+                          : 'text-red-600 border-red-300 hover:bg-red-50'
+                        }`
+                  }`}
+                >
+                  {resettingTopic === topic ? 'Resetting...' : 'Reset'}
+                </button>
+              )}
+            </div>
           </div>
-
-          {/* Progress Bar and Reset Button */}
-          <div className="flex items-center gap-4">
+          {/* Progress Bar and Reset Button (desktop) */}
+          <div className="flex items-center gap-4 mt-3 md:mt-0">
             {/* Progress Bar */}
             <div className="w-32 md:w-48 bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
               <div
@@ -109,22 +132,25 @@ const TopicSection = ({
                 style={{ width: `${animatedWidths[topic] || 0}%` }}
               />
             </div>
-
-            {/* Reset Button */}
-            <button
-              onClick={handleResetClick}
-              disabled={resettingTopic === topic}
-              className={`px-3 py-1 text-xs md:text-sm rounded border transition-colors ${
-                resettingTopic === topic
-                  ? 'opacity-50 cursor-not-allowed'
-                  : `${darkMode 
-                      ? 'text-red-400 border-red-500 hover:bg-red-900/20' 
-                      : 'text-red-600 border-red-300 hover:bg-red-50'
-                    }`
-              }`}
-            >
-              {resettingTopic === topic ? 'Resetting...' : 'Reset'}
-            </button>
+            {/* Reset Button for desktop */}
+            <div className="hidden md:block">
+              {hasProgress && (
+                <button
+                  onClick={handleResetClick}
+                  disabled={resettingTopic === topic}
+                  className={`px-3 py-1 text-xs md:text-sm rounded border transition-colors ${
+                    resettingTopic === topic
+                      ? 'opacity-50 cursor-not-allowed'
+                      : `${darkMode 
+                          ? 'text-red-400 border-red-500 hover:bg-red-900/20' 
+                          : 'text-red-600 border-red-300 hover:bg-red-50'
+                        }`
+                  }`}
+                >
+                  {resettingTopic === topic ? 'Resetting...' : 'Reset'}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
