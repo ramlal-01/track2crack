@@ -60,7 +60,7 @@ const TopicSection = ({
           topicRefs.current[topic] = el;
         }
       }}
-      className={`${darkCardBg} ${darkBorder} border rounded-lg mb-6 overflow-hidden shadow-sm`}
+      className={`${darkCardBg} ${darkBorder} border rounded-lg mb-6 shadow-sm`}
     >
       {/* Topic Header */}
       <div 
