@@ -233,7 +233,9 @@ const QuestionRow = ({
               }`}
               title={progress?.remindOn ? `Reminder: ${new Date(progress.remindOn).toLocaleDateString()}` : "Set reminder"}
             >
-              <FaBell />
+              {progress?.remindOn
+                ? <span className="font-semibold">{new Date(progress.remindOn).toLocaleDateString()}</span>
+                : <FaBell />}
             </button>
           </div>
 
