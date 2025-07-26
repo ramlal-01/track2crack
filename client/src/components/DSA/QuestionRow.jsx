@@ -73,20 +73,19 @@ const QuestionRow = ({
             </span>
           </div>
 
-          {/* Links Row - HIGHLY VISIBLE */}
+          {/* Links Row - Simple like original */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-6">
               {question.leetcodeLink && (
                 <a
                   href={question.leetcodeLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-white font-bold text-sm transition-all duration-200 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 px-4 py-2.5 rounded-xl shadow-md hover:shadow-lg transform hover:scale-105 border-2 border-orange-400"
+                  className="text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 transition-colors"
                   title="LeetCode"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <SiLeetcode className="text-xl" />
-                  <span className="font-bold">LEETCODE</span>
+                  <SiLeetcode className="text-2xl" />
                 </a>
               )}
               {question.geeksforgeeksLink && (
@@ -94,12 +93,11 @@ const QuestionRow = ({
                   href={question.geeksforgeeksLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-white font-bold text-sm transition-all duration-200 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-4 py-2.5 rounded-xl shadow-md hover:shadow-lg transform hover:scale-105 border-2 border-green-500"
+                  className="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
                   title="GeeksforGeeks"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <SiGeeksforgeeks className="text-xl" />
-                  <span className="font-bold">GFG</span>
+                  <SiGeeksforgeeks className="text-2xl" />
                 </a>
               )}
             </div>
@@ -198,7 +196,7 @@ const QuestionRow = ({
         </div>
       </div>
 
-      {/* Desktop Layout */}
+      {/* Desktop Layout - Like Original Backup */}
       <div className="hidden md:block">
         <div className="grid grid-cols-12 gap-3 items-center p-4">
           {/* Completion Checkbox */}
@@ -231,39 +229,31 @@ const QuestionRow = ({
             </span>
           </div>
 
-          {/* Links - HIGHLY VISIBLE DESKTOP VERSION */}
-          <div className="col-span-2 flex justify-center items-center gap-2">
-            {question.leetcodeLink ? (
+          {/* Links - Simple like original backup */}
+          <div className="col-span-2 flex justify-center items-center gap-4">
+            {question.leetcodeLink && (
               <a
                 href={question.leetcodeLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-12 h-12 text-white bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-110 border-2 border-orange-400 hover:border-orange-300"
+                className="text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 transition-colors"
                 title="LeetCode"
                 onClick={(e) => e.stopPropagation()}
               >
                 <SiLeetcode className="text-2xl" />
               </a>
-            ) : (
-              <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl border-2 border-gray-200 dark:border-gray-600 flex items-center justify-center">
-                <span className="text-gray-400 text-xs">N/A</span>
-              </div>
             )}
-            {question.geeksforgeeksLink ? (
+            {question.geeksforgeeksLink && (
               <a
                 href={question.geeksforgeeksLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-12 h-12 text-white bg-gradient-to-br from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-110 border-2 border-green-500 hover:border-green-400"
+                className="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
                 title="GeeksforGeeks"
                 onClick={(e) => e.stopPropagation()}
               >
                 <SiGeeksforgeeks className="text-2xl" />
               </a>
-            ) : (
-              <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl border-2 border-gray-200 dark:border-gray-600 flex items-center justify-center">
-                <span className="text-gray-400 text-xs">N/A</span>
-              </div>
             )}
           </div>
 
