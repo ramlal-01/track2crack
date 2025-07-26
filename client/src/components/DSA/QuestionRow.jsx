@@ -56,9 +56,9 @@ const QuestionRow = ({
       {/* Mobile Layout */}
       <div className="block md:hidden p-5 space-y-4">
         {/* Question Title and Difficulty */}
-        <div className="flex flex-col space-y-3">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-start gap-3 flex-1 min-w-0">
+        <div className="flex flex-col space-y-2">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
               <input
                 type="checkbox"
                 checked={progress?.isCompleted || false}
@@ -67,22 +67,14 @@ const QuestionRow = ({
                 className="w-5 h-5 mt-0.5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 flex-shrink-0"
               />
               <h3 
-                className={`font-medium text-sm leading-tight cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ${
-                  progress?.isCompleted ? 'line-through opacity-75' : ''
-                }`}
+                className={`font-medium text-base leading-tight cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ${progress?.isCompleted ? 'line-through opacity-75' : ''}`}
                 onClick={handleQuestionClick}
               >
                 {question.title}
               </h3>
+              <span className={`text-xs font-semibold px-2 py-1 rounded flex-shrink-0 ${getDifficultyColor(question.difficulty)}`}>{question.difficulty}</span>
             </div>
-            <span className={`text-xs font-semibold px-2 py-1 rounded flex-shrink-0 ${getDifficultyColor(question.difficulty)}`}>
-              {question.difficulty}
-            </span>
-          </div>
-
-          {/* Links Row - Simple like original */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center gap-3 ml-2">
               {question.link && question.platform && (
                 <a
                   href={question.link}
@@ -94,21 +86,19 @@ const QuestionRow = ({
                   {getPlatformIcon(question.platform)}
                 </a>
               )}
+              <button
+                onClick={(e) => handleInteraction(e, () => handleToggle(question._id, "isBookmarked"))}
+                className={`text-xl ${progress?.isBookmarked ? 'text-yellow-500' : 'text-gray-400'} hover:text-yellow-500 transition-colors p-1`}
+              >
+                {progress?.isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
+              </button>
             </div>
-
-            <button
-              onClick={(e) => handleInteraction(e, () => handleToggle(question._id, "isBookmarked"))}
-              className={`text-xl ${progress?.isBookmarked ? 'text-yellow-500' : 'text-gray-400'} hover:text-yellow-500 transition-colors p-1`}
-            >
-              {progress?.isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
-            </button>
           </div>
         </div>
-
         {/* Reminder and Note Row */}
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3 mt-2">
           {/* Reminder */}
-          <div className="relative flex-1">
+          <div className="relative flex-1 z-30">
             <button
               onClick={(e) => {
                 handleInteraction(e, () => {
@@ -116,18 +106,12 @@ const QuestionRow = ({
                   setOpenReminderId(openReminderId === question._id ? null : question._id);
                 });
               }}
-              className={`w-full text-sm px-3 py-2 rounded-lg border transition-colors ${
-                progress?.remindOn 
-                  ? 'bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-900 dark:text-blue-300 dark:border-blue-700' 
-                  : 'text-blue-600 border-blue-300 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-600 dark:hover:bg-blue-900'
-              }`}
+              className={`w-full text-sm px-3 py-2 rounded-lg border transition-colors ${progress?.remindOn ? 'bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-900 dark:text-blue-300 dark:border-blue-700' : 'text-blue-600 border-blue-300 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-600 dark:hover:bg-blue-900'}`}
             >
               <div className="flex items-center justify-center gap-2">
                 <FaBell className="text-sm" />
                 <span>
-                  {progress?.remindOn
-                    ? new Date(progress.remindOn).toLocaleDateString()
-                    : "Set Reminder"}
+                  {progress?.remindOn ? new Date(progress.remindOn).toLocaleDateString() : "Set Reminder"}
                 </span>
               </div>
             </button>
@@ -138,9 +122,8 @@ const QuestionRow = ({
               darkMode={darkMode}
             />
           </div>
-
           {/* Note */}
-          <div className="relative flex-1">
+          <div className="relative flex-1 z-30">
             {progress?.note ? (
               <button
                 onClick={(e) => {

@@ -81,23 +81,18 @@ const TopicSection = ({
                 <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   {completedCount}/{totalCount} completed ({Math.round(progressPercent)}%)
                 </p>
-                
                 {/* Stats badges */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-5 mt-1">
                   {bookmarkCount > 0 && (
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-2 px-2 py-1 bg-yellow-50 dark:bg-yellow-900/20 rounded-full">
                       <FaBookmark className={`text-xs ${darkMode ? 'text-yellow-400' : 'text-yellow-500'}`} />
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                        {bookmarkCount}
-                      </span>
+                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{bookmarkCount}</span>
                     </div>
                   )}
                   {reminderCount > 0 && (
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-2 px-2 py-1 bg-blue-50 dark:bg-blue-900/20 rounded-full">
                       <FaBell className={`text-xs ${darkMode ? 'text-blue-400' : 'text-blue-500'}`} />
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                        {reminderCount}
-                      </span>
+                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{reminderCount}</span>
                     </div>
                   )}
                 </div>

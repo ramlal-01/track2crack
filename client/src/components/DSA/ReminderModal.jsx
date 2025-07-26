@@ -15,9 +15,10 @@ const ReminderModal = ({
   return (
     <div 
       data-modal="reminder"
-      className={`absolute z-50 mt-2 ${
+      className={`absolute z-[9999] mt-2 ${
         darkMode ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'
       } border shadow-xl rounded-lg p-4 min-w-[280px]`}
+      // z-[9999] ensures calendar is always on top
     >
       <div className={`${darkMode ? 'dark-datepicker' : ''}`}>
         <DatePicker

@@ -8,6 +8,7 @@ import ProgressCircles from "../components/DSA/ProgressCircles";
 import FilterTabs from "../components/DSA/FilterTabs";
 import SearchBar from "../components/DSA/SearchBar";
 import TopicSection from "../components/DSA/TopicSection";
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 
 const DSASheet = () => {
   // State management
@@ -339,36 +340,64 @@ const DSASheet = () => {
     <div className={`min-h-screen bg-slate-50 ${darkBg}`}>
       <div className="container mx-auto px-4 py-6 md:px-6 md:py-8 lg:px-8 lg:py-10">
         {/* Header */}
-        <div className={`mb-8 p-4 md:p-6 lg:p-8 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-gray-800 dark:to-gray-700 rounded-2xl shadow-md ${darkCardBg} ${darkBorder}`}>
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-            {/* Title */}
-            <div className="text-center lg:text-left">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-indigo-700 dark:text-indigo-400 flex items-center justify-center lg:justify-start gap-2 tracking-tight">
-                📘 <span>DSA Sheet</span>
-              </h1>
-              <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 tracking-wide mt-1">
-                Track your completion and revisit daily
-              </p>
+        <div className={`flex justify-between items-center mb-10 px-10 py-6 bg-gradient-to-r from-blue-50 to-blue-200 rounded-3xl shadow-lg border border-blue-100 ${darkMode ? 'dark:from-gray-800 dark:to-gray-700 ' + darkCardBg + ' ' + darkBorder : ''}`}>
+          {/* LEFT: Title and Subtitle */}
+          <div>
+            <h1 className={`text-5xl font-extrabold text-blue-700 tracking-tight mb-2 drop-shadow-sm`}>📘 DSA Sheet</h1>
+            <p className={`text-lg text-blue-800/80 font-medium tracking-wide`}>Track your completion and revisit daily</p>
+          </div>
+          {/* RIGHT: Progress Rings - Now showing counts */}
+          <div className="flex items-center gap-10">
+            {/* Easy Progress */}
+            <div className="flex flex-col items-center">
+              <div className="w-24 h-24 drop-shadow-md relative">
+                <CircularProgressbar
+                  value={easyProgress}
+                  styles={buildStyles({
+                    pathTransition: "stroke-dashoffset 0.5s ease 0s",
+                    pathColor: "#22c55e",
+                    trailColor: "#e0e7ff",
+                  })}
+                />
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-lg font-bold text-green-700">{easyCompleted}/{easyQuestions.length}</span>
+                </div>
+              </div>
+              <div className="text-lg font-semibold text-green-700 mt-1">Easy</div>
             </div>
-
-            {/* Progress Circles */}
-            <div className="flex justify-center">
-              <ProgressCircles
-                easyProgress={easyProgress}
-                mediumProgress={mediumProgress}
-                hardProgress={hardProgress}
-                progress={progress}
-                easyCompleted={easyCompleted}
-                easyQuestions={easyQuestions}
-                mediumCompleted={mediumCompleted}
-                mediumQuestions={mediumQuestions}
-                hardCompleted={hardCompleted}
-                hardQuestions={hardQuestions}
-                completed={completed}
-                total={total}
-                darkMode={darkMode}
-                darkText={darkText}
-              />
+            {/* Medium Progress */}
+            <div className="flex flex-col items-center">
+              <div className="w-24 h-24 drop-shadow-md relative">
+                <CircularProgressbar
+                  value={mediumProgress}
+                  styles={buildStyles({
+                    pathTransition: "stroke-dashoffset 0.5s ease 0s",
+                    pathColor: "#fbbf24",
+                    trailColor: "#e0e7ff",
+                  })}
+                />
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-lg font-bold text-yellow-700">{mediumCompleted}/{mediumQuestions.length}</span>
+                </div>
+              </div>
+              <div className="text-lg font-semibold text-yellow-700 mt-1">Medium</div>
+            </div>
+            {/* Hard Progress */}
+            <div className="flex flex-col items-center">
+              <div className="w-24 h-24 drop-shadow-md relative">
+                <CircularProgressbar
+                  value={hardProgress}
+                  styles={buildStyles({
+                    pathTransition: "stroke-dashoffset 0.5s ease 0s",
+                    pathColor: "#ef4444",
+                    trailColor: "#e0e7ff",
+                  })}
+                />
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-lg font-bold text-red-700">{hardCompleted}/{hardQuestions.length}</span>
+                </div>
+              </div>
+              <div className="text-lg font-semibold text-red-700 mt-1">Hard</div>
             </div>
           </div>
         </div>
