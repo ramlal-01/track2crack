@@ -5,6 +5,7 @@ import ReminderModal from "./ReminderModal";
 import NoteModal from "./NoteModal";
 import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
+import ReactDOM from "react-dom";
 
 const QuestionRow = ({ 
   question, 
@@ -98,7 +99,7 @@ const QuestionRow = ({
           </div>
         </div>
         {/* Reminder and Note Row */}
-        <div className="flex items-center justify-between gap-3 mt-2 relative">
+        <div className="flex items-center justify-between gap-3 mt-2">
           {/* Reminder */}
           <div className="relative flex-1">
             <button
@@ -117,27 +118,30 @@ const QuestionRow = ({
                 </span>
               </div>
             </button>
-            {/* Inline Reminder Popover */}
-            {openReminderId === question._id && (
-              <div className={`absolute z-50 mt-2 ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'} border shadow-lg rounded p-2`}> 
-                <DatePicker
-                  selected={progress?.remindOn ? new Date(progress.remindOn) : null}
-                  onChange={(date) => handleReminderChange(question._id, date)}
-                  dateFormat="dd/MM/yyyy"
-                  placeholderText="Pick a date"
-                  minDate={new Date()}
-                  inline
-                  className={darkMode ? 'dark:bg-gray-700' : ''}
-                />
-                {progress?.remindOn && (
-                  <button
-                    onClick={() => handleReminderChange(question._id, null)}
-                    className={`text-xs ${darkMode ? 'text-red-400' : 'text-red-500'} mt-2 font-semibold transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-sm`}
-                  >
-                    Clear Reminder
-                  </button>
-                )}
-              </div>
+            {/* Portal Reminder Popover */}
+            {openReminderId === question._id && ReactDOM.createPortal(
+              <div className={`fixed inset-0 z-[99999] flex items-center justify-center bg-black/30`} onClick={() => setOpenReminderId(null)}>
+                <div className={`relative ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'} border shadow-lg rounded p-2`} onClick={e => e.stopPropagation()}>
+                  <DatePicker
+                    selected={progress?.remindOn ? new Date(progress.remindOn) : null}
+                    onChange={(date) => handleReminderChange(question._id, date)}
+                    dateFormat="dd/MM/yyyy"
+                    placeholderText="Pick a date"
+                    minDate={new Date()}
+                    inline
+                    className={darkMode ? 'dark:bg-gray-700' : ''}
+                  />
+                  {progress?.remindOn && (
+                    <button
+                      onClick={() => handleReminderChange(question._id, null)}
+                      className={`text-xs ${darkMode ? 'text-red-400' : 'text-red-500'} mt-2 font-semibold transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-sm`}
+                    >
+                      Clear Reminder
+                    </button>
+                  )}
+                </div>
+              </div>,
+              document.body
             )}
           </div>
           {/* Note */}
@@ -176,65 +180,68 @@ const QuestionRow = ({
                 </div>
               </button>
             )}
-            {/* Inline Note Popover */}
-            {openNoteId === question._id && (
-              <div className={`absolute z-50 mt-2 ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'} border shadow-lg rounded p-3 w-64 max-w-[90vw]`}>
-                <textarea
-                  value={noteText}
-                  onChange={(e) => setNoteText(e.target.value)}
-                  onClick={(e) => e.stopPropagation()}
-                  rows={3}
-                  placeholder="Type your quick note here..."
-                  className={`w-full p-2 border rounded text-sm ${darkInput}`}
-                  autoFocus
-                />
-                {noteText && (
-                  <button
-                    onClick={async () => {
-                      setNoteText('');
-                      await updateProgress(question._id, { note: '' });
-                      setProgressMap((prev) => ({
-                        ...prev,
-                        [question._id]: {
-                          ...prev[question._id],
-                          note: ''
-                        }
-                      }));
-                      toast.success("Note cleared!");
-                      setOpenNoteId(null);
-                    }}
-                    className={`text-xs ${darkMode ? 'text-red-400' : 'text-red-500'} mt-2 hover:underline`}
-                  >
-                    Clear Note
-                  </button>
-                )}
-                <div className="flex justify-end gap-2 mt-2">
-                  <button
-                    onClick={() => setOpenNoteId(null)}
-                    className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} hover:underline`}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={async () => {
-                      await updateProgress(question._id, { note: noteText });
-                      setProgressMap((prev) => ({
-                        ...prev,
-                        [question._id]: {
-                          ...prev[question._id],
-                          note: noteText
-                        }
-                      }));
-                      toast.success("Note saved!");
-                      setOpenNoteId(null);
-                    }}
-                    className={`text-xs px-2 py-1 rounded ${noteText === (progress.note || '') ? `${darkMode ? 'text-gray-500 border-gray-500' : 'text-gray-400 border-gray-300'} cursor-not-allowed` : `${darkMode ? 'text-green-400 border-green-500 hover:bg-gray-600' : 'text-green-600 border-green-500 hover:bg-green-50'}`} border`}
-                    disabled={noteText === (progress.note || '')}
-                  >
-                    Save
-                  </button>
+            {/* Portal Note Popover */}
+            {openNoteId === question._id && ReactDOM.createPortal(
+              <div className={`fixed inset-0 z-[99999] flex items-center justify-center bg-black/30`} onClick={() => setOpenNoteId(null)}>
+                <div className={`relative ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'} border shadow-lg rounded p-3 w-64 max-w-[90vw]`} onClick={e => e.stopPropagation()}>
+                  <textarea
+                    value={noteText}
+                    onChange={(e) => setNoteText(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    rows={3}
+                    placeholder="Type your quick note here..."
+                    className={`w-full p-2 border rounded text-sm ${darkInput}`}
+                    autoFocus
+                  />
+                  {noteText && (
+                    <button
+                      onClick={async () => {
+                        setNoteText('');
+                        await updateProgress(question._id, { note: '' });
+                        setProgressMap((prev) => ({
+                          ...prev,
+                          [question._id]: {
+                            ...prev[question._id],
+                            note: ''
+                          }
+                        }));
+                        toast.success("Note cleared!");
+                        setOpenNoteId(null);
+                      }}
+                      className={`text-xs ${darkMode ? 'text-red-400' : 'text-red-500'} mt-2 hover:underline`}
+                    >
+                      Clear Note
+                    </button>
+                  )}
+                  <div className="flex justify-end gap-2 mt-2">
+                    <button
+                      onClick={() => setOpenNoteId(null)}
+                      className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} hover:underline`}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={async () => {
+                        await updateProgress(question._id, { note: noteText });
+                        setProgressMap((prev) => ({
+                          ...prev,
+                          [question._id]: {
+                            ...prev[question._id],
+                            note: noteText
+                          }
+                        }));
+                        toast.success("Note saved!");
+                        setOpenNoteId(null);
+                      }}
+                      className={`text-xs px-2 py-1 rounded ${noteText === (progress.note || '') ? `${darkMode ? 'text-gray-500 border-gray-500' : 'text-gray-400 border-gray-300'} cursor-not-allowed` : `${darkMode ? 'text-green-400 border-green-500 hover:bg-gray-600' : 'text-green-600 border-green-500 hover:bg-green-50'}`} border`}
+                      disabled={noteText === (progress.note || '')}
+                    >
+                      Save
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </div>,
+              document.body
             )}
           </div>
         </div>
