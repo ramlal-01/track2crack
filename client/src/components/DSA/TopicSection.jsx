@@ -124,9 +124,9 @@ const TopicSection = ({
             </div>
           </div>
           {/* Progress Bar and Reset Button (desktop) */}
-          <div className="flex flex-col md:flex-row items-center gap-4 mt-3 md:mt-0">
+          <div className="flex items-center gap-4 mt-3 md:mt-0">
             {/* Progress Bar */}
-            <div className="w-full flex justify-center md:justify-start">
+            <div className="flex justify-center md:justify-start w-full">
               <div className="w-32 md:w-48 bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full transition-all duration-1000 ease-out"
