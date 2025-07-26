@@ -32,7 +32,7 @@ const QuestionRow = ({
   };
 
   return (
-    <div className={`${darkTableRow} border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors`}>
+    <div className={`border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${darkTableRow}`}>
       {/* Mobile Layout */}
       <div className="block md:hidden p-4 space-y-3">
         {/* Question Title and Difficulty */}
@@ -95,7 +95,8 @@ const QuestionRow = ({
           {/* Reminder */}
           <div className="relative">
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 setOpenNoteId(null);
                 setOpenReminderId(openReminderId === question._id ? null : question._id);
               }}
@@ -127,7 +128,8 @@ const QuestionRow = ({
                   {progress.note}
                 </span>
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setOpenReminderId(null);
                     setOpenNoteId(openNoteId === question._id ? null : question._id);
                     setNoteText(progress.note || '');
@@ -139,7 +141,8 @@ const QuestionRow = ({
               </div>
             ) : (
               <button
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setOpenReminderId(null);
                   setOpenNoteId(openNoteId === question._id ? null : question._id);
                   setNoteText('');
@@ -165,125 +168,151 @@ const QuestionRow = ({
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden md:grid md:grid-cols-12 gap-4 items-center p-4">
-        {/* Completion Checkbox */}
-        <div className="col-span-1 flex justify-center">
-          <input
-            type="checkbox"
-            checked={progress?.isCompleted || false}
-            onChange={() => handleToggle(question._id, "isCompleted")}
-            className="w-5 h-5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-          />
-        </div>
-
-        {/* Question Title */}
-        <div className="col-span-5 lg:col-span-6">
-          <span className="font-medium text-sm lg:text-base">{question.title}</span>
-        </div>
-
-        {/* Difficulty */}
-        <div className="col-span-1 text-center">
-          <span className={`text-sm font-semibold ${getDifficultyColor(question.difficulty)}`}>
-            {question.difficulty}
-          </span>
-        </div>
-
-        {/* Links */}
-        <div className="col-span-2 flex justify-center space-x-3">
-          {question.leetcodeLink && (
-            <a
-              href={question.leetcodeLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-orange-500 hover:text-orange-600 text-lg"
-              title="LeetCode"
-            >
-              <SiLeetcode />
-            </a>
-          )}
-          {question.geeksforgeeksLink && (
-            <a
-              href={question.geeksforgeeksLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-green-600 hover:text-green-700 text-lg"
-              title="GeeksforGeeks"
-            >
-              <SiGeeksforgeeks />
-            </a>
-          )}
-        </div>
-
-        {/* Bookmark */}
-        <div className="col-span-1 flex justify-center">
-          <button
-            onClick={() => handleToggle(question._id, "isBookmarked")}
-            className={`text-lg ${progress?.isBookmarked ? 'text-yellow-500' : 'text-gray-400'} hover:text-yellow-500 transition-colors`}
-          >
-            {progress?.isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
-          </button>
-        </div>
-
-        {/* Reminder */}
-        <div className="col-span-1 flex justify-center relative">
-          <button
-            onClick={() => {
-              setOpenNoteId(null);
-              setOpenReminderId(openReminderId === question._id ? null : question._id);
-            }}
-            className={`text-sm px-2 py-1 rounded ${
-              progress?.remindOn 
-                ? 'text-blue-700 dark:text-blue-300' 
-                : 'text-blue-600 dark:text-blue-400'
-            }`}
-          >
-            <FaBell />
-          </button>
-          <ReminderModal
-            openReminderId={openReminderId === question._id ? question._id : null}
-            progressMap={progressMap}
-            handleReminderChange={handleReminderChange}
-            darkMode={darkMode}
-          />
-        </div>
-
-        {/* Note */}
-        <div className="col-span-1 flex justify-center relative">
-          {progress?.note ? (
-            <button
-              onClick={() => {
-                setOpenReminderId(null);
-                setOpenNoteId(openNoteId === question._id ? null : question._id);
-                setNoteText(progress.note || '');
+      <div className="hidden md:block">
+        <div className="grid grid-cols-12 gap-2 items-center p-4">
+          {/* Completion Checkbox */}
+          <div className="col-span-1 flex justify-center">
+            <input
+              type="checkbox"
+              checked={progress?.isCompleted || false}
+              onChange={(e) => {
+                e.stopPropagation();
+                handleToggle(question._id, "isCompleted");
               }}
-              className={`text-sm ${darkMode ? 'text-yellow-400' : 'text-yellow-600'}`}
-              title={progress.note}
-            >
-              📄
-            </button>
-          ) : (
+              className="w-5 h-5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            />
+          </div>
+
+          {/* Question Title */}
+          <div className="col-span-4">
+            <span className="font-medium text-sm">{question.title}</span>
+          </div>
+
+          {/* Difficulty */}
+          <div className="col-span-1 text-center">
+            <span className={`text-xs font-semibold px-2 py-1 rounded ${getDifficultyColor(question.difficulty)}`}>
+              {question.difficulty}
+            </span>
+          </div>
+
+          {/* Links */}
+          <div className="col-span-2 flex justify-center space-x-3">
+            {question.leetcodeLink && (
+              <a
+                href={question.leetcodeLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-orange-500 hover:text-orange-600 text-lg transition-colors"
+                title="LeetCode"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <SiLeetcode />
+              </a>
+            )}
+            {question.geeksforgeeksLink && (
+              <a
+                href={question.geeksforgeeksLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-green-600 hover:text-green-700 text-lg transition-colors"
+                title="GeeksforGeeks"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <SiGeeksforgeeks />
+              </a>
+            )}
+          </div>
+
+          {/* Bookmark */}
+          <div className="col-span-1 flex justify-center">
             <button
-              onClick={() => {
-                setOpenReminderId(null);
-                setOpenNoteId(openNoteId === question._id ? null : question._id);
-                setNoteText('');
+              onClick={(e) => {
+                e.stopPropagation();
+                handleToggle(question._id, "isBookmarked");
               }}
-              className={`text-sm ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}
+              className={`text-lg ${progress?.isBookmarked ? 'text-yellow-500' : 'text-gray-400'} hover:text-yellow-500 transition-colors`}
             >
-              📝
+              {progress?.isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
             </button>
-          )}
-          <NoteModal
-            openNoteId={openNoteId === question._id ? question._id : null}
-            noteText={noteText}
-            setNoteText={setNoteText}
-            setOpenNoteId={setOpenNoteId}
-            progressMap={progressMap}
-            updateProgress={updateProgress}
-            setProgressMap={setProgressMap}
-            darkMode={darkMode}
-            darkInput={darkInput}
-          />
+          </div>
+
+          {/* Reminder */}
+          <div className="col-span-1 flex justify-center relative">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpenNoteId(null);
+                setOpenReminderId(openReminderId === question._id ? null : question._id);
+              }}
+              className={`text-sm p-2 rounded transition-colors ${
+                progress?.remindOn 
+                  ? 'text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900' 
+                  : 'text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900'
+              }`}
+              title={progress?.remindOn ? `Reminder set for ${new Date(progress.remindOn).toLocaleDateString()}` : "Set reminder"}
+            >
+              <FaBell />
+            </button>
+            <ReminderModal
+              openReminderId={openReminderId === question._id ? question._id : null}
+              progressMap={progressMap}
+              handleReminderChange={handleReminderChange}
+              darkMode={darkMode}
+            />
+          </div>
+
+          {/* Note */}
+          <div className="col-span-2 flex justify-center relative">
+            {progress?.note ? (
+              <div className="flex items-center gap-2 max-w-full">
+                <span className="text-sm">📄</span>
+                <span 
+                  className={`text-xs max-w-[120px] truncate ${darkMode ? 'text-yellow-400' : 'text-yellow-600'}`}
+                  title={progress.note}
+                >
+                  {progress.note}
+                </span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenReminderId(null);
+                    setOpenNoteId(openNoteId === question._id ? null : question._id);
+                    setNoteText(progress.note || '');
+                  }}
+                  className={`text-xs ${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'} transition-colors`}
+                >
+                  ✏️
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenReminderId(null);
+                  setOpenNoteId(openNoteId === question._id ? null : question._id);
+                  setNoteText('');
+                }}
+                className={`text-sm px-2 py-1 rounded border transition-colors ${
+                  darkMode 
+                    ? 'text-blue-400 border-blue-600 hover:bg-blue-900' 
+                    : 'text-blue-600 border-blue-300 hover:bg-blue-50'
+                }`}
+              >
+                📝 Add Note
+              </button>
+            )}
+            <NoteModal
+              openNoteId={openNoteId === question._id ? question._id : null}
+              noteText={noteText}
+              setNoteText={setNoteText}
+              setOpenNoteId={setOpenNoteId}
+              progressMap={progressMap}
+              updateProgress={updateProgress}
+              setProgressMap={setProgressMap}
+              darkMode={darkMode}
+              darkInput={darkInput}
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -20,7 +20,8 @@ const TopicSection = ({
   setProgressMap, 
   handleReminderChange, 
   handleResetTopic, 
-  resettingTopic, 
+  resettingTopic,
+  topicRefs, // Add topicRefs prop
   darkMode, 
   darkCardBg, 
   darkBorder, 
@@ -42,7 +43,14 @@ const TopicSection = ({
   };
 
   return (
-    <div className={`${darkCardBg} ${darkBorder} border rounded-lg mb-6 overflow-hidden shadow-sm`}>
+    <div 
+      ref={(el) => {
+        if (topicRefs && topicRefs.current) {
+          topicRefs.current[topic] = el;
+        }
+      }}
+      className={`${darkCardBg} ${darkBorder} border rounded-lg mb-6 overflow-hidden shadow-sm`}
+    >
       {/* Topic Header */}
       <div 
         className={`p-4 md:p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors`}
@@ -100,18 +108,20 @@ const TopicSection = ({
       {isExpanded && (
         <div className="border-t border-gray-200 dark:border-gray-700">
           {/* Desktop Table Header */}
-          <div className={`hidden md:grid md:grid-cols-12 gap-4 items-center p-4 ${darkTableHeader} border-b border-gray-200 dark:border-gray-700 text-sm font-semibold`}>
-            <div className="col-span-1 text-center">Done</div>
-            <div className="col-span-5 lg:col-span-6">Question</div>
-            <div className="col-span-1 text-center">Level</div>
-            <div className="col-span-2 text-center">Links</div>
-            <div className="col-span-1 text-center">Save</div>
-            <div className="col-span-1 text-center">Remind</div>
-            <div className="col-span-1 text-center">Note</div>
+          <div className={`hidden md:block ${darkTableHeader} border-b border-gray-200 dark:border-gray-700`}>
+            <div className="grid grid-cols-12 gap-2 items-center p-4 text-sm font-semibold">
+              <div className="col-span-1 text-center">Done</div>
+              <div className="col-span-4">Question</div>
+              <div className="col-span-1 text-center">Level</div>
+              <div className="col-span-2 text-center">Links</div>
+              <div className="col-span-1 text-center">Save</div>
+              <div className="col-span-1 text-center">Remind</div>
+              <div className="col-span-2 text-center">Note</div>
+            </div>
           </div>
 
           {/* Questions List */}
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
+          <div>
             {questions.map((question) => (
               <QuestionRow
                 key={question._id}

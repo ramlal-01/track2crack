@@ -271,20 +271,27 @@ const DSASheet = () => {
     setAnimatedWidths(newWidths);
   }, [groupedQuestions, progressMap]);
 
-  // Click outside handler
+  // Improved click outside handler
   useEffect(() => {
     const handleClickOutside = (e) => {
+      // Check if click is inside any modal or dropdown
       const clickedInsideReminder = reminderRefs.current[openReminderId]?.contains(e.target);
       const clickedInsideNote = noteRefs.current[openNoteId]?.contains(e.target);
+      
+      // Check if click is inside any topic section
       const clickedInsideAnyTopic = Object.values(topicRefs.current).some(ref => ref?.contains(e.target));
       
+      // Check if click is inside filter controls
       const filterButtons = document.querySelectorAll('[data-filter-button]');
       const difficultySelect = document.querySelector('select');
+      const searchInput = document.querySelector('input[type="text"]');
       const clickedInsideControls = 
         Array.from(filterButtons).some(btn => btn.contains(e.target)) ||
-        difficultySelect?.contains(e.target);
+        difficultySelect?.contains(e.target) ||
+        searchInput?.contains(e.target);
 
-      if (!clickedInsideAnyTopic && !clickedInsideControls) {
+      // Only close topics if clicked completely outside and no modals are open
+      if (!clickedInsideAnyTopic && !clickedInsideControls && !clickedInsideReminder && !clickedInsideNote && !openReminderId && !openNoteId) {
         setTimeout(() => {
           setExpandedTopics({});
         }, 100);
@@ -293,7 +300,7 @@ const DSASheet = () => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [openReminderId, openNoteId, expandedTopics]);
+  }, [openReminderId, openNoteId]);
 
   // Loading state
   if (loading) {
@@ -387,6 +394,7 @@ const DSASheet = () => {
                 handleReminderChange={handleReminderChange}
                 handleResetTopic={handleResetTopic}
                 resettingTopic={resettingTopic}
+                topicRefs={topicRefs}
                 darkMode={darkMode}
                 darkCardBg={darkCardBg}
                 darkBorder={darkBorder}
