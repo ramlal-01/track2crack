@@ -16,7 +16,8 @@ const NoteModal = ({
 
   const progress = progressMap[openNoteId] || {};
 
-  const handleSaveNote = async () => {
+  const handleSaveNote = async (e) => {
+    e.stopPropagation();
     await updateProgress(openNoteId, { note: noteText });
     setProgressMap((prev) => ({
       ...prev,
@@ -29,7 +30,8 @@ const NoteModal = ({
     setOpenNoteId(null);
   };
 
-  const handleClearNote = async () => {
+  const handleClearNote = async (e) => {
+    e.stopPropagation();
     setNoteText('');
     await updateProgress(openNoteId, { note: '' });
     setProgressMap((prev) => ({
@@ -43,13 +45,22 @@ const NoteModal = ({
     setOpenNoteId(null);
   };
 
+  const handleCancel = (e) => {
+    e.stopPropagation();
+    setOpenNoteId(null);
+  };
+
   return (
-    <div className={`absolute z-50 mt-2 ${
-      darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'
-    } border shadow-lg rounded p-3 w-64 max-w-[90vw]`}>
+    <div 
+      data-modal="note"
+      className={`absolute z-50 mt-2 ${
+        darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'
+      } border shadow-lg rounded p-3 w-64 max-w-[90vw]`}
+    >
       <textarea
         value={noteText}
         onChange={(e) => setNoteText(e.target.value)}
+        onClick={(e) => e.stopPropagation()}
         rows={3}
         placeholder="Type your quick note here..."
         className={`w-full p-2 border rounded text-sm ${darkInput}`}
@@ -69,7 +80,7 @@ const NoteModal = ({
 
       <div className="flex justify-end gap-2 mt-2">
         <button
-          onClick={() => setOpenNoteId(null)}
+          onClick={handleCancel}
           className={`text-xs ${
             darkMode ? 'text-gray-400' : 'text-gray-500'
           } hover:underline`}

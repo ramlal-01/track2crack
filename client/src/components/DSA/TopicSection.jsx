@@ -21,7 +21,7 @@ const TopicSection = ({
   handleReminderChange, 
   handleResetTopic, 
   resettingTopic,
-  topicRefs, // Add topicRefs prop
+  topicRefs, 
   darkMode, 
   darkCardBg, 
   darkBorder, 
@@ -35,11 +35,18 @@ const TopicSection = ({
   const totalCount = questions.length;
   const progressPercent = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
 
-  const toggleTopic = () => {
+  const toggleTopic = (e) => {
+    // Prevent event bubbling
+    e.stopPropagation();
     setExpandedTopics(prev => ({
       ...prev,
       [topic]: !prev[topic]
     }));
+  };
+
+  const handleResetClick = (e) => {
+    e.stopPropagation();
+    handleResetTopic(topic);
   };
 
   return (
@@ -53,15 +60,15 @@ const TopicSection = ({
     >
       {/* Topic Header */}
       <div 
-        className={`p-4 md:p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors`}
+        className={`p-4 md:p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors select-none`}
         onClick={toggleTopic}
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           {/* Topic Title and Progress */}
           <div className="flex items-center gap-3 min-w-0 flex-1">
-            <button className={`text-lg ${darkText} hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors`}>
+            <div className={`text-lg ${darkText} hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors`}>
               {isExpanded ? <FaChevronDown /> : <FaChevronRight />}
-            </button>
+            </div>
             <div className="min-w-0 flex-1">
               <h2 className={`text-lg md:text-xl font-semibold ${darkText} truncate`}>
                 {topic}
@@ -84,10 +91,7 @@ const TopicSection = ({
 
             {/* Reset Button */}
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleResetTopic(topic);
-              }}
+              onClick={handleResetClick}
               disabled={resettingTopic === topic}
               className={`px-3 py-1 text-xs md:text-sm rounded border transition-colors ${
                 resettingTopic === topic
@@ -109,7 +113,7 @@ const TopicSection = ({
         <div className="border-t border-gray-200 dark:border-gray-700">
           {/* Desktop Table Header */}
           <div className={`hidden md:block ${darkTableHeader} border-b border-gray-200 dark:border-gray-700`}>
-            <div className="grid grid-cols-12 gap-2 items-center p-4 text-sm font-semibold">
+            <div className="grid grid-cols-12 gap-3 items-center p-4 text-sm font-semibold">
               <div className="col-span-1 text-center">Done</div>
               <div className="col-span-4">Question</div>
               <div className="col-span-1 text-center">Level</div>
@@ -121,7 +125,7 @@ const TopicSection = ({
           </div>
 
           {/* Questions List */}
-          <div>
+          <div className="divide-y divide-gray-200 dark:divide-gray-700">
             {questions.map((question) => (
               <QuestionRow
                 key={question._id}

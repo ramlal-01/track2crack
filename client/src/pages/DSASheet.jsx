@@ -274,6 +274,11 @@ const DSASheet = () => {
   // Improved click outside handler
   useEffect(() => {
     const handleClickOutside = (e) => {
+      // Don't close if any modal is open
+      if (openReminderId || openNoteId) {
+        return;
+      }
+
       // Check if click is inside any modal or dropdown
       const clickedInsideReminder = reminderRefs.current[openReminderId]?.contains(e.target);
       const clickedInsideNote = noteRefs.current[openNoteId]?.contains(e.target);
@@ -290,11 +295,27 @@ const DSASheet = () => {
         difficultySelect?.contains(e.target) ||
         searchInput?.contains(e.target);
 
-      // Only close topics if clicked completely outside and no modals are open
-      if (!clickedInsideAnyTopic && !clickedInsideControls && !clickedInsideReminder && !clickedInsideNote && !openReminderId && !openNoteId) {
+      // Check if click is on interactive elements within tables
+      const isInteractiveElement = 
+        e.target.closest('input[type="checkbox"]') ||
+        e.target.closest('button') ||
+        e.target.closest('a') ||
+        e.target.closest('textarea') ||
+        e.target.closest('[role="button"]') ||
+        e.target.closest('.react-datepicker') ||
+        e.target.closest('[data-modal]');
+
+      // Only close topics if clicked completely outside and no modals are open and not on interactive elements
+      if (!clickedInsideAnyTopic && 
+          !clickedInsideControls && 
+          !clickedInsideReminder && 
+          !clickedInsideNote && 
+          !isInteractiveElement &&
+          !openReminderId && 
+          !openNoteId) {
         setTimeout(() => {
           setExpandedTopics({});
-        }, 100);
+        }, 150);
       }
     };
 
