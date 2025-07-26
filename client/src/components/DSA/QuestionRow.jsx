@@ -44,6 +44,13 @@ const QuestionRow = ({
     handleToggle(question._id, "isCompleted");
   };
 
+  // Add this helper function at the top of the component (after imports)
+  const getPlatformIcon = (platform) => {
+    if (platform === "GFG") return <SiGeeksforgeeks className="text-green-600 dark:text-green-400" title="GFG" />;
+    if (platform === "LeetCode") return <SiLeetcode className="text-orange-500 dark:text-orange-400" title="LeetCode" />;
+    return null;
+  };
+
   return (
     <div className={`border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${darkTableRow}`}>
       {/* Mobile Layout */}
@@ -76,28 +83,15 @@ const QuestionRow = ({
           {/* Links Row - Simple like original */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
-              {question.leetcodeLink && (
+              {question.link && question.platform && (
                 <a
-                  href={question.leetcodeLink}
+                  href={question.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 transition-colors"
-                  title="LeetCode"
                   onClick={(e) => e.stopPropagation()}
+                  title={question.platform}
                 >
-                  <SiLeetcode className="text-2xl" />
-                </a>
-              )}
-              {question.geeksforgeeksLink && (
-                <a
-                  href={question.geeksforgeeksLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
-                  title="GeeksforGeeks"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <SiGeeksforgeeks className="text-2xl" />
+                  {getPlatformIcon(question.platform)}
                 </a>
               )}
             </div>
@@ -231,28 +225,15 @@ const QuestionRow = ({
 
           {/* Links - Simple like original backup */}
           <div className="col-span-2 flex justify-center items-center gap-4">
-            {question.leetcodeLink && (
+            {question.link && question.platform && (
               <a
-                href={question.leetcodeLink}
+                href={question.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 transition-colors"
-                title="LeetCode"
                 onClick={(e) => e.stopPropagation()}
+                title={question.platform}
               >
-                <SiLeetcode className="text-2xl" />
-              </a>
-            )}
-            {question.geeksforgeeksLink && (
-              <a
-                href={question.geeksforgeeksLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
-                title="GeeksforGeeks"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <SiGeeksforgeeks className="text-2xl" />
+                {getPlatformIcon(question.platform)}
               </a>
             )}
           </div>
