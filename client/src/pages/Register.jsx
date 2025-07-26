@@ -146,16 +146,16 @@ const { login } = useAuth();
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-purple-600 mb-6">Sign Up</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
+      <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-sm sm:max-w-md">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center text-purple-600 mb-6">Sign Up</h2>
 
-        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-5">
+        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-4 sm:space-y-5">
           {/* Full Name */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Full Name</label>
+            <label className="block text-gray-700 font-medium mb-1 text-sm sm:text-base">Full Name</label>
             <div className="flex items-center border border-gray-300 rounded-md px-3">
-              <FaUser className="text-gray-400" />
+              <FaUser className="text-gray-400 text-sm sm:text-base" />
               <input
                 type="text"
                 name="name"
@@ -164,16 +164,16 @@ const { login } = useAuth();
                 required
                 placeholder="e.g. Bhaskar Sharma"
                 autoComplete="off"
-                className="w-full px-2 py-2 outline-none"
+                className="w-full px-2 py-2 outline-none text-sm sm:text-base"
               />
             </div>
           </div>
 
           {/* Email */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Email</label>
+            <label className="block text-gray-700 font-medium mb-1 text-sm sm:text-base">Email</label>
             <div className="flex items-center border border-gray-300 rounded-md px-3">
-              <FaEnvelope className="text-gray-400" />
+              <FaEnvelope className="text-gray-400 text-sm sm:text-base" />
               <input
                 type="email"
                 name="email"
@@ -182,16 +182,16 @@ const { login } = useAuth();
                 required
                 placeholder="bhaskar@gmail.com"
                 autoComplete="off"
-                className="w-full px-2 py-2 outline-none"
+                className="w-full px-2 py-2 outline-none text-sm sm:text-base"
               />
             </div>
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Password</label>
+            <label className="block text-gray-700 font-medium mb-1 text-sm sm:text-base">Password</label>
             <div className="flex items-center border border-gray-300 rounded-md px-3">
-              <FaLock className="text-gray-400 mr-2" />
+              <FaLock className="text-gray-400 mr-2 text-sm sm:text-base" />
               <input
                 type="password"
                 name="password"
@@ -200,7 +200,7 @@ const { login } = useAuth();
                 required
                 autoComplete="new-password"
                 placeholder="Enter password"
-                className="w-full py-2 outline-none"
+                className="w-full py-2 outline-none text-sm sm:text-base"
               />
             </div>
 
@@ -212,16 +212,16 @@ const { login } = useAuth();
                     style={{ width: `${(strength / 5) * 100}%` }}
                   ></div>
                 </div>
-                <div className="text-sm text-gray-600 mt-1">Level: {strengthLabel}</div>
+                <div className="text-xs sm:text-sm text-gray-600 mt-1">Level: {strengthLabel}</div>
               </>
             )}
           </div>
 
           {/* Confirm Password */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Confirm Password</label>
+            <label className="block text-gray-700 font-medium mb-1 text-sm sm:text-base">Confirm Password</label>
             <div className="flex items-center border border-gray-300 rounded-md px-3">
-              <FaLock className="text-gray-400 mr-2" />
+              <FaLock className="text-gray-400 mr-2 text-sm sm:text-base" />
               <input
                 type="password"
                 name="confirmPassword"
@@ -230,13 +230,13 @@ const { login } = useAuth();
                 required
                 autoComplete="new-password"
                 placeholder="Confirm password"
-                className="w-full py-2 outline-none"
+                className="w-full py-2 outline-none text-sm sm:text-base"
               />
             </div>
 
             {formData.confirmPassword.length > 0 && (
               <p
-                className={`text-sm mt-1 ${
+                className={`text-xs sm:text-sm mt-1 ${
                   passwordsMatch ? 'text-green-600' : 'text-red-500'
                 }`}
               >
@@ -249,7 +249,7 @@ const { login } = useAuth();
           <button
             type="submit"
             disabled={!isFormValid || loading}
-            className={`w-full py-2 rounded-md font-semibold transition ${
+            className={`w-full py-2 sm:py-3 rounded-md font-semibold transition text-sm sm:text-base ${
               isFormValid && !loading
                 ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
@@ -257,7 +257,7 @@ const { login } = useAuth();
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                <svg className="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-white" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                 </svg>
@@ -271,7 +271,7 @@ const { login } = useAuth();
 
         {/* Footer */}
         <div className="text-center mt-4">
-          <p className="text-sm text-gray-700">
+          <p className="text-xs sm:text-sm text-gray-700">
             Already have an account?{' '}
             <Link to="/login" className="text-blue-600 font-medium hover:underline">
               Login here
@@ -280,20 +280,20 @@ const { login } = useAuth();
         </div>
 
         <div className="mt-6">
-          <p className="text-center text-sm text-gray-500 mb-4">Or Sign up with:</p>
+          <p className="text-center text-xs sm:text-sm text-gray-500 mb-4">Or Sign up with:</p>
           <div className="space-y-3">
             <button
               onClick={() => handleOAuthLogin('google')}
-              className="flex items-center justify-center w-full border border-gray-300 rounded-full py-2 text-sm font-semibold text-gray-800 shadow-sm hover:shadow-md transition hover:bg-red-50"
+              className="flex items-center justify-center w-full border border-gray-300 rounded-full py-2 sm:py-3 text-xs sm:text-sm font-semibold text-gray-800 shadow-sm hover:shadow-md transition hover:bg-red-50"
             >
-              <FaGoogle className="mr-2 text-xl text-[#e3580e]" />
+              <FaGoogle className="mr-2 text-lg sm:text-xl text-[#e3580e]" />
               Sign up with Google
             </button>
             <button
               onClick={() => handleOAuthLogin('github')}
-              className="flex items-center justify-center w-full border border-gray-300 rounded-full py-2 text-sm font-semibold text-gray-800 shadow-sm hover:shadow-md transition hover:bg-gray-100"
+              className="flex items-center justify-center w-full border border-gray-300 rounded-full py-2 sm:py-3 text-xs sm:text-sm font-semibold text-gray-800 shadow-sm hover:shadow-md transition hover:bg-gray-100"
             >
-              <FaGithub className="mr-2 text-xl text-gray-800" />
+              <FaGithub className="mr-2 text-lg sm:text-xl text-gray-800" />
               Sign up with GitHub
             </button>
           </div>

@@ -37,20 +37,35 @@ const VerifyEmail = () => {
   }, [token, navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md text-center">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
+      <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-sm sm:max-w-md text-center">
         {status === 'pending' && (
-          <p className="text-gray-600 animate-pulse">🔄 Verifying your email...</p>
+          <div className="flex flex-col items-center space-y-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p className="text-gray-600 text-sm sm:text-base">🔄 Verifying your email...</p>
+          </div>
         )}
         {status === 'success' && (
-          <p className="text-green-600 font-semibold">
-            ✅ {message}
-            <br />
-            Redirecting to login...
-          </p>
+          <div className="flex flex-col items-center space-y-4">
+            <div className="text-green-500 text-4xl">✅</div>
+            <p className="text-green-600 font-semibold text-sm sm:text-base">
+              {message}
+              <br />
+              <span className="text-xs sm:text-sm font-normal">Redirecting to login...</span>
+            </p>
+          </div>
         )}
         {status === 'error' && (
-          <p className="text-red-500 font-semibold">❌ {message}</p>
+          <div className="flex flex-col items-center space-y-4">
+            <div className="text-red-500 text-4xl">❌</div>
+            <p className="text-red-500 font-semibold text-sm sm:text-base">{message}</p>
+            <button
+              onClick={() => navigate('/login')}
+              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm sm:text-base"
+            >
+              Go to Login
+            </button>
+          </div>
         )}
       </div>
     </div>

@@ -145,15 +145,15 @@ const handleOAuthLogin = async (providerName) => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-purple-600 mb-6">LogIn</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
+      <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-sm sm:max-w-md">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center text-purple-600 mb-6">LogIn</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-5" autoComplete="off">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5" autoComplete="off">
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Email</label>
+            <label className="block text-gray-700 font-medium mb-1 text-sm sm:text-base">Email</label>
             <div className="flex items-center border border-gray-300 rounded-md px-3">
-              <FaEnvelope className="text-gray-400" />
+              <FaEnvelope className="text-gray-400 text-sm sm:text-base" />
               <input
                 id="email"
                 type="email"
@@ -162,16 +162,16 @@ const handleOAuthLogin = async (providerName) => {
                 onChange={handleChange}
                 autoComplete="off"
                 required
-                className="w-full px-2 py-2 outline-none"
+                className="w-full px-2 py-2 outline-none text-sm sm:text-base"
                 placeholder="bhaskar@gmail.com"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Password</label>
+            <label className="block text-gray-700 font-medium mb-1 text-sm sm:text-base">Password</label>
             <div className="flex items-center border border-gray-300 rounded-md px-3">
-              <FaLock className="text-gray-400" />
+              <FaLock className="text-gray-400 text-sm sm:text-base" />
               <input
                 id="password"
                 type="password"
@@ -180,7 +180,7 @@ const handleOAuthLogin = async (providerName) => {
                 onChange={handleChange}
                 autoComplete="new-password"
                 required
-                className="w-full px-2 py-2 outline-none"
+                className="w-full px-2 py-2 outline-none text-sm sm:text-base"
                 placeholder="Enter password"
               />
             </div>
@@ -189,14 +189,14 @@ const handleOAuthLogin = async (providerName) => {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full flex justify-center items-center gap-2 
+            className={`w-full flex justify-center items-center gap-2 py-2 sm:py-3 rounded-md font-semibold transition text-sm sm:text-base
               ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-purple-500'} 
-              text-white py-2 rounded-md font-semibold hover:opacity-90 transition`}
+              text-white hover:opacity-90`}
           >
             {loading ? (
               <>
                 <svg
-                  className="w-5 h-5 animate-spin text-white"
+                  className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -224,14 +224,14 @@ const handleOAuthLogin = async (providerName) => {
         </form>
 
         <div className="text-center mt-4">
-          <Link to="/forgot-password" className="text-sm text-gray-600 hover:underline">
+          <Link to="/forgot-password" className="text-xs sm:text-sm text-gray-600 hover:underline">
             Forgot password?
           </Link>
         </div>
 
         <div className="text-center mt-2">
-          <p className="text-sm text-gray-700">
-            Don’t have an account?{' '}
+          <p className="text-xs sm:text-sm text-gray-700">
+            Don't have an account?{' '}
             <Link to="/register" className="text-blue-600 font-medium hover:underline">
               Sign up
             </Link>
@@ -239,20 +239,20 @@ const handleOAuthLogin = async (providerName) => {
         </div>
 
        <div className="mt-6">
-        <p className="text-center text-sm text-gray-500 mb-4">Or log in with:</p>
+        <p className="text-center text-xs sm:text-sm text-gray-500 mb-4">Or log in with:</p>
         <div className="space-y-3">
           <button
             onClick={() => handleOAuthLogin('google')}
-            className="flex items-center justify-center w-full border border-gray-300 rounded-full py-2 text-sm font-semibold text-gray-800 shadow-sm hover:shadow-md transition hover:bg-red-50"
+            className="flex items-center justify-center w-full border border-gray-300 rounded-full py-2 sm:py-3 text-xs sm:text-sm font-semibold text-gray-800 shadow-sm hover:shadow-md transition hover:bg-red-50"
           >
-            <FaGoogle className="mr-2 text-xl text-[#DB4437]" />
+            <FaGoogle className="mr-2 text-lg sm:text-xl text-[#DB4437]" />
             Sign in with Google
           </button>
           <button
             onClick={() => handleOAuthLogin('github')}
-            className="flex items-center justify-center w-full border border-gray-300 rounded-full py-2 text-sm font-semibold text-gray-800 shadow-sm hover:shadow-md transition hover:bg-gray-100"
+            className="flex items-center justify-center w-full border border-gray-300 rounded-full py-2 sm:py-3 text-xs sm:text-sm font-semibold text-gray-800 shadow-sm hover:shadow-md transition hover:bg-gray-100"
           >
-            <FaGithub className="mr-2 text-xl text-gray-800" />
+            <FaGithub className="mr-2 text-lg sm:text-xl text-gray-800" />
             Sign in with GitHub
           </button>
         </div>
@@ -264,7 +264,7 @@ const handleOAuthLogin = async (providerName) => {
             <button
               onClick={handleResend}
               disabled={resending}
-              className="text-blue-600 hover:underline font-medium"
+              className="text-blue-600 hover:underline font-medium text-xs sm:text-sm"
             >
               {resending ? 'Resending...' : 'Resend Verification Email'}
             </button>
