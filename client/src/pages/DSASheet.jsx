@@ -429,33 +429,53 @@ const DSASheet = () => {
     <div className={`min-h-screen bg-slate-50 ${darkBg}`}>
       <div className="container mx-auto px-4 py-6 md:px-6 md:py-8 lg:px-8 lg:py-10">
         {/* Header */}
-        <DSASheetHeader
-          easyProgress={easyProgress}
-          easyCompleted={easyCompleted}
-          easyQuestions={easyQuestions}
-          mediumProgress={mediumProgress}
-          mediumCompleted={mediumCompleted}
-          mediumQuestions={mediumQuestions}
-          hardProgress={hardProgress}
-          hardCompleted={hardCompleted}
-          hardQuestions={hardQuestions}
-          progress={progress}
-          completed={completed}
-          total={total}
-          darkMode={darkMode}
-          darkText={darkText}
-          compact={true}
-        />
+        <div className={`mb-8 p-3 md:p-6 lg:p-4 bg-gradient-to-r from-blue-100 to-white dark:from-gray-800 dark:to-gray-700 rounded-2xl shadow-md ${darkCardBg} ${darkBorder} max-w-full lg:max-w-5xl mx-auto`}>
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            {/* Title */}
+            <div className="text-center lg:text-left ml-0 lg:ml-10">
+              <h1 className="text-2xl md:text-3xl lg:text-5xl font-extrabold text-indigo-700 dark:text-indigo-400 flex items-center justify-center lg:justify-start gap-2 tracking-tight">
+                 <span>DSA Sheet</span>
+              </h1>
+              <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 tracking-wide mt-1">
+                Track your completion and revisit daily
+              </p>
+            </div>
+
+            {/* Progress Circles */}
+            <div className="flex justify-center mr-0 lg:mr-5 mt-5">
+              <ProgressCircles
+                easyProgress={easyProgress}
+                mediumProgress={mediumProgress}
+                hardProgress={hardProgress}
+                progress={progress}
+                easyCompleted={easyCompleted}
+                easyQuestions={easyQuestions}
+                mediumCompleted={mediumCompleted}
+                mediumQuestions={mediumQuestions}
+                hardCompleted={hardCompleted}
+                hardQuestions={hardQuestions}
+                completed={completed}
+                total={total}
+                darkMode={darkMode}
+                darkText={darkText}
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Filter Tabs */}
-        <FilterTabs
-          filter={filter}
-          setFilter={setFilter}
-          difficultyFilter={difficultyFilter}
-          setDifficultyFilter={setDifficultyFilter}
-          setSearchQuery={setSearchQuery}
-          darkMode={darkMode}
-        />
+        <div className="w-full overflow-x-auto">
+          <div className="flex flex-nowrap gap-2 md:gap-4 items-center">
+            <FilterTabs
+              filter={filter}
+              setFilter={setFilter}
+              difficultyFilter={difficultyFilter}
+              setDifficultyFilter={setDifficultyFilter}
+              setSearchQuery={setSearchQuery}
+              darkMode={darkMode}
+            />
+          </div>
+        </div>
 
         {/* Search Bar */}
         <SearchBar
