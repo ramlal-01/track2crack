@@ -15,7 +15,7 @@ const FilterTabs = ({
       darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
     }`}>
       {/* Filter Tabs */}
-      <div className="flex flex-wrap items-center gap-2 md:gap-3">
+      <div className="flex flex-wrap justify-center items-center gap-2 md:gap-6 px-2">
         {tabs.map((tab) => (
           <button
             key={tab}
@@ -24,7 +24,7 @@ const FilterTabs = ({
               setFilter(tab);
               setSearchQuery(''); // Clear search when changing tabs
             }}
-            className={`px-3 py-1.5 md:px-4 md:py-2.5 text-sm md:text-base font-medium rounded-full border-2 transition-all duration-200 transform hover:scale-105 ${
+            className={`px-2.5 py-1 md:px-1 md:py-1 text-xs md:text-sm font-medium rounded-full border-2 transition-all duration-200 transform hover:scale-105 ${
               tab === filter
                 ? "bg-indigo-600 text-white border-indigo-600 shadow-lg scale-105 dark:bg-indigo-700 dark:border-indigo-800"
                 : "bg-transparent text-gray-700 border-gray-300 hover:bg-indigo-50 hover:border-indigo-300 hover:text-indigo-700 dark:bg-transparent dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-500"

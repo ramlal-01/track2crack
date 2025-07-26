@@ -70,7 +70,7 @@ const QuestionRow = ({
                 className="w-5 h-5 mt-0.5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 flex-shrink-0"
               />
               <h3 
-                className={`font-medium text-base leading-tight cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ${progress?.isCompleted ? 'line-through opacity-75' : ''}`}
+                className={`font-medium text-base leading-tight cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ${progress?.isCompleted ? 'font-bold text-green-600 dark:text-green-400' : ''}`}
                 onClick={handleQuestionClick}
               >
                 {question.title}
@@ -177,7 +177,7 @@ const QuestionRow = ({
           <div className="col-span-4">
             <span 
               className={`font-medium text-sm cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ${
-                progress?.isCompleted ? 'line-through opacity-75' : ''
+                progress?.isCompleted ? 'font-bold text-green-600 dark:text-green-400' : ''
               }`}
               onClick={handleQuestionClick}
             >
