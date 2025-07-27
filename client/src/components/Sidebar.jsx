@@ -106,27 +106,11 @@ const Sidebar = () => {
         {/* Sidebar Content - Fixed width wrapper */}
         <div className="w-72 h-full flex flex-col transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
           <div className="flex-1 flex flex-col p-5 overflow-y-auto">
-            {/* Top section with Dashboard and Close button */}
-            <div className="flex items-center justify-between mb-4">
-              {/* Dashboard */}
-              <button 
-                onClick={() => {
-                  navigate("/dashboard");
-                  closeSidebar();
-                }}
-                className="flex-1 flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
-              >
-                <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 shadow-md group-hover:shadow-lg transition-all">
-                  <ChartBarIcon className="w-5 h-5 text-white" />
-                </div>
-                <span className="font-medium">Dashboard</span>
-                <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-transform group-hover:translate-x-1" />
-              </button>
-
-              {/* Cross Icon - Aligned with Dashboard button */}
+            {/* Cross Icon - Positioned slightly above Dashboard button */}
+            <div className="flex justify-end mb-2">
               <button 
                 onClick={closeSidebar}
-                className="p-2 ml-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+                className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
                 aria-label="Close sidebar"
               >
                 <XMarkIcon className="w-5 h-5" />
@@ -135,6 +119,21 @@ const Sidebar = () => {
 
           {/* Navigation */}
           <nav className="flex-1 flex flex-col gap-4">
+            {/* Dashboard */}
+            <button 
+              onClick={() => {
+                navigate("/dashboard");
+                closeSidebar();
+              }}
+              className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
+            >
+              <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 shadow-md group-hover:shadow-lg transition-all">
+                <ChartBarIcon className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-medium">Dashboard</span>
+              <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-transform group-hover:translate-x-1" />
+            </button>
+
             {/* Divider */}
             <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
 
