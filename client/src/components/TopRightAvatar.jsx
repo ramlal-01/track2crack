@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +26,8 @@ const TopRightAvatar = () => {
   const userId = localStorage.getItem("userId");
   const [avatarURL, setAvatarURL] = useState(null);
   const [user, setUser] = useState(null);
+  const notificationRef = useRef(null);
+  const overlayRef = useRef(null);
 
 
   // Generate a stable avatar URL based on user email
@@ -135,6 +137,23 @@ const fetchNotifications = async (userId, page = 1) => {
     return () => clearInterval(interval);
   }, [userId]);
 
+  // Click outside to close notifications
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setShowNotifications(false);
+      }
+      if (overlayRef.current && !overlayRef.current.contains(event.target)) {
+        setShowMobileNotificationOverlay(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -179,7 +198,7 @@ const handleSettingsClick = () => {
       {/* Mobile Notification Overlay */}
       {showMobileNotificationOverlay && (
         <div className="fixed inset-0 z-[100] bg-white/10 dark:bg-black/10 backdrop-blur-md flex items-start justify-center pt-4 px-4 animate-in fade-in duration-300">
-          <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/50 w-full max-w-md max-h-[85vh] overflow-hidden animate-in slide-in-from-top-4 duration-300">
+          <div ref={overlayRef} className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/50 w-full max-w-md max-h-[85vh] overflow-hidden animate-in slide-in-from-top-4 duration-300">
             {/* Header */}
             <div className="px-6 py-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white relative overflow-hidden">
               <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
@@ -228,13 +247,11 @@ const handleSettingsClick = () => {
                             ? "bg-gray-100 dark:bg-gray-700" 
                             : "bg-gradient-to-br from-indigo-400 to-purple-500"
                         }`}>
-                          <span className={`text-sm font-bold ${
+                          <BellIcon className={`h-6 w-6 ${
                             notification.isSeen 
                               ? "text-gray-600 dark:text-gray-300" 
                               : "text-white"
-                          }`}>
-                            {notification.type?.charAt(0)?.toUpperCase() || "📌"}
-                          </span>
+                          }`} />
                         </div>
                       </div>
                       <div className="min-w-0 flex-1">
@@ -309,7 +326,7 @@ const handleSettingsClick = () => {
       )}
       
       {/* Notification Bell - Hide on mobile, will be moved to dropdown */}
-      <div className="relative hidden md:block">
+      <div className="relative hidden md:block" ref={notificationRef}>
         <button onClick={() => setShowNotifications(!showNotifications)} className="p-3 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/50 dark:border-gray-600/50 hover:shadow-xl hover:scale-105 transition-all duration-200 relative group" title="Notifications">
           <BellIcon className="h-5 w-5 text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
           {notifications.some(n => !n.isSeen) && (
@@ -366,13 +383,11 @@ const handleSettingsClick = () => {
                             ? "bg-gray-100 dark:bg-gray-700" 
                             : "bg-gradient-to-br from-indigo-400 to-purple-500"
                         }`}>
-                          <span className={`text-sm font-bold ${
+                          <BellIcon className={`h-6 w-6 ${
                             notification.isSeen 
                               ? "text-gray-600 dark:text-gray-300" 
                               : "text-white"
-                          }`}>
-                            {notification.type?.charAt(0)?.toUpperCase() || "📌"}
-                          </span>
+                          }`} />
                         </div>
                       </div>
                       <div className="min-w-0 flex-1">
