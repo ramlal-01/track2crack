@@ -6,7 +6,7 @@ import { FaFire } from "react-icons/fa";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import SubjectCard from "../components/SubjectCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import SubjectProgressChart from "../components/SubjectProgressChart";
 import { useEffect, useState } from "react";
 import API from "../api/api"; // your API utility
@@ -15,6 +15,7 @@ import { Navigate } from "react-router-dom";
 const Dashboard = () => {
   const { theme } = useTheme(); // dark / light 
   const navigate = useNavigate();
+  const location = useLocation();
   const user = JSON.parse(localStorage.getItem("user"));
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -40,8 +41,7 @@ const [quizProgress, setQuizProgress] = useState({
   CN: 0
 });
 
-
-useEffect(() => {
+const fetchProgress = async () => {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
   
@@ -51,175 +51,181 @@ useEffect(() => {
     return;
   }
 
-  const fetchProgress = async () => {
-    setIsLoading(true);
-    try {
-      // 1. First fetch all topics to create ID-subject mapping
-      const [
-        { data: javaTopics = {} },
-        { data: oopsTopics = {} },
-        { data: dsaTheoryTopics = {} },
-        { data: osTopics = {} },
-        { data: dbmsTopics = {} },
-        { data: cnTopics = {} }
-      ] = await Promise.all([
-        API.get('/theory/topics?subject=Java'),
-        API.get('/theory/topics?subject=OOPS'),
-        API.get('/theory/topics?subject=DSA'),
-        API.get('/core/topics?subject=OS'),
-        API.get('/core/topics?subject=DBMS'),
-        API.get('/core/topics?subject=CN')
-      ]);
+  setIsLoading(true);
+  try {
+    // 1. First fetch all topics to create ID-subject mapping
+    const [
+      { data: javaTopics = {} },
+      { data: oopsTopics = {} },
+      { data: dsaTheoryTopics = {} },
+      { data: osTopics = {} },
+      { data: dbmsTopics = {} },
+      { data: cnTopics = {} }
+    ] = await Promise.all([
+      API.get('/theory/topics?subject=Java'),
+      API.get('/theory/topics?subject=OOPS'),
+      API.get('/theory/topics?subject=DSA'),
+      API.get('/core/topics?subject=OS'),
+      API.get('/core/topics?subject=DBMS'),
+      API.get('/core/topics?subject=CN')
+    ]);
 
-      // Create ID to subject mapping
-      const topicSubjectMap = {};
-      
-      // Add theory topics
-      [javaTopics, oopsTopics, dsaTheoryTopics].forEach(topicGroup => {
-        topicGroup.topics?.forEach(topic => {
-          topicSubjectMap[topic._id] = topic.subject;
-        });
+    // Create ID to subject mapping
+    const topicSubjectMap = {};
+    
+    // Add theory topics
+    [javaTopics, oopsTopics, dsaTheoryTopics].forEach(topicGroup => {
+      topicGroup.topics?.forEach(topic => {
+        topicSubjectMap[topic._id] = topic.subject;
       });
+    });
 
-      // Add core topics
-      [osTopics, dbmsTopics, cnTopics].forEach(topicGroup => {
-        topicGroup.topics?.forEach(topic => {
-          topicSubjectMap[topic._id] = topic.subject;
-        });
+    // Add core topics
+    [osTopics, dbmsTopics, cnTopics].forEach(topicGroup => {
+      topicGroup.topics?.forEach(topic => {
+        topicSubjectMap[topic._id] = topic.subject;
       });
+    });
 
-      // 2. Now fetch progress data
-      const [
-        { data: theoryProgress = {} },
-        { data: coreProgress = {} },
-        { data: dsaProgress = {} },
-        { data: dsaQuestions = {} }
-      ] = await Promise.all([
-        API.get(`/theory/progress/${userId}`),
-        API.get(`/core/progress/${userId}`),
-        API.get(`/dsa/progress/${userId}`),
-        API.get('/dsa/questions')
-      ]);
+    // 2. Now fetch progress data
+    const [
+      { data: theoryProgress = {} },
+      { data: coreProgress = {} },
+      { data: dsaProgress = {} },
+      { data: dsaQuestions = {} }
+    ] = await Promise.all([
+      API.get(`/theory/progress/${userId}`),
+      API.get(`/core/progress/${userId}`),
+      API.get(`/dsa/progress/${userId}`),
+      API.get('/dsa/questions')
+    ]);
 
-      // Add subject to progress items
-      const theoryWithSubjects = theoryProgress.progress?.map(item => ({
-        ...item,
-        subject: topicSubjectMap[item.topicId]
-      })) || [];
+    // Add subject to progress items
+    const theoryWithSubjects = theoryProgress.progress?.map(item => ({
+      ...item,
+      subject: topicSubjectMap[item.topicId]
+    })) || [];
 
-      const coreWithSubjects = coreProgress.progress?.map(item => ({
-        ...item,
-        subject: topicSubjectMap[item.coreTopicId]
-      })) || [];
+    const coreWithSubjects = coreProgress.progress?.map(item => ({
+      ...item,
+      subject: topicSubjectMap[item.coreTopicId]
+    })) || [];
 
-      const calculateProgress = (items, total) => {
-        if (!Array.isArray(items)) return 0;
-        const completed = items.filter(i => i?.isCompleted).length;
-        return total > 0 ? Math.round((completed / total) * 100) : 0;
-      };
+    const calculateProgress = (items, total) => {
+      if (!Array.isArray(items)) return 0;
+      const completed = items.filter(i => i?.isCompleted).length;
+      return total > 0 ? Math.round((completed / total) * 100) : 0;
+    };
 
-      const newProgress = {
-        Java: calculateProgress(
-          theoryWithSubjects.filter(p => p?.subject === 'Java'),
-          javaTopics.count || 0
-        ),
-        OOPS: calculateProgress(
-          theoryWithSubjects.filter(p => p?.subject === 'OOPS'),
-          oopsTopics.count || 0
-        ),
-        DSA: calculateProgress(
-          theoryWithSubjects.filter(p => p?.subject === 'DSA'),
-          dsaTheoryTopics.count || 0
-        ),
-        OS: calculateProgress(
-          coreWithSubjects.filter(p => p?.subject === 'OS'),
-          osTopics.count || 0
-        ),
-        DBMS: calculateProgress(
-          coreWithSubjects.filter(p => p?.subject === 'DBMS'),
-          dbmsTopics.count || 0
-        ),
-        CN: calculateProgress(
-          coreWithSubjects.filter(p => p?.subject === 'CN'),
-          cnTopics.count || 0
-        ),
-        DSASheet: calculateProgress(
-          dsaProgress.progress || [],
-          dsaQuestions.count || 0
-        )
-      };
+    const newProgress = {
+      Java: calculateProgress(
+        theoryWithSubjects.filter(p => p?.subject === 'Java'),
+        javaTopics.count || 0
+      ),
+      OOPS: calculateProgress(
+        theoryWithSubjects.filter(p => p?.subject === 'OOPS'),
+        oopsTopics.count || 0
+      ),
+      DSA: calculateProgress(
+        theoryWithSubjects.filter(p => p?.subject === 'DSA'),
+        dsaTheoryTopics.count || 0
+      ),
+      OS: calculateProgress(
+        coreWithSubjects.filter(p => p?.subject === 'OS'),
+        osTopics.count || 0
+      ),
+      DBMS: calculateProgress(
+        coreWithSubjects.filter(p => p?.subject === 'DBMS'),
+        dbmsTopics.count || 0
+      ),
+      CN: calculateProgress(
+        coreWithSubjects.filter(p => p?.subject === 'CN'),
+        cnTopics.count || 0
+      ),
+      DSASheet: calculateProgress(
+        dsaProgress.progress || [],
+        dsaQuestions.count || 0
+      )
+    };
 
+    setProgress(newProgress);
 
-      setProgress(newProgress);
+  } catch (err) {
+    console.error("Error:", err);
+    setError("Failed to load progress");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-    } catch (err) {
-      console.error("Error:", err);
-      setError("Failed to load progress");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  fetchProgress();
-}, []);
-
-
-
-
-
-useEffect(() => {
+const fetchQuizProgress = async () => {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
 
   if (!userId || !token) return;
 
-  const fetchQuizProgress = async () => {
-    try {
-      const quizRequests = [
-        API.get('/quiz/progress', {
-           
-          params: { subject: 'Java', source: 'Theory' }
-        }),
-        API.get('/quiz/progress', {
-           
-          params: { subject: 'OOPS', source: 'Theory' }
-        }),
-        API.get('/quiz/progress', {
-           
-          params: { subject: 'DSA', source: 'Theory' }
-        }),
-        API.get('/quiz/progress', {
-          
-          params: { subject: 'OS', source: 'Core' }
-        }),
-        API.get('/quiz/progress', {
-           
-          params: { subject: 'DBMS', source: 'Core' }
-        }),
-        API.get('/quiz/progress', {
-           
-          params: { subject: 'CN', source: 'Core' }
-        })
-      ];
+  try {
+    const quizRequests = [
+      API.get('/quiz/progress', {
+         
+        params: { subject: 'Java', source: 'Theory' }
+      }),
+      API.get('/quiz/progress', {
+         
+        params: { subject: 'OOPS', source: 'Theory' }
+      }),
+      API.get('/quiz/progress', {
+         
+        params: { subject: 'DSA', source: 'Theory' }
+      }),
+      API.get('/quiz/progress', {
+        
+        params: { subject: 'OS', source: 'Core' }
+      }),
+      API.get('/quiz/progress', {
+         
+        params: { subject: 'DBMS', source: 'Core' }
+      }),
+      API.get('/quiz/progress', {
+         
+        params: { subject: 'CN', source: 'Core' }
+      })
+    ];
 
-      const quizResponses = await Promise.all(quizRequests);
+    const quizResponses = await Promise.all(quizRequests);
 
-      setQuizProgress({
-        Java: quizResponses[0].data.progressPercent || 0,
-        OOPS: quizResponses[1].data.progressPercent || 0,
-        DSA: quizResponses[2].data.progressPercent || 0,
-        OS: quizResponses[3].data.progressPercent || 0,
-        DBMS: quizResponses[4].data.progressPercent || 0,
-        CN: quizResponses[5].data.progressPercent || 0
-      });
+    setQuizProgress({
+      Java: quizResponses[0].data.progressPercent || 0,
+      OOPS: quizResponses[1].data.progressPercent || 0,
+      DSA: quizResponses[2].data.progressPercent || 0,
+      OS: quizResponses[3].data.progressPercent || 0,
+      DBMS: quizResponses[4].data.progressPercent || 0,
+      CN: quizResponses[5].data.progressPercent || 0
+    });
 
-    } catch (err) {
-      console.error("❌ Quiz Progress Fetch Failed:", err);
+  } catch (err) {
+    console.error("❌ Quiz Progress Fetch Failed:", err);
+  }
+};
+
+// Initial load and refresh on navigation back to dashboard
+useEffect(() => {
+  fetchProgress();
+  fetchQuizProgress();
+}, [location.pathname]); // Refresh whenever the pathname changes
+
+// Refresh data when user comes back to the tab (optional enhancement)
+useEffect(() => {
+  const handleVisibilityChange = () => {
+    if (!document.hidden && location.pathname === '/dashboard') {
+      fetchProgress();
+      fetchQuizProgress();
     }
   };
 
-  fetchQuizProgress();
-}, []);
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+  return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+}, [location.pathname]);
 
 
   return (
