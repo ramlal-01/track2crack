@@ -158,7 +158,7 @@ const AppContent = () => {
         <Sidebar />
         
         {/* Main content area - takes full width when sidebar is closed */}
-        <div className="flex-1 w-full">
+        <div className="flex-1 w-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] transform-gpu">
           <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />

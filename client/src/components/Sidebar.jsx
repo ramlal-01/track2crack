@@ -91,7 +91,7 @@ const Sidebar = () => {
     <>
       {/* Sidebar Overlay */}
       <div 
-        className={`fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden transition-all duration-300 ease-in-out ${
+        className={`fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
           isSidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`} 
         onClick={closeSidebar}
@@ -99,12 +99,12 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed lg:sticky top-[72px] left-0 z-40 flex-shrink-0 h-[calc(100vh-72px)] flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
+        className={`fixed lg:sticky top-[72px] left-0 z-40 flex-shrink-0 h-[calc(100vh-72px)] flex flex-col transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] transform-gpu will-change-[width,transform] bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
           isSidebarOpen ? 'w-72 translate-x-0' : 'w-0 -translate-x-full overflow-hidden'
         }`}
       >
         {/* Sidebar Content - Fixed width wrapper */}
-        <div className="w-72 h-full flex flex-col">
+        <div className="w-72 h-full flex flex-col transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
           {/* Cross Icon - Top Right Corner - Show on all screen sizes */}
           <div className="flex justify-end p-4">
             <button 
