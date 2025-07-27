@@ -103,7 +103,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed top-[72px] z-40 w-72 h-[calc(100vh-72px-96px)] flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
+        className={`fixed top-[72px] lg:top-[72px] bottom-0 left-0 z-40 w-72 flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 sidebar-full-height ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -119,9 +119,9 @@ const Sidebar = () => {
         )}
          
 
-        <div className="flex-1 flex flex-col p-5 overflow-y-auto sidebar-scroll">
+        <div className="flex-1 flex flex-col p-5 overflow-y-auto sidebar-scroll sidebar-content relative">
           {/* Navigation */}
-          <nav className="flex-1 flex flex-col gap-4 pb-4">
+          <nav className="flex-1 flex flex-col gap-4">
             {/* Dashboard */}
             <button 
               onClick={() => {
@@ -267,23 +267,8 @@ const Sidebar = () => {
             </button>
           </nav>
 
-          {/* Bottom spacer */}
-          <div className="flex-1"></div>
-
-          {/* Settings
-          <button 
-            onClick={() => {
-              navigate("/dashboard/settings");
-              setIsSidebarOpen(false);
-            }}
-            className="flex items-center px-4 py-3 mt-4 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group border border-gray-200 dark:border-gray-700"
-          >
-            <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-gray-500 to-gray-600 shadow-md group-hover:shadow-lg transition-all">
-              <Cog6ToothIcon className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-medium">Settings</span>
-            <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-transform group-hover:translate-x-1" />
-          </button> */}
+          {/* Bottom fade gradient */}
+          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white dark:from-gray-900 to-transparent pointer-events-none"></div>
         </div>
       </aside>
     </>

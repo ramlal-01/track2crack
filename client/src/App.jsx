@@ -151,7 +151,7 @@ const shouldShowSidebar = dashboardRoutes.includes(location.pathname);
 
       {dashboardRoutes.includes(location.pathname) && <DashboardHeader />}
       
-      <div className="flex-grow relative">
+      <div className="flex-1 relative min-h-0">
         {shouldShowSidebar && <Sidebar />}
         <Routes>
           <Route path="/" element={<Home />} />
