@@ -230,11 +230,11 @@ useEffect(() => {
         
 
           {/* Center - Welcome Message */}
-            <div className="hidden sm:block mb-6 lg:mb-10">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
+            <div className="mb-4 sm:mb-6 lg:mb-10">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 dark:text-white">
                 Welcome back, <span className="text-purple-700 dark:text-blue-300">{user?.name || "Coder"}</span>
               </h2>
-              <p className="text-sm sm:text-base italic text-indigo-700 dark:text-gray-400">
+              <p className="text-xs sm:text-sm lg:text-base italic text-indigo-700 dark:text-gray-400">
                 "Track your progress. Crack your placements."
               </p>
             </div>
