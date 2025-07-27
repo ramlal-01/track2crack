@@ -12,10 +12,11 @@ export const useSidebar = () => {
 };
 
 export const SidebarProvider = ({ children }) => {
+  // Initialize sidebar as closed, especially on mobile
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
 
-  // Define which pages should have sidebar open by default
+  // Define which pages should have sidebar open by default on desktop only
   const defaultOpenPages = ['/dashboard'];
   
   // Define all dashboard/auth pages where sidebar should be available
@@ -36,14 +37,37 @@ export const SidebarProvider = ({ children }) => {
     '/quiz/history'
   ];
 
-  // Set default sidebar state based on current page
+  // Function to check if screen is mobile
+  const isMobile = () => {
+    return typeof window !== 'undefined' && window.innerWidth < 1024; // lg breakpoint in Tailwind
+  };
+
+  // Set default sidebar state based on current page and screen size
   useEffect(() => {
-    if (defaultOpenPages.includes(location.pathname)) {
-      setIsSidebarOpen(true);
-    } else if (dashboardPages.includes(location.pathname)) {
+    // Always close sidebar on mobile, regardless of page
+    if (isMobile()) {
       setIsSidebarOpen(false);
+    } else {
+      // On desktop, open sidebar for default pages, close for others
+      if (defaultOpenPages.includes(location.pathname)) {
+        setIsSidebarOpen(true);
+      } else if (dashboardPages.includes(location.pathname)) {
+        setIsSidebarOpen(false);
+      }
     }
   }, [location.pathname]);
+
+  // Handle window resize to close sidebar on mobile
+  useEffect(() => {
+    const handleResize = () => {
+      if (isMobile() && isSidebarOpen) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isSidebarOpen]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(prev => !prev);
