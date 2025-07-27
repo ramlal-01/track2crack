@@ -31,13 +31,15 @@ import Feedback from './pages/FeedbackPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './context/AuthContext';
 import DashboardHeader from './components/DashboardHeader';
-import { SidebarProvider } from './context/SidebarContext';
-import Sidebar from "./components/Sidebar";
+import { SidebarProvider, useSidebar } from './context/SidebarContext';
+import Sidebar from './components/Sidebar';
+
+
 const App = () => {
   return (
     <BrowserRouter>
-     <SidebarProvider>
-      <AppContent />
+      <SidebarProvider>
+        <AppContent />
       </SidebarProvider>
     </BrowserRouter>
   );
@@ -46,6 +48,7 @@ const App = () => {
 const AppContent = () => {
   const location = useLocation();
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const { isSidebarOpen, isDashboardPage } = useSidebar();
 
  
 
@@ -143,16 +146,20 @@ const AppContent = () => {
   "/quiz/history"
 ];
 
-const shouldShowSidebar = dashboardRoutes.includes(location.pathname);
 
   return (
     <div className="flex flex-col min-h-screen">
       {showNavbar && <Navbar  />}
 
       {dashboardRoutes.includes(location.pathname) && <DashboardHeader />}
-      {shouldShowSidebar && <Sidebar />}
-      <div className="flex-grow">
-        <Routes>
+
+      <div className="flex flex-grow relative">
+        {/* Sidebar - only shows on dashboard pages */}
+        <Sidebar />
+        
+        {/* Main content area - takes full width when sidebar is closed */}
+        <div className="flex-1 w-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] transform-gpu">
+          <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -165,9 +172,9 @@ const shouldShowSidebar = dashboardRoutes.includes(location.pathname);
           {/* Theory Routes */}
           <Route path="/dashboard/theory/dsa" element={ <ProtectedRoute><DSA /> </ProtectedRoute>} />
           <Route path="/dashboard/theory/java" element={ <ProtectedRoute><Java /> </ProtectedRoute>} />
-          <Route path="/dashboard/theory/oops" element={  <ProtectedRoute> <OOPS /></ProtectedRoute>  } />
+          <Route path="/dashboard/theory/oops" element={  <OOPS />  } />
           {/* Quiz Route */}
-          <Route path="/quiz" element={ <ProtectedRoute>  <Quiz /> </ProtectedRoute> } />
+          <Route path="/quiz" element={   <Quiz />  } />
           <Route path="/quiz/history" element={<ProtectedRoute><QuizHistory /> </ProtectedRoute>} />
 
           {/* Core Routes and Core Quiz Routes  */}
@@ -185,7 +192,8 @@ const shouldShowSidebar = dashboardRoutes.includes(location.pathname);
           <Route path="/" element={<Navigate to="/dashboard" replace />} />  
           <Route path="/dashboard/feedback" element = {<Feedback />} />
 
-        </Routes>
+          </Routes>
+        </div>
       </div>
       <Footer />
 

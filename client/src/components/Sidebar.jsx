@@ -6,6 +6,7 @@ import {
   ServerIcon,
   BookOpenIcon,
   LifebuoyIcon,
+  Bars3Icon,
   XMarkIcon,
   TvIcon,
   CircleStackIcon,
@@ -16,7 +17,7 @@ import {
   DocumentTextIcon,
   PuzzlePieceIcon,
   LightBulbIcon,
-  Cog6ToothIcon
+  Cog6ToothIcon // Added the missing import
 } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
 import API from "../api/api";
@@ -30,7 +31,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const { theme } = useTheme();
-  const { isSidebarOpen, closeSidebar } = useSidebar();
+  const { isSidebarOpen, closeSidebar, isDashboardPage } = useSidebar();
 
   useEffect(() => {
     const id = localStorage.getItem("userId");
@@ -52,11 +53,7 @@ const Sidebar = () => {
       case "DBMS": navigate("/dashboard/core/dbms"); break;
       case "OS": navigate("/dashboard/core/os"); break;
     }
-    
-    // Close sidebar on mobile after navigation
-    if (window.innerWidth < 1024) {
-      closeSidebar();
-    }
+    closeSidebar(); // Close sidebar on mobile after navigation
   };
 
   const handleTheoryClick = async (subject) => {
@@ -72,11 +69,7 @@ const Sidebar = () => {
       case "Java": navigate("/dashboard/theory/java"); break;
       case "OOPS": navigate("/dashboard/theory/oops"); break;
     }
-    
-    // Close sidebar on mobile after navigation
-    if (window.innerWidth < 1024) {
-      closeSidebar();
-    }
+    closeSidebar(); // Close sidebar on mobile after navigation
   };
 
   const coreIcons = {
@@ -91,11 +84,14 @@ const Sidebar = () => {
     "OOPS": <CubeIcon className="w-5 h-5 mr-3 text-indigo-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-300" />
   };
 
+  // Don't render sidebar if not on dashboard pages
+  if (!isDashboardPage) return null;
+
   return (
     <>
-      {/* Mobile Overlay */}
+      {/* Sidebar Overlay */}
       <div 
-        className={`fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden transition-all duration-300 ease-in-out ${
+        className={`fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
           isSidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`} 
         onClick={closeSidebar}
@@ -103,32 +99,31 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed top-[72px] z-40 w-72 h-[calc(100vh-72px)] flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed lg:sticky top-[72px] left-0 z-40 flex-shrink-0 h-[calc(100vh-72px)] flex flex-col transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] transform-gpu will-change-[width,transform] bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
+          isSidebarOpen ? 'w-72 translate-x-0' : 'w-0 -translate-x-full overflow-hidden'
         }`}
       >
-        {/* Close button - Only visible when sidebar is open */}
-        {isSidebarOpen && (
-          <button
-            onClick={closeSidebar}
-            className="absolute top-4 right-4 z-50 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
-            aria-label="Close sidebar"
-          >
-            <XMarkIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-          </button>
-        )}
-         
+        {/* Sidebar Content - Fixed width wrapper */}
+        <div className="w-72 h-full flex flex-col transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+          <div className="flex-1 flex flex-col p-5 overflow-y-auto">
+            {/* Cross Icon - Positioned slightly above Dashboard button */}
+            <div className="flex justify-end mb-2">
+              <button 
+                onClick={closeSidebar}
+                className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+                aria-label="Close sidebar"
+              >
+                <XMarkIcon className="w-5 h-5" />
+              </button>
+            </div>
 
-        <div className="flex-1 flex flex-col p-5 overflow-y-auto">
           {/* Navigation */}
           <nav className="flex-1 flex flex-col gap-4">
             {/* Dashboard */}
             <button 
               onClick={() => {
                 navigate("/dashboard");
-                if (window.innerWidth < 1024) {
-                  closeSidebar();
-                }
+                closeSidebar();
               }}
               className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
             >
@@ -165,7 +160,9 @@ const Sidebar = () => {
                   {["DSA", "Java", "OOPS"].map(subject => (
                     <button 
                       key={subject} 
-                      onClick={() => handleTheoryClick(subject)} 
+                      onClick={() => {
+                        handleTheoryClick(subject);
+                      }} 
                       className="flex items-center w-full px-4 py-2.5 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50 text-sm transition-all hover:translate-x-1 group"
                     >
                       {theoryIcons[subject]}
@@ -200,7 +197,9 @@ const Sidebar = () => {
                   {["CN", "DBMS", "OS"].map(subject => (
                     <button 
                       key={subject} 
-                      onClick={() => handleCoreClick(subject)} 
+                      onClick={() => {
+                        handleCoreClick(subject);
+                      }} 
                       className="flex items-center w-full px-4 py-2.5 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50 text-sm transition-all hover:translate-x-1 group"
                     >
                       {coreIcons[subject]}
@@ -219,9 +218,7 @@ const Sidebar = () => {
             <button 
               onClick={() => {
                 navigate("/dashboard/quizhistory");
-                if (window.innerWidth < 1024) {
-                  closeSidebar();
-                }
+                closeSidebar();
               }}
               className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
             >
@@ -236,9 +233,7 @@ const Sidebar = () => {
             <button 
               onClick={() => {
                 navigate("/dashboard/revision-planner");
-                if (window.innerWidth < 1024) {
-                  closeSidebar();
-                }
+                closeSidebar();
               }}
               className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
             >
@@ -253,9 +248,7 @@ const Sidebar = () => {
             <button 
               onClick={() => {
                 navigate("/dashboard/feedback");
-                if (window.innerWidth < 1024) {
-                  closeSidebar();
-                }
+                closeSidebar();
               }}
               className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
             >
@@ -284,6 +277,7 @@ const Sidebar = () => {
             <span className="font-medium">Settings</span>
             <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-transform group-hover:translate-x-1" />
           </button> */}
+          </div>
         </div>
       </aside>
     </>
