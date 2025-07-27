@@ -150,8 +150,9 @@ const shouldShowSidebar = dashboardRoutes.includes(location.pathname);
       {showNavbar && <Navbar  />}
 
       {dashboardRoutes.includes(location.pathname) && <DashboardHeader />}
-      {shouldShowSidebar && <Sidebar />}
-      <div className="flex-grow">
+      
+      <div className="flex-grow relative">
+        {shouldShowSidebar && <Sidebar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -187,6 +188,7 @@ const shouldShowSidebar = dashboardRoutes.includes(location.pathname);
 
         </Routes>
       </div>
+      
       <Footer />
 
       <ToastContainer

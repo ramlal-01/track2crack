@@ -103,7 +103,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed top-[72px] z-40 w-72 h-[calc(100vh-72px)] flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
+        className={`fixed top-[72px] z-40 w-72 h-[calc(100vh-72px-96px)] flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -119,9 +119,9 @@ const Sidebar = () => {
         )}
          
 
-        <div className="flex-1 flex flex-col p-5 overflow-y-auto">
+        <div className="flex-1 flex flex-col p-5 overflow-y-auto sidebar-scroll">
           {/* Navigation */}
-          <nav className="flex-1 flex flex-col gap-4">
+          <nav className="flex-1 flex flex-col gap-4 pb-4">
             {/* Dashboard */}
             <button 
               onClick={() => {

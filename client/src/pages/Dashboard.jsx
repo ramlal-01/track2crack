@@ -1,6 +1,5 @@
 // src/pages/Deskboard.jsx
 import React from "react";
-import Sidebar from "../components/Sidebar";
 import TopRightAvatar from "../components/TopRightAvatar";
 import { useTheme } from "../context/ThemeContext"; // global dark/light theme
 import { FaFire } from "react-icons/fa";
@@ -229,17 +228,6 @@ useEffect(() => {
 
   return (
     <div className={`flex min-h-screen ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}>
-      {/* Sidebar */}
-      <Sidebar />
-
-      {/* Desktop overlay when sidebar is open */}
-      {/* {isSidebarOpen && (
-        <div 
-          className=" lg:block fixed inset-0 z-30   transition-all duration-300"
-          onClick={closeSidebar}
-        />
-      )} */}
-
       {/* Main content */}
       <div className={`flex-1 transition-all duration-300 ease-in-out ${
         isSidebarOpen ? 'lg:ml-72' : 'lg:ml-0'
