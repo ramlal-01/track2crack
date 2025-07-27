@@ -32,6 +32,9 @@ const Sidebar = () => {
   const { theme } = useTheme();
   const { isSidebarOpen, closeSidebar } = useSidebar();
 
+  // Debug log
+  console.log('Sidebar render - isSidebarOpen:', isSidebarOpen);
+
   useEffect(() => {
     const id = localStorage.getItem("userId");
     if (id) {
@@ -93,6 +96,11 @@ const Sidebar = () => {
 
   return (
     <>
+      {/* Debug info */}
+      <div className="fixed top-0 right-0 z-50 bg-yellow-300 p-2 text-black text-sm">
+        Sidebar Open: {isSidebarOpen ? 'YES' : 'NO'}
+      </div>
+
       {/* Mobile Overlay */}
       <div 
         className={`fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden transition-all duration-300 ease-in-out ${
@@ -103,171 +111,24 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed top-[72px] bottom-0 left-0 z-40 w-72 flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
+        className={`fixed left-0 z-40 w-72 flex flex-col transition-all duration-300 ease-in-out shadow-xl border-r-4 border-green-500 ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
+        style={{ 
+          top: '72px',
+          height: 'calc(100vh - 72px)',
+          backgroundColor: '#10b981' // Green background for visibility
+        }}
       >
-        {/* Close button - Only visible when sidebar is open */}
-        {isSidebarOpen && (
-          <button
+        <div className="p-4 text-white">
+          <h2 className="text-xl font-bold">SIDEBAR</h2>
+          <p>State: {isSidebarOpen ? 'OPEN' : 'CLOSED'}</p>
+          <button 
             onClick={closeSidebar}
-            className="absolute top-4 right-4 z-50 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 lg:hidden"
-            aria-label="Close sidebar"
+            className="mt-2 px-4 py-2 bg-red-500 text-white rounded"
           >
-            <XMarkIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            Close
           </button>
-        )}
-
-        <div className="flex-1 flex flex-col p-5 overflow-y-auto sidebar-scroll relative">
-          {/* Navigation */}
-          <nav className="flex-1 flex flex-col gap-4 pb-20">
-            {/* Dashboard */}
-            <button 
-              onClick={() => {
-                navigate("/dashboard");
-                if (window.innerWidth < 1024) {
-                  closeSidebar();
-                }
-              }}
-              className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
-            >
-              <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 shadow-md group-hover:shadow-lg transition-all">
-                <ChartBarIcon className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-medium">Dashboard</span>
-              <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-transform group-hover:translate-x-1" />
-            </button>
-
-            {/* Divider */}
-            <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
-
-            {/* Theory Subjects */}
-            <div className="rounded-xl overflow-hidden">
-              <button 
-                onClick={() => setShowTheoryMenu(!showTheoryMenu)} 
-                className="flex justify-between items-center w-full px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group"
-              >
-                <div className="flex items-center">
-                  <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 shadow-md group-hover:shadow-lg transition-all">
-                    <BookOpenIcon className="w-5 h-5 text-white" />
-                  </div>
-                  <span className="font-medium">Theory Subjects</span>
-                </div>
-                {showTheoryMenu ? (
-                  <ChevronDownIcon className="w-5 h-5 text-blue-500 dark:text-blue-400 transition-transform duration-300" />
-                ) : (
-                  <ChevronRightIcon className="w-5 h-5 text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-transform duration-300" />
-                )}
-              </button>
-              {showTheoryMenu && (
-                <div className="ml-4 mt-1 mb-2 space-y-1 pl-2 border-l-2 border-gray-200 dark:border-gray-700">
-                  {["DSA", "Java", "OOPS"].map(subject => (
-                    <button 
-                      key={subject} 
-                      onClick={() => handleTheoryClick(subject)} 
-                      className="flex items-center w-full px-4 py-2.5 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50 text-sm transition-all hover:translate-x-1 group"
-                    >
-                      {theoryIcons[subject]}
-                      <span className="font-medium">{subject}</span>
-                      <ChevronRightIcon className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 text-blue-500 dark:text-blue-400 transition-all" />
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Core Subjects */}
-            <div className="rounded-xl overflow-hidden">
-              <button 
-                onClick={() => setShowCoreMenu(!showCoreMenu)} 
-                className="flex justify-between items-center w-full px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group"
-              >
-                <div className="flex items-center">
-                  <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 shadow-md group-hover:shadow-lg transition-all">
-                    <ServerIcon className="w-5 h-5 text-white" />
-                  </div>
-                  <span className="font-medium">Core Subjects</span>
-                </div>
-                {showCoreMenu ? (
-                  <ChevronDownIcon className="w-5 h-5 text-purple-500 dark:text-purple-400 transition-transform duration-300" />
-                ) : (
-                  <ChevronRightIcon className="w-5 h-5 text-gray-400 group-hover:text-purple-500 dark:group-hover:text-purple-400 transition-transform duration-300" />
-                )}
-              </button>
-              {showCoreMenu && (
-                <div className="ml-4 mt-1 mb-2 space-y-1 pl-2 border-l-2 border-gray-200 dark:border-gray-700">
-                  {["CN", "DBMS", "OS"].map(subject => (
-                    <button 
-                      key={subject} 
-                      onClick={() => handleCoreClick(subject)} 
-                      className="flex items-center w-full px-4 py-2.5 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50 text-sm transition-all hover:translate-x-1 group"
-                    >
-                      {coreIcons[subject]}
-                      <span className="font-medium">{subject}</span>
-                      <ChevronRightIcon className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 text-purple-500 dark:text-purple-400 transition-all" />
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Divider */}
-            <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
-
-            {/* Quiz History */}
-            <button 
-              onClick={() => {
-                navigate("/dashboard/quizhistory");
-                if (window.innerWidth < 1024) {
-                  closeSidebar();
-                }
-              }}
-              className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
-            >
-              <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 shadow-md group-hover:shadow-lg transition-all">
-                <DocumentTextIcon className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-medium">Quiz History</span>
-              <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-transform group-hover:translate-x-1" />
-            </button>
-
-            {/* Revision Planner */}
-            <button 
-              onClick={() => {
-                navigate("/dashboard/revision-planner");
-                if (window.innerWidth < 1024) {
-                  closeSidebar();
-                }
-              }}
-              className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
-            >
-              <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 shadow-md group-hover:shadow-lg transition-all">
-                <ClockIcon className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-medium">Revision Planner</span>
-              <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-amber-500 dark:group-hover:text-amber-400 transition-transform group-hover:translate-x-1" />
-            </button>
-
-            {/* Feedback */}
-            <button 
-              onClick={() => {
-                navigate("/dashboard/feedback");
-                if (window.innerWidth < 1024) {
-                  closeSidebar();
-                }
-              }}
-              className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
-            >
-              <div className="p-1.5 mr-3 rounded-lg bg-gradient-to-br from-rose-500 to-pink-500 shadow-md group-hover:shadow-lg transition-all">
-                <LifebuoyIcon className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-medium">Feedback</span>
-              <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-rose-500 dark:group-hover:text-rose-400 transition-transform group-hover:translate-x-1" />
-            </button>
-          </nav>
-
-          {/* Bottom fade gradient to indicate more content or footer boundary */}
-          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white dark:from-gray-900 to-transparent pointer-events-none"></div>
         </div>
       </aside>
     </>

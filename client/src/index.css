@@ -130,28 +130,3 @@ body {
 .dark .sidebar-scroll::-webkit-scrollbar-thumb {
   background-color: #4b5563;
 }
-
-/* Sidebar height and positioning improvements */
-.sidebar-full-height {
-  height: calc(100vh - 72px);
-  max-height: calc(100vh - 72px);
-}
-
-/* Ensure sidebar content doesn't get cut off */
-.sidebar-content {
-  padding-bottom: 6rem; /* 96px - space for footer */
-}
-
-/* Responsive sidebar adjustments */
-@media (max-width: 1023px) {
-  .sidebar-full-height {
-    height: 100vh;
-    max-height: 100vh;
-    top: 0 !important;
-  }
-  
-  .sidebar-content {
-    padding-bottom: 2rem; /* Less padding on mobile */
-    padding-top: 5rem; /* Account for mobile header */
-  }
-}
