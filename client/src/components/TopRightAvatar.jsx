@@ -178,47 +178,81 @@ const handleSettingsClick = () => {
       
       {/* Mobile Notification Overlay */}
       {showMobileNotificationOverlay && (
-        <div className="fixed inset-0 z-[100] bg-white/10 dark:bg-black/10 backdrop-blur-md flex items-start justify-center pt-4 px-4">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md max-h-[80vh] overflow-hidden">
+        <div className="fixed inset-0 z-[100] bg-white/10 dark:bg-black/10 backdrop-blur-md flex items-start justify-center pt-4 px-4 animate-in fade-in duration-300">
+          <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/50 w-full max-w-md max-h-[85vh] overflow-hidden animate-in slide-in-from-top-4 duration-300">
             {/* Header */}
-            <div className="px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white flex justify-between items-center">
-              <h3 className="font-bold text-lg">Notifications</h3>
-              <button 
-                onClick={() => setShowMobileNotificationOverlay(false)}
-                className="text-white hover:bg-white/20 rounded-full p-1 transition-colors"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+            <div className="px-6 py-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white relative overflow-hidden">
+              <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+              <div className="relative flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+                    <BellIcon className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg">Notifications</h3>
+                    <p className="text-xs text-white/80">Stay updated with your progress</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setShowMobileNotificationOverlay(false)}
+                  className="text-white hover:bg-white/20 rounded-xl p-2 transition-all duration-200 hover:scale-105"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             {/* Notifications Content */}
             {notifications.length > 0 ? (
               <div className="max-h-96 overflow-y-auto">
-                {notifications.map((notification) => (
+                {notifications.map((notification, index) => (
                   <div
                     key={notification.id}
                     onClick={() => {
                       setShowMobileNotificationOverlay(false);
                       if (notification.link) navigate(notification.link);
                     }}
-                    className={`px-4 py-3 border-b border-gray-200 dark:border-gray-700 transition-colors duration-150 cursor-pointer
-                      ${notification.isSeen ? "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-indigo-50 dark:bg-indigo-900/50"}`}
+                    className={`px-6 py-4 border-b border-gray-100 dark:border-gray-700/50 transition-all duration-300 cursor-pointer hover:scale-[1.02] transform
+                      ${notification.isSeen 
+                        ? "bg-white/50 dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700/50" 
+                        : "bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 hover:from-indigo-100 hover:to-purple-100 dark:hover:from-indigo-900/50 dark:hover:to-purple-900/50"
+                      }`}
+                    style={{ animationDelay: `${index * 50}ms` }}
                   >
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 pt-0.5">
-                        <div className="h-10 w-10 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center">
-                          <span className="text-sm font-bold text-indigo-600 dark:text-indigo-300">
-                            {notification.type?.toUpperCase() || "NOTE"}
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 pt-1">
+                        <div className={`h-12 w-12 rounded-2xl flex items-center justify-center shadow-lg ${
+                          notification.isSeen 
+                            ? "bg-gray-100 dark:bg-gray-700" 
+                            : "bg-gradient-to-br from-indigo-400 to-purple-500"
+                        }`}>
+                          <span className={`text-sm font-bold ${
+                            notification.isSeen 
+                              ? "text-gray-600 dark:text-gray-300" 
+                              : "text-white"
+                          }`}>
+                            {notification.type?.charAt(0)?.toUpperCase() || "📌"}
                           </span>
                         </div>
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">{notification.title}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Due: {formatDate(notification.date)}</p>
+                        <div className="flex items-start justify-between gap-2">
+                          <h4 className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 leading-tight">
+                            {notification.title}
+                          </h4>
+                          {!notification.isSeen && (
+                            <div className="flex-shrink-0">
+                              <div className="h-2 w-2 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full animate-pulse"></div>
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          Due: {formatDate(notification.date)}
+                        </p>
                         {!notification.isSeen && (
-                          <span className="inline-block mt-1 px-2 py-1 text-xs bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 rounded-full">
+                          <span className="inline-block mt-2 px-3 py-1 text-xs font-medium bg-gradient-to-r from-indigo-400 to-purple-500 text-white rounded-full shadow-sm">
                             New
                           </span>
                         )}
@@ -227,45 +261,47 @@ const handleSettingsClick = () => {
                   </div>
                 ))}
                 {hasMore && (
-                  <div className="text-center py-3 border-b border-gray-200 dark:border-gray-700">
+                  <div className="text-center py-4 border-b border-gray-200 dark:border-gray-700">
                     <button onClick={() => {
                       const nextPage = notificationPage + 1;
                       setNotificationPage(nextPage);
                       fetchNotifications(userId, nextPage);
                     }}
-                      className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
+                      className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors bg-indigo-50 dark:bg-indigo-900/30 px-4 py-2 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/50">
                       Load more notifications
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="px-4 py-8 text-center">
-                <div className="text-4xl mb-2">📭</div>
-                <p className="text-gray-500 dark:text-gray-400 font-medium">No notifications</p>
-                <p className="text-sm text-gray-400 dark:text-gray-500">You're all caught up!</p>
+              <div className="px-6 py-12 text-center">
+                <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-2xl flex items-center justify-center">
+                  <div className="text-3xl">🔔</div>
+                </div>
+                <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">All caught up!</h4>
+                <p className="text-sm text-gray-500 dark:text-gray-400">You have no new notifications</p>
               </div>
             )}
 
             {/* Footer Actions */}
-            <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700/30 border-t border-gray-200 dark:border-gray-700 flex justify-between">
+            <div className="px-6 py-4 bg-gray-50/80 dark:bg-gray-700/30 backdrop-blur-sm border-t border-gray-200/50 dark:border-gray-700/50 flex justify-between gap-3">
               <button 
                 onClick={() => {
                   handleMarkAllRead();
                   setShowMobileNotificationOverlay(false);
                 }}
-                className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
+                className="flex-1 px-4 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-xl transition-all duration-200 hover:scale-105"
               >
-                Mark all as read
+                Mark all read
               </button>
               <button 
                 onClick={() => {
                   setShowMobileNotificationOverlay(false);
                   navigate('/dashboard/revision-planner');
                 }}
-                className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
+                className="flex-1 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 rounded-xl transition-all duration-200 hover:scale-105 shadow-lg"
               >
-                View revision planner
+                View planner
               </button>
             </div>
           </div>
@@ -274,67 +310,123 @@ const handleSettingsClick = () => {
       
       {/* Notification Bell - Hide on mobile, will be moved to dropdown */}
       <div className="relative hidden md:block">
-        <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:shadow transition-all duration-200 relative" title="Notifications">
-          <BellIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
-          {notifications.some(n => !n.isSeen) && <span className="absolute top-0 right-0 h-3 w-3 rounded-full bg-red-500 border-2 border-white dark:border-gray-800"></span>}
+        <button onClick={() => setShowNotifications(!showNotifications)} className="p-3 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/50 dark:border-gray-600/50 hover:shadow-xl hover:scale-105 transition-all duration-200 relative group" title="Notifications">
+          <BellIcon className="h-5 w-5 text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
+          {notifications.some(n => !n.isSeen) && (
+            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-gradient-to-r from-red-400 to-pink-500 border-2 border-white dark:border-gray-800 flex items-center justify-center">
+              <span className="text-xs font-bold text-white">{notifications.filter(n => !n.isSeen).length}</span>
+            </span>
+          )}
         </button>
 
         {showNotifications && (
-          <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 z-50 border border-gray-200 dark:border-gray-600 overflow-hidden">
-            <div className="px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white flex justify-between items-center">
-              <h3 className="font-bold">Notifications</h3>
-              <button className="text-xs underline" onClick={handleMarkAllRead}>Mark all as read</button>
+          <div className="absolute right-0 mt-3 w-96 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl shadow-2xl ring-1 ring-black/5 dark:ring-white/10 z-50 border border-white/20 dark:border-gray-700/50 overflow-hidden animate-in slide-in-from-top-2 duration-300">
+            {/* Header */}
+            <div className="px-6 py-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white relative overflow-hidden">
+              <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+              <div className="relative flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+                    <BellIcon className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg">Notifications</h3>
+                    <p className="text-xs text-white/80">Stay updated with your progress</p>
+                  </div>
+                </div>
+                <button 
+                  className="text-sm font-medium text-white/80 hover:text-white hover:bg-white/20 px-3 py-1 rounded-lg transition-all duration-200" 
+                  onClick={handleMarkAllRead}
+                >
+                  Mark all read
+                </button>
+              </div>
             </div>
 
             {notifications.length > 0 ? (
-              <div className="max-h-64 overflow-y-auto">
-                {notifications.map((notification) => (
+              <div className="max-h-80 overflow-y-auto">
+                {notifications.map((notification, index) => (
                   <div
                     key={notification.id}
                     onClick={() => {
                       setShowNotifications(false);
                       if (notification.link) navigate(notification.link);
                     }}
-                    className={`px-4 py-3 border-b transition-colors duration-150 cursor-pointer
-                      ${notification.isSeen ? "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-indigo-50 dark:bg-indigo-900"}`}
+                    className={`px-6 py-4 border-b border-gray-100/50 dark:border-gray-700/50 transition-all duration-300 cursor-pointer hover:scale-[1.02] transform group
+                      ${notification.isSeen 
+                        ? "bg-white/50 dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700/50" 
+                        : "bg-gradient-to-r from-indigo-50/80 to-purple-50/80 dark:from-indigo-900/20 dark:to-purple-900/20 hover:from-indigo-100/80 hover:to-purple-100/80 dark:hover:from-indigo-900/40 dark:hover:to-purple-900/40"
+                      }`}
+                    style={{ animationDelay: `${index * 50}ms` }}
                   >
-                    <div className="flex items-start">
-                      <div className="flex-shrink-0 pt-0.5">
-                        <div className="h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center">
-                          <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300">
-                            {notification.type?.toUpperCase() || "NOTE"}
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 pt-1">
+                        <div className={`h-12 w-12 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 ${
+                          notification.isSeen 
+                            ? "bg-gray-100 dark:bg-gray-700" 
+                            : "bg-gradient-to-br from-indigo-400 to-purple-500"
+                        }`}>
+                          <span className={`text-sm font-bold ${
+                            notification.isSeen 
+                              ? "text-gray-600 dark:text-gray-300" 
+                              : "text-white"
+                          }`}>
+                            {notification.type?.charAt(0)?.toUpperCase() || "📌"}
                           </span>
                         </div>
                       </div>
-                      <div className="ml-3">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">{notification.title}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Due: {formatDate(notification.date)}</p>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-2">
+                          <h4 className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                            {notification.title}
+                          </h4>
+                          {!notification.isSeen && (
+                            <div className="flex-shrink-0">
+                              <div className="h-2 w-2 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full animate-pulse"></div>
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          Due: {formatDate(notification.date)}
+                        </p>
+                        {!notification.isSeen && (
+                          <span className="inline-block mt-2 px-3 py-1 text-xs font-medium bg-gradient-to-r from-indigo-400 to-purple-500 text-white rounded-full shadow-sm">
+                            New
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
                 ))}
                 {hasMore && (
-                  <div className="text-center py-2">
+                  <div className="text-center py-4 border-b border-gray-200/50 dark:border-gray-700/50">
                     <button onClick={() => {
                       const nextPage = notificationPage + 1;
                       setNotificationPage(nextPage);
                       fetchNotifications(userId, nextPage);
                     }}
-                      className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">
+                      className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors bg-indigo-50 dark:bg-indigo-900/30 px-4 py-2 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/50 hover:scale-105 transition-all duration-200">
                       Load more
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="px-4 py-6 text-center">
-                <p className="text-sm text-gray-500 dark:text-gray-400">No notifications available</p>
+              <div className="px-6 py-12 text-center">
+                <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-2xl flex items-center justify-center">
+                  <div className="text-3xl">🔔</div>
+                </div>
+                <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">All caught up!</h4>
+                <p className="text-sm text-gray-500 dark:text-gray-400">You have no new notifications</p>
               </div>
             )}
 
-            <div className="px-4 py-2 bg-gray-50 dark:bg-gray-700/30 text-center border-t border-gray-100 dark:border-gray-700">
-              <button onClick={() => { setShowNotifications(false); window.location.href = '/dashboard/revision-planner'; }}
-                className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">
+            <div className="px-6 py-4 bg-gray-50/80 dark:bg-gray-700/30 backdrop-blur-sm text-center border-t border-gray-200/50 dark:border-gray-700/50">
+              <button onClick={() => { 
+                setShowNotifications(false); 
+                navigate('/dashboard/revision-planner'); 
+              }}
+                className="text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 px-6 py-2 rounded-xl transition-all duration-200 hover:scale-105 shadow-lg">
                 View all reminders
               </button>
             </div>
