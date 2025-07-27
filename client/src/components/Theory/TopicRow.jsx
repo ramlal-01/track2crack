@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { FaBookmark, FaRegBookmark, FaBell } from "react-icons/fa";
 import { SiYoutube, SiGeeksforgeeks } from "react-icons/si";
 import { MdQuiz } from "react-icons/md";
@@ -187,6 +186,19 @@ const TopicRow = ({
             >
               <FaBell />
             </button>
+          )}
+
+          {openReminderId === topic._id && (
+            <div className={`absolute z-50 top-8 bg-white border border-gray-200 shadow-lg rounded-lg p-2 ${darkCardBg} ${darkBorder}`}>
+              <DatePicker
+                selected={remindOn ? new Date(remindOn) : null}
+                onChange={(date) => handleReminderChange(topic._id, date)}
+                dateFormat="dd/MM/yyyy"
+                minDate={new Date()}
+                inline
+                className="dark:bg-gray-800"
+              />
+            </div>
           )}
         </div>
 
@@ -472,110 +484,6 @@ const TopicRow = ({
             </div>
           </div>
         </div>
-      )}
-
-      {/* Desktop Date Picker Modal */}
-      {openReminderId === topic._id && (
-        ReactDOM.createPortal(
-          <div 
-            className="fixed inset-0 flex items-center justify-center z-[100] bg-black/30 p-4"
-            onClick={(e) => {
-              if (e.target === e.currentTarget) {
-                setOpenReminderId(null);
-              }
-            }}
-          >
-            <div className={`bg-white rounded-lg shadow-xl p-5 w-full max-w-sm mx-4 ${darkCardBg} ${darkMode ? 'dark-datepicker' : ''}`}>
-              <h3 className={`font-semibold text-lg mb-4 text-gray-800 ${darkText} leading-tight`}>
-                Set Reminder for: {topic.title}
-              </h3>
-              
-              <div className="mb-4">
-                <DatePicker
-                  selected={remindOn ? new Date(remindOn) : null}
-                  onChange={(date) => handleReminderChange(topic._id, date)}
-                  dateFormat="dd/MM/yyyy"
-                  minDate={new Date()}
-                  inline
-                  className="w-full"
-                  calendarClassName="!font-sans !border-0 w-full"
-                />
-              </div>
-
-              <div className="flex gap-3 justify-end">
-                <button 
-                  onClick={() => setOpenReminderId(null)} 
-                  className={`text-sm px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition-colors dark:border-gray-600 dark:hover:bg-gray-700`}
-                >
-                  Cancel
-                </button>
-                {remindOn && (
-                  <button
-                    onClick={() => handleReminderChange(topic._id, null)}
-                    className="text-sm px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
-                  >
-                    Clear Reminder
-                  </button>
-                )}
-              </div>
-
-              {/* Dark mode styles */}
-              {darkMode && (
-                <style jsx>{`
-                  .dark-datepicker .react-datepicker {
-                    background-color: #374151 !important;
-                    border: none !important;
-                    color: #f9fafb !important;
-                    font-family: inherit !important;
-                    width: 100% !important;
-                  }
-                  .dark-datepicker .react-datepicker__header {
-                    background-color: #4b5563 !important;
-                    border-bottom-color: #6b7280 !important;
-                    border-radius: 0.5rem 0.5rem 0 0 !important;
-                  }
-                  .dark-datepicker .react-datepicker__current-month,
-                  .dark-datepicker .react-datepicker__day-name {
-                    color: #f9fafb !important;
-                    font-weight: 600 !important;
-                  }
-                  .dark-datepicker .react-datepicker__day {
-                    color: #d1d5db !important;
-                    border-radius: 0.375rem !important;
-                    cursor: pointer !important;
-                  }
-                  .dark-datepicker .react-datepicker__day:hover {
-                    background-color: #6366f1 !important;
-                    color: #ffffff !important;
-                  }
-                  .dark-datepicker .react-datepicker__day--selected {
-                    background-color: #4f46e5 !important;
-                    color: #ffffff !important;
-                  }
-                  .dark-datepicker .react-datepicker__day--today {
-                    background-color: #1f2937 !important;
-                    color: #60a5fa !important;
-                    font-weight: 600 !important;
-                  }
-                  .dark-datepicker .react-datepicker__navigation {
-                    border-color: #9ca3af !important;
-                  }
-                  .dark-datepicker .react-datepicker__navigation:hover {
-                    border-color: #f9fafb !important;
-                  }
-                  .dark-datepicker .react-datepicker__day--disabled {
-                    color: #6b7280 !important;
-                    cursor: not-allowed !important;
-                  }
-                  .dark-datepicker .react-datepicker__day--outside-month {
-                    color: #6b7280 !important;
-                  }
-                `}</style>
-              )}
-            </div>
-          </div>,
-          document.body
-        )
       )}
     </>
   );
