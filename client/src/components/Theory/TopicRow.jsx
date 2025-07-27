@@ -195,7 +195,7 @@ const TopicRow = ({
             >
               <DatePicker
                 selected={remindOn ? new Date(remindOn) : null}
-                                  onChange={(date) => handleReminderChange(topic._id, date)}
+                onChange={(date) => handleReminderChange(topic._id, date)}
                 dateFormat="dd/MM/yyyy"
                 minDate={new Date()}
                 inline

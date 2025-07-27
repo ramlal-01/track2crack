@@ -20,7 +20,13 @@ const StreakBadge = () => {
 
   return (
     <div className="bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-300 px-3 py-1 rounded-full font-semibold text-sm shadow-sm flex items-center gap-1">
-      🔥 {streak !== null ? `${streak} Day${streak > 1 ? "s" : ""}` : "Loading..."}
+      🔥 
+      <span className="block">
+        {streak !== null ? `${streak}` : "..."}
+      </span>
+      <span className="hidden sm:inline">
+        {streak !== null ? ` Day${streak > 1 ? "s" : ""}` : ""}
+      </span>
     </div>
   );
 };
