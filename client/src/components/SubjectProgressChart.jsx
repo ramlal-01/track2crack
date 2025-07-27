@@ -175,7 +175,7 @@ const SubjectProgressChart = ({ data }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="h-[20rem] sm:h-[28rem] w-full max-w-[40rem] mx-auto rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-8 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all duration-300"
+      className="h-[20rem] sm:h-[28rem] w-full max-w-[40rem] rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-8 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all duration-300"
     >
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-8 gap-3 sm:gap-0">
         <div>

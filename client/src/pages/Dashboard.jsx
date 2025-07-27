@@ -304,7 +304,7 @@ useEffect(() => {
             />
         </div>
  
-        <div className="w-full flex justify-center mb-8 sm:mb-12 lg:mb-15">
+        <div className="w-full mb-8 sm:mb-12 lg:mb-15">
           <SubjectProgressChart data={{
             Java: quizProgress.Java,
             OOPS: quizProgress.OOPS,

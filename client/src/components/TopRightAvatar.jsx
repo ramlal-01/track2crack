@@ -11,7 +11,8 @@ import {
   CogIcon,
   AcademicCapIcon,
   UserCircleIcon,
-  BellIcon
+  BellIcon,
+  ChevronRightIcon
 } from "@heroicons/react/24/solid";
 
 const TopRightAvatar = () => {
@@ -19,7 +20,7 @@ const TopRightAvatar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notificationPage, setNotificationPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [showMobileNotifications, setShowMobileNotifications] = useState(false);
+  const [showMobileNotificationOverlay, setShowMobileNotificationOverlay] = useState(false);
   const [streak, setStreak] = useState(null);
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
@@ -175,6 +176,102 @@ const handleSettingsClick = () => {
        
       <ThemeToggle />
       
+      {/* Mobile Notification Overlay */}
+      {showMobileNotificationOverlay && (
+        <div className="fixed inset-0 z-[100] bg-black bg-opacity-50 flex items-start justify-center pt-4 px-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md max-h-[80vh] overflow-hidden">
+            {/* Header */}
+            <div className="px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white flex justify-between items-center">
+              <h3 className="font-bold text-lg">Notifications</h3>
+              <button 
+                onClick={() => setShowMobileNotificationOverlay(false)}
+                className="text-white hover:bg-white/20 rounded-full p-1 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Notifications Content */}
+            {notifications.length > 0 ? (
+              <div className="max-h-96 overflow-y-auto">
+                {notifications.map((notification) => (
+                  <div
+                    key={notification.id}
+                    onClick={() => {
+                      setShowMobileNotificationOverlay(false);
+                      if (notification.link) navigate(notification.link);
+                    }}
+                    className={`px-4 py-3 border-b border-gray-200 dark:border-gray-700 transition-colors duration-150 cursor-pointer
+                      ${notification.isSeen ? "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-indigo-50 dark:bg-indigo-900/50"}`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 pt-0.5">
+                        <div className="h-10 w-10 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center">
+                          <span className="text-sm font-bold text-indigo-600 dark:text-indigo-300">
+                            {notification.type?.toUpperCase() || "NOTE"}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">{notification.title}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Due: {formatDate(notification.date)}</p>
+                        {!notification.isSeen && (
+                          <span className="inline-block mt-1 px-2 py-1 text-xs bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 rounded-full">
+                            New
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {hasMore && (
+                  <div className="text-center py-3 border-b border-gray-200 dark:border-gray-700">
+                    <button onClick={() => {
+                      const nextPage = notificationPage + 1;
+                      setNotificationPage(nextPage);
+                      fetchNotifications(userId, nextPage);
+                    }}
+                      className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
+                      Load more notifications
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="px-4 py-8 text-center">
+                <div className="text-4xl mb-2">📭</div>
+                <p className="text-gray-500 dark:text-gray-400 font-medium">No notifications</p>
+                <p className="text-sm text-gray-400 dark:text-gray-500">You're all caught up!</p>
+              </div>
+            )}
+
+            {/* Footer Actions */}
+            <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700/30 border-t border-gray-200 dark:border-gray-700 flex justify-between">
+              <button 
+                onClick={() => {
+                  handleMarkAllRead();
+                  setShowMobileNotificationOverlay(false);
+                }}
+                className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
+              >
+                Mark all as read
+              </button>
+              <button 
+                onClick={() => {
+                  setShowMobileNotificationOverlay(false);
+                  navigate('/dashboard/revision-planner');
+                }}
+                className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
+              >
+                View revision planner
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Notification Bell - Hide on mobile, will be moved to dropdown */}
       <div className="relative hidden md:block">
         <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:shadow transition-all duration-200 relative" title="Notifications">
@@ -327,7 +424,7 @@ const handleSettingsClick = () => {
               {/* Notifications Section for Mobile */}
               <div>
                 <button 
-                  onClick={() => setShowMobileNotifications(!showMobileNotifications)}
+                  onClick={() => setShowMobileNotificationOverlay(true)}
                   className="w-full px-3 py-3 bg-gray-50 dark:bg-gray-700/30 border-b border-gray-200 dark:border-gray-600 flex justify-between items-center hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
@@ -337,66 +434,8 @@ const handleSettingsClick = () => {
                       <span className="h-2 w-2 rounded-full bg-red-500"></span>
                     )}
                   </div>
-                  <ChevronDownIcon className={`h-4 w-4 text-gray-400 transform transition-transform ${showMobileNotifications ? 'rotate-180' : ''}`} />
+                  <ChevronRightIcon className="h-4 w-4 text-gray-400" />
                 </button>
-
-                {showMobileNotifications && (
-                  <div className="bg-white dark:bg-gray-800">
-                    {notifications.length > 0 ? (
-                      <div className="max-h-40 overflow-y-auto">
-                        {notifications.slice(0, 4).map((notification) => (
-                          <div
-                            key={notification.id}
-                            onClick={() => {
-                              setShowMobileNotifications(false);
-                              if (notification.link) navigate(notification.link);
-                            }}
-                            className={`px-3 py-2 border-b border-gray-100 dark:border-gray-700 transition-colors duration-150 cursor-pointer
-                              ${notification.isSeen ? "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-indigo-50 dark:bg-indigo-900/50"}`}
-                          >
-                            <div className="flex items-start gap-2">
-                              <div className="flex-shrink-0 pt-0.5">
-                                <div className="h-5 w-5 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center">
-                                  <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300">
-                                    {notification.type?.charAt(0).toUpperCase() || "N"}
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="min-w-0 flex-1">
-                                <p className="text-xs font-medium text-gray-900 dark:text-white truncate">{notification.title}</p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">{formatDate(notification.date)}</p>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="px-3 py-4 text-center">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">No notifications</p>
-                      </div>
-                    )}
-                    <div className="px-3 py-2 text-center border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30">
-                      <button 
-                        onClick={() => {
-                          setShowMobileNotifications(false);
-                          handleMarkAllRead();
-                        }}
-                        className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline mr-3"
-                      >
-                        Mark all read
-                      </button>
-                      <button 
-                        onClick={() => {
-                          setShowMobileNotifications(false);
-                          window.location.href = '/dashboard/revision-planner';
-                        }}
-                        className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline"
-                      >
-                        View all
-                      </button>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
 
