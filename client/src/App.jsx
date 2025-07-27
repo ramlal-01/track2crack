@@ -31,7 +31,7 @@ import Feedback from './pages/FeedbackPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './context/AuthContext';
 import DashboardHeader from './components/DashboardHeader';
-import { SidebarProvider } from './context/SidebarContext';
+import { SidebarProvider, useSidebar } from './context/SidebarContext';
 import Sidebar from './components/Sidebar';
 
 
@@ -48,6 +48,7 @@ const App = () => {
 const AppContent = () => {
   const location = useLocation();
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const { isSidebarOpen, isDashboardPage } = useSidebar();
 
  
 
@@ -156,8 +157,10 @@ const AppContent = () => {
         {/* Sidebar - only shows on dashboard pages */}
         <Sidebar />
         
-        {/* Main content area */}
-        <div className="flex-grow">
+        {/* Main content area - adjust margin when sidebar is closed on desktop */}
+        <div className={`flex-grow transition-all duration-300 ${
+          isDashboardPage && !isSidebarOpen ? 'lg:ml-0' : ''
+        }`}>
           <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />

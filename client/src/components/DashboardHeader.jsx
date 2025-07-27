@@ -14,11 +14,11 @@ const DashboardHeader = () => {
       
       {/* Left: Hamburger Menu + App Name */}
       <div className="flex items-center">
-        {/* Hamburger Menu - Only show on dashboard pages */}
+        {/* Hamburger Menu - Show on all dashboard pages and all screen sizes */}
         {isDashboardPage && (
           <button 
             onClick={toggleSidebar}
-            className="lg:hidden p-2 mr-3 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50"
+            className="p-2 mr-3 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50"
             aria-label="Toggle sidebar"
           >
             <Bars3Icon className="w-6 h-6 text-white" />

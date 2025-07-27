@@ -100,11 +100,11 @@ const Sidebar = () => {
       {/* Sidebar */}
       <aside 
         className={`fixed lg:sticky top-[72px] z-40 w-72 h-[calc(100vh-72px)] flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Cross Icon - Top Right Corner */}
-        <div className="flex justify-end p-4 lg:hidden">
+        {/* Cross Icon - Top Right Corner - Show on all screen sizes */}
+        <div className="flex justify-end p-4">
           <button 
             onClick={closeSidebar}
             className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
