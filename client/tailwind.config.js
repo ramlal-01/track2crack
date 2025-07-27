@@ -6,7 +6,11 @@ module.exports = {
   ],
   darkMode: 'class', // ✅ required for .dark to work
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        'xs': '475px',
+      },
+    },
   },
   plugins: [],
 };

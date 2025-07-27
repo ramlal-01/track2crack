@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +23,7 @@ const TopRightAvatar = () => {
   const userId = localStorage.getItem("userId");
   const [avatarURL, setAvatarURL] = useState(null);
   const [user, setUser] = useState(null);
+  const notificationRef = useRef(null);
 
 
   // Generate a stable avatar URL based on user email
@@ -116,6 +117,25 @@ const fetchNotifications = async (userId, page = 1) => {
     return () => clearInterval(interval);
   }, [userId]);
 
+  // Handle outside clicks for notification dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setShowNotifications(false);
+      }
+    };
+
+    if (showNotifications) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [showNotifications]);
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -152,26 +172,40 @@ const handleSettingsClick = () => {
   };
 
   return (
-    <div className="flex items-center justify-end gap-3 h-full">
-      {/* Dark/Light Toggle */}
-       
-      <ThemeToggle />
+    <div className="flex items-center justify-end gap-2 sm:gap-3 h-full">
+      {/* Dark/Light Toggle - Hide on very small screens */}
+      <div className="hidden xs:block">
+        <ThemeToggle />
+      </div>
+      
       {/* Notification Bell */}
-      <div className="relative">
-        <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:shadow transition-all duration-200 relative" title="Notifications">
-          <BellIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
-          {notifications.some(n => !n.isSeen) && <span className="absolute top-0 right-0 h-3 w-3 rounded-full bg-red-500 border-2 border-white dark:border-gray-800"></span>}
+      <div className="relative" ref={notificationRef}>
+        <button 
+          onClick={() => setShowNotifications(!showNotifications)} 
+          className="p-2 rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:shadow transition-all duration-200 relative focus:outline-none focus:ring-2 focus:ring-blue-500" 
+          title="Notifications"
+          aria-label="Toggle notifications"
+        >
+          <BellIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-700 dark:text-gray-300" />
+          {notifications.some(n => !n.isSeen) && (
+            <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 border-2 border-white dark:border-gray-800 animate-pulse"></span>
+          )}
         </button>
 
         {showNotifications && (
-          <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 z-50 border border-gray-200 dark:border-gray-600 overflow-hidden">
-            <div className="px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white flex justify-between items-center">
-              <h3 className="font-bold">Notifications</h3>
-              <button className="text-xs underline" onClick={handleMarkAllRead}>Mark all as read</button>
+          <div className="absolute right-0 mt-2 w-screen max-w-sm sm:w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 z-50 border border-gray-200 dark:border-gray-600 overflow-hidden transform transition-all duration-200 scale-100">
+            <div className="px-3 sm:px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white flex justify-between items-center">
+              <h3 className="font-bold text-sm sm:text-base">Notifications</h3>
+              <button 
+                className="text-xs underline hover:no-underline transition-all" 
+                onClick={handleMarkAllRead}
+              >
+                Mark all read
+              </button>
             </div>
 
             {notifications.length > 0 ? (
-              <div className="max-h-64 overflow-y-auto">
+              <div className="max-h-64 sm:max-h-80 overflow-y-auto">
                 {notifications.map((notification) => (
                   <div
                     key={notification.id}
@@ -179,46 +213,54 @@ const handleSettingsClick = () => {
                       setShowNotifications(false);
                       if (notification.link) navigate(notification.link);
                     }}
-                    className={`px-4 py-3 border-b transition-colors duration-150 cursor-pointer
-                      ${notification.isSeen ? "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-indigo-50 dark:bg-indigo-900"}`}
+                    className={`px-3 sm:px-4 py-3 border-b border-gray-100 dark:border-gray-700 transition-colors duration-150 cursor-pointer active:bg-gray-100 dark:active:bg-gray-700
+                      ${notification.isSeen ? "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-indigo-50 dark:bg-indigo-900 hover:bg-indigo-100 dark:hover:bg-indigo-800"}`}
                   >
-                    <div className="flex items-start">
+                    <div className="flex items-start gap-3">
                       <div className="flex-shrink-0 pt-0.5">
-                        <div className="h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center">
+                        <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center">
                           <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300">
-                            {notification.type?.toUpperCase() || "NOTE"}
+                            {notification.type?.charAt(0)?.toUpperCase() || "N"}
                           </span>
                         </div>
                       </div>
-                      <div className="ml-3">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">{notification.title}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Due: {formatDate(notification.date)}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white line-clamp-2">{notification.title}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Due: {formatDate(notification.date)}</p>
                       </div>
                     </div>
                   </div>
                 ))}
                 {hasMore && (
                   <div className="text-center py-2">
-                    <button onClick={() => {
-                      const nextPage = notificationPage + 1;
-                      setNotificationPage(nextPage);
-                      fetchNotifications(userId, nextPage);
-                    }}
-                      className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">
+                    <button 
+                      onClick={() => {
+                        const nextPage = notificationPage + 1;
+                        setNotificationPage(nextPage);
+                        fetchNotifications(userId, nextPage);
+                      }}
+                      className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded px-2 py-1"
+                    >
                       Load more
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="px-4 py-6 text-center">
+              <div className="px-3 sm:px-4 py-6 text-center">
+                <BellIcon className="h-8 w-8 mx-auto text-gray-300 dark:text-gray-600 mb-2" />
                 <p className="text-sm text-gray-500 dark:text-gray-400">No notifications available</p>
               </div>
             )}
 
-            <div className="px-4 py-2 bg-gray-50 dark:bg-gray-700/30 text-center border-t border-gray-100 dark:border-gray-700">
-              <button onClick={() => { setShowNotifications(false); window.location.href = '/dashboard/revision-planner'; }}
-                className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">
+            <div className="px-3 sm:px-4 py-2 bg-gray-50 dark:bg-gray-700/30 text-center border-t border-gray-100 dark:border-gray-700">
+              <button 
+                onClick={() => { 
+                  setShowNotifications(false); 
+                  navigate('/dashboard/revision-planner'); 
+                }}
+                className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded px-2 py-1"
+              >
                 View all reminders
               </button>
             </div>
@@ -228,19 +270,19 @@ const handleSettingsClick = () => {
 
       {/* Avatar Dropdown */}
       <Menu as="div" className="relative inline-block text-left">
-        <Menu.Button className="inline-flex items-center gap-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow hover:shadow-md border border-gray-200 dark:border-gray-600 focus:outline-none transition-all duration-200">
+        <Menu.Button className="inline-flex items-center gap-1 sm:gap-2 bg-white dark:bg-gray-800 px-2 sm:px-4 py-2 rounded-full shadow hover:shadow-md border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200">
           {avatarURL ? (
             <img
-      src={avatarURL || "/avatar.svg"}
-      alt="avatar"
-      className="w-8 h-8 rounded-full object-cover"
-    />
+              src={avatarURL || "/avatar.svg"}
+              alt="avatar"
+              className="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover"
+            />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-300 to-indigo-500 flex items-center justify-center">
-              <UserCircleIcon className="w-6 h-6 text-white" />
+            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-indigo-300 to-indigo-500 flex items-center justify-center">
+              <UserCircleIcon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
             </div>
           )}
-          <ChevronDownIcon className="w-4 h-4 text-gray-500 dark:text-gray-300" />
+          <ChevronDownIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500 dark:text-gray-300 hidden xs:block" />
         </Menu.Button>
 
 
@@ -252,33 +294,33 @@ const handleSettingsClick = () => {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-72 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 border border-gray-200 dark:border-gray-600 overflow-hidden">
+          <Menu.Items className="absolute right-0 mt-2 w-screen max-w-xs sm:w-72 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 border border-gray-200 dark:border-gray-600 overflow-hidden">
             {/* Profile Header */}
             {user ? (
-              <div className="px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
+              <div className="px-3 sm:px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
                 <div className="flex items-center gap-3">
                   <img 
                     src={avatarURL} 
-                    className="w-12 h-12 rounded-full border-2 border-white" 
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white flex-shrink-0" 
                     alt="avatar" 
                   />
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-sm font-bold truncate">{user?.name}</p>
                     <p className="text-xs opacity-90 truncate">{user?.email}</p>
                     <p className="text-xs mt-1 flex items-center gap-1">
-                      <AcademicCapIcon className="w-3 h-3" />
-                      Student Account
+                      <AcademicCapIcon className="w-3 h-3 flex-shrink-0" />
+                      <span className="truncate">Student Account</span>
                     </p>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
+              <div className="px-3 sm:px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-300 to-indigo-500 flex items-center justify-center border-2 border-white">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-indigo-300 to-indigo-500 flex items-center justify-center border-2 border-white flex-shrink-0">
                     <UserCircleIcon className="w-6 h-6 text-white" />
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-sm font-bold">Guest User</p>
                     <p className="text-xs opacity-90">Not logged in</p>
                   </div>
@@ -296,10 +338,10 @@ const handleSettingsClick = () => {
                         onClick={handleProfileClick}
                         className={`${
                           active ? "bg-indigo-50 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400" : "text-gray-700 dark:text-gray-200"
-                        } group flex items-center w-full px-4 py-3 text-sm transition-colors duration-150`}
+                        } group flex items-center w-full px-3 sm:px-4 py-3 text-sm transition-colors duration-150 active:bg-indigo-100 dark:active:bg-gray-600`}
                       >
-                        <UserIcon className="w-5 h-5 mr-3 text-indigo-500 dark:text-indigo-400" />
-                        My Profile
+                        <UserIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-500 dark:text-indigo-400 flex-shrink-0" />
+                        <span className="truncate">My Profile</span>
                       </button>
                     )}
                   </Menu.Item>
@@ -310,10 +352,10 @@ const handleSettingsClick = () => {
                         onClick={handleSettingsClick}
                         className={`${
                           active ? "bg-indigo-50 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400" : "text-gray-700 dark:text-gray-200"
-                        } group flex items-center w-full px-4 py-3 text-sm transition-colors duration-150`}
+                        } group flex items-center w-full px-3 sm:px-4 py-3 text-sm transition-colors duration-150 active:bg-indigo-100 dark:active:bg-gray-600`}
                       >
-                        <CogIcon className="w-5 h-5 mr-3 text-indigo-500 dark:text-indigo-400" />
-                        Edit Profile
+                        <CogIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-500 dark:text-indigo-400 flex-shrink-0" />
+                        <span className="truncate">Edit Profile</span>
                       </button>
                     )}
                   </Menu.Item>
@@ -326,10 +368,10 @@ const handleSettingsClick = () => {
                         onClick={handleLogout}
                         className={`${
                           active ? "bg-red-50 dark:bg-gray-700 text-red-600 dark:text-red-400" : "text-red-500 dark:text-red-400"
-                        } group flex items-center w-full px-4 py-3 text-sm font-medium transition-colors duration-150`}
+                        } group flex items-center w-full px-3 sm:px-4 py-3 text-sm font-medium transition-colors duration-150 active:bg-red-100 dark:active:bg-gray-600`}
                       >
-                        <ArrowRightOnRectangleIcon className="w-5 h-5 mr-3" />
-                        Logout
+                        <ArrowRightOnRectangleIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0" />
+                        <span className="truncate">Logout</span>
                       </button>
                     )}
                   </Menu.Item>
@@ -340,13 +382,13 @@ const handleSettingsClick = () => {
                 <Menu.Item>
                   {({ active }) => (
                     <button
-                      onClick={() => window.location.href = '/login'}
+                      onClick={() => navigate('/login')}
                       className={`${
                         active ? "bg-indigo-50 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400" : "text-indigo-500 dark:text-indigo-400"
-                      } group flex items-center w-full px-4 py-3 text-sm font-medium transition-colors duration-150`}
+                      } group flex items-center w-full px-3 sm:px-4 py-3 text-sm font-medium transition-colors duration-150 active:bg-indigo-100 dark:active:bg-gray-600`}
                     >
-                      <ArrowRightOnRectangleIcon className="w-5 h-5 mr-3 rotate-180" />
-                      Login
+                      <ArrowRightOnRectangleIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 rotate-180 flex-shrink-0" />
+                      <span className="truncate">Login</span>
                     </button>
                   )}
                 </Menu.Item>
