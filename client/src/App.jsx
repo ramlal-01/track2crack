@@ -153,14 +153,12 @@ const AppContent = () => {
 
       {dashboardRoutes.includes(location.pathname) && <DashboardHeader />}
 
-      <div className="flex flex-grow">
+      <div className="flex flex-grow relative">
         {/* Sidebar - only shows on dashboard pages */}
         <Sidebar />
         
-        {/* Main content area - adjust margin when sidebar is closed on desktop */}
-        <div className={`flex-grow transition-all duration-300 ${
-          isDashboardPage && !isSidebarOpen ? 'lg:ml-0' : ''
-        }`}>
+        {/* Main content area - takes full width when sidebar is closed */}
+        <div className="flex-1 w-full">
           <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
