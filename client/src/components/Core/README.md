@@ -9,10 +9,16 @@ The original monolithic `CoreSubjectPage.jsx` has been split into 6 focused comp
 ### 1. **ProgressCards.jsx**
 - **Purpose**: Displays the four progress statistics cards
 - **Features**: 
-  - Total Topics, Completed, Bookmarked, Progress percentage
+  - Total Topics, Completed, Bookmarked, Quiz-based Progress percentage
   - Circular progress bar with dark mode support
-  - Mobile-responsive grid layout (1 col on mobile, 2 on md, 4 on lg)
+  - **Dual Layout System**: 
+    - Mobile: 2x2 grid with compact horizontal design (28px icons)
+    - Desktop: 1x4 grid with original vertical design (50px progress ring, larger icons)
+  - Shows total quiz attempts instead of current count ("n attempts")
+  - Maintains original desktop styling while optimizing mobile experience
+  - Responsive sizing and spacing for different screen sizes
   - Hover animations and color-coded borders
+  - **Progress Logic**: Uses quiz-based `progressPercent` from API (highest scores per topic)
 
 ### 2. **CurrentTopicSection.jsx**
 - **Purpose**: Handles the current active topic with learning flow
@@ -20,17 +26,20 @@ The original monolithic `CoreSubjectPage.jsx` has been split into 6 focused comp
   - Yes/No knowledge assessment
   - Learning resources display
   - Quiz initiation
-  - Bookmark and reminder functionality
   - Mobile-responsive layout (stacked on mobile, side-by-side on desktop)
   - Score display card
+  - **Compact design**: Reduced padding and spacing for minimal height usage
+  - **Streamlined interface**: No bookmark or reminder functionality
 
 ### 3. **FilterControls.jsx**
 - **Purpose**: Manages filtering and search functionality
 - **Features**:
   - Filter tabs (All, Important, Other, Bookmarked, Remind)
-  - "Completed Only" checkbox
   - Search input with icon
-  - Mobile-responsive layout with abbreviated labels on small screens
+  - **Dual Layout System**:
+    - Mobile: Grid layout (3 cols on mobile, 5 on tablet) with abbreviated labels
+    - Desktop: Original horizontal flex layout with full labels
+  - No "Completed Only" filter as requested
   - Dark mode support
 
 ### 4. **TopicsTable.jsx**
@@ -74,6 +83,9 @@ The original monolithic `CoreSubjectPage.jsx` has been split into 6 focused comp
 3. **Progress Cards**: Responsive grid with proper spacing
 4. **Current Topic**: Stacked layout instead of side-by-side
 5. **Touch-Friendly**: Larger tap targets and proper spacing
+6. **Hidden Elements**: Topic explanations hidden on mobile for cleaner layout
+7. **Improved Alignment**: Better spacing, centered content, and organized button layouts
+8. **Mobile-Optimized Modals**: Full-width buttons and improved touch interactions
 
 ## 🎨 Dark Mode Support
 
@@ -139,5 +151,22 @@ const CoreCN = () => {
   );
 };
 ```
+
+## 🔄 Recent Updates
+
+### Calendar & Modal Fixes
+- **Separate Calendar States**: Fixed dual calendar issue by using separate state for current topic vs. list topics
+- **Click-Outside Functionality**: Added automatic closing of calendars and note modals when clicking outside
+- **Mutual Exclusion**: Opening one calendar/modal now automatically closes others
+- **Improved UX**: Better interaction flow with proper state management
+
+### Height Optimization
+- **Current Topic Card**: Reduced height through optimized padding and spacing
+- **Compact Design**: More efficient use of vertical space while maintaining functionality
+
+### Complete Functionality Removal
+- **Current Topic Section**: Removed both bookmark and calendar/reminder functionality
+- **Ultra-clean Interface**: Focus purely on learning flow (assessment, resources, quiz)
+- **List Functionality**: All bookmark and reminder features available in the topics list
 
 This refactoring provides a solid foundation for future enhancements while maintaining all existing functionality and significantly improving the mobile user experience.
