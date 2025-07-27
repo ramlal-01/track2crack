@@ -189,7 +189,10 @@ const TopicRow = ({
           )}
 
           {openReminderId === topic._id && (
-            <div className={`absolute z-50 top-8 bg-white border border-gray-200 shadow-lg rounded-lg p-2 ${darkCardBg} ${darkBorder}`}>
+            <div 
+              className={`absolute z-50 top-8 bg-white border border-gray-200 shadow-lg rounded-lg p-2 ${darkCardBg} ${darkBorder}`}
+              onClick={(e) => e.stopPropagation()}
+            >
               <DatePicker
                 selected={remindOn ? new Date(remindOn) : null}
                 onChange={(date) => handleReminderChange(topic._id, date)}
@@ -197,6 +200,7 @@ const TopicRow = ({
                 minDate={new Date()}
                 inline
                 className="dark:bg-gray-800"
+                portalId="root"
               />
             </div>
           )}
