@@ -156,8 +156,9 @@ const handleSettingsClick = () => {
       {/* Dark/Light Toggle */}
        
       <ThemeToggle />
-      {/* Notification Bell */}
-      <div className="relative">
+      
+      {/* Notification Bell - Hidden on mobile, shown on desktop */}
+      <div className="relative hidden sm:block">
         <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:shadow transition-all duration-200 relative" title="Notifications">
           <BellIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
           {notifications.some(n => !n.isSeen) && <span className="absolute top-0 right-0 h-3 w-3 rounded-full bg-red-500 border-2 border-white dark:border-gray-800"></span>}
@@ -228,19 +229,19 @@ const handleSettingsClick = () => {
 
       {/* Avatar Dropdown */}
       <Menu as="div" className="relative inline-block text-left">
-        <Menu.Button className="inline-flex items-center gap-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow hover:shadow-md border border-gray-200 dark:border-gray-600 focus:outline-none transition-all duration-200">
+        <Menu.Button className="inline-flex items-center gap-2 bg-white dark:bg-gray-800 px-3 sm:px-4 py-2 rounded-full shadow hover:shadow-md border border-gray-200 dark:border-gray-600 focus:outline-none transition-all duration-200">
           {avatarURL ? (
             <img
       src={avatarURL || "/avatar.svg"}
       alt="avatar"
-      className="w-8 h-8 rounded-full object-cover"
+      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover"
     />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-300 to-indigo-500 flex items-center justify-center">
-              <UserCircleIcon className="w-6 h-6 text-white" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-indigo-300 to-indigo-500 flex items-center justify-center">
+              <UserCircleIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
           )}
-          <ChevronDownIcon className="w-4 h-4 text-gray-500 dark:text-gray-300" />
+          <ChevronDownIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500 dark:text-gray-300" />
         </Menu.Button>
 
 
@@ -252,18 +253,18 @@ const handleSettingsClick = () => {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-72 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 border border-gray-200 dark:border-gray-600 overflow-hidden">
+          <Menu.Items className="absolute right-0 mt-2 w-64 sm:w-72 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 border border-gray-200 dark:border-gray-600 overflow-hidden">
             {/* Profile Header */}
             {user ? (
-              <div className="px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
-                <div className="flex items-center gap-3">
+              <div className="px-3 sm:px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
+                <div className="flex items-center gap-2 sm:gap-3">
                   <img 
                     src={avatarURL} 
-                    className="w-12 h-12 rounded-full border-2 border-white" 
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white" 
                     alt="avatar" 
                   />
-                  <div>
-                    <p className="text-sm font-bold truncate">{user?.name}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs sm:text-sm font-bold truncate">{user?.name}</p>
                     <p className="text-xs opacity-90 truncate">{user?.email}</p>
                     <p className="text-xs mt-1 flex items-center gap-1">
                       <AcademicCapIcon className="w-3 h-3" />
@@ -273,18 +274,71 @@ const handleSettingsClick = () => {
                 </div>
               </div>
             ) : (
-              <div className="px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-300 to-indigo-500 flex items-center justify-center border-2 border-white">
-                    <UserCircleIcon className="w-6 h-6 text-white" />
+              <div className="px-3 sm:px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-indigo-300 to-indigo-500 flex items-center justify-center border-2 border-white">
+                    <UserCircleIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
-                  <div>
-                    <p className="text-sm font-bold">Guest User</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs sm:text-sm font-bold">Guest User</p>
                     <p className="text-xs opacity-90">Not logged in</p>
                   </div>
                 </div>
               </div>
             )}
+
+            {/* Notifications Section - Show on mobile only */}
+            <div className="sm:hidden">
+              <div className="px-3 py-2 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white flex justify-between items-center">
+                <h3 className="text-xs font-bold flex items-center gap-1">
+                  <BellIcon className="w-3 h-3" />
+                  Notifications
+                </h3>
+                <button className="text-xs underline" onClick={handleMarkAllRead}>Mark all read</button>
+              </div>
+
+              {notifications.length > 0 ? (
+                <div className="max-h-32 overflow-y-auto">
+                  {notifications.slice(0, 3).map((notification) => (
+                    <div
+                      key={notification.id}
+                      onClick={() => {
+                        if (notification.link) navigate(notification.link);
+                      }}
+                      className={`px-3 py-2 border-b transition-colors duration-150 cursor-pointer
+                        ${notification.isSeen ? "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-indigo-50 dark:bg-indigo-900"}`}
+                    >
+                      <div className="flex items-start">
+                        <div className="flex-shrink-0 pt-0.5">
+                          <div className="h-6 w-6 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center">
+                            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300">
+                              {notification.type?.toUpperCase() || "NOTE"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="ml-2 min-w-0 flex-1">
+                          <p className="text-xs font-medium text-gray-900 dark:text-white truncate">{notification.title}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">Due: {formatDate(notification.date)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {notifications.length > 3 && (
+                    <div className="text-center py-1">
+                      <button 
+                        onClick={() => window.location.href = '/dashboard/revision-planner'}
+                        className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">
+                        View all ({notifications.length})
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="px-3 py-3 text-center">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">No notifications</p>
+                </div>
+              )}
+            </div>
 
             {/* Menu Items - Only show when logged in */}
             {user ? (
@@ -296,9 +350,9 @@ const handleSettingsClick = () => {
                         onClick={handleProfileClick}
                         className={`${
                           active ? "bg-indigo-50 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400" : "text-gray-700 dark:text-gray-200"
-                        } group flex items-center w-full px-4 py-3 text-sm transition-colors duration-150`}
+                        } group flex items-center w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm transition-colors duration-150`}
                       >
-                        <UserIcon className="w-5 h-5 mr-3 text-indigo-500 dark:text-indigo-400" />
+                        <UserIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-500 dark:text-indigo-400" />
                         My Profile
                       </button>
                     )}
@@ -310,9 +364,9 @@ const handleSettingsClick = () => {
                         onClick={handleSettingsClick}
                         className={`${
                           active ? "bg-indigo-50 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400" : "text-gray-700 dark:text-gray-200"
-                        } group flex items-center w-full px-4 py-3 text-sm transition-colors duration-150`}
+                        } group flex items-center w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm transition-colors duration-150`}
                       >
-                        <CogIcon className="w-5 h-5 mr-3 text-indigo-500 dark:text-indigo-400" />
+                        <CogIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-500 dark:text-indigo-400" />
                         Edit Profile
                       </button>
                     )}
@@ -326,9 +380,9 @@ const handleSettingsClick = () => {
                         onClick={handleLogout}
                         className={`${
                           active ? "bg-red-50 dark:bg-gray-700 text-red-600 dark:text-red-400" : "text-red-500 dark:text-red-400"
-                        } group flex items-center w-full px-4 py-3 text-sm font-medium transition-colors duration-150`}
+                        } group flex items-center w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-medium transition-colors duration-150`}
                       >
-                        <ArrowRightOnRectangleIcon className="w-5 h-5 mr-3" />
+                        <ArrowRightOnRectangleIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" />
                         Logout
                       </button>
                     )}
@@ -343,9 +397,9 @@ const handleSettingsClick = () => {
                       onClick={() => window.location.href = '/login'}
                       className={`${
                         active ? "bg-indigo-50 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400" : "text-indigo-500 dark:text-indigo-400"
-                      } group flex items-center w-full px-4 py-3 text-sm font-medium transition-colors duration-150`}
+                      } group flex items-center w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-medium transition-colors duration-150`}
                     >
-                      <ArrowRightOnRectangleIcon className="w-5 h-5 mr-3 rotate-180" />
+                      <ArrowRightOnRectangleIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 rotate-180" />
                       Login
                     </button>
                   )}

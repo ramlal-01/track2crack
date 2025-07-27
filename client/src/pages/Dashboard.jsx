@@ -225,23 +225,23 @@ useEffect(() => {
   return (
     <div className={`min-h-screen ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}>
       {/* Main content */}
-      <div className="flex-1 p-10">
+      <div className="flex-1 p-4 sm:p-6 md:p-10">
         {/* Header */}
         
 
           {/* Center - Welcome Message */}
-            <div className=" hidden sm:block mb-10">
-              <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
+            <div className="hidden sm:block mb-6 sm:mb-10">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
                 Welcome back, <span className="text-purple-700 dark:text-blue-300">{user?.name || "Coder"}</span>
               </h2>
-              <p className="text-sb italic text-indigo-700 dark:text-gray-400">
+              <p className="text-sm sm:text-base italic text-indigo-700 dark:text-gray-400">
                 "Track your progress. Crack your placements."
               </p>
             </div>
 
         {/* --- From here, actual content starts (Step 2 onward) --- */}
          
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 mt-6 mb-15"> 
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-10 mt-4 sm:mt-6 mb-8 sm:mb-15"> 
             <SubjectCard
                 icon="/assets/icons/dsa-sheet.svg"
                 title="DSA Sheet"
@@ -250,10 +250,10 @@ useEffect(() => {
             />    
         </div>
         
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-white tracking-tight mb-2">📘 Core Subjects</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Track progress in foundational subjects</p>
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-white tracking-tight mb-2">📘 Core Subjects</h2>
+        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-3 sm:mb-4">Track progress in foundational subjects</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-6 mb-15">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-10 mt-4 sm:mt-6 mb-8 sm:mb-15">
             <SubjectCard 
                 icon="/assets/icons/os.svg" 
                 title="Operating Systems" 
@@ -276,14 +276,14 @@ useEffect(() => {
         
 
         {/* Theory Subjects  */}
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-white tracking-tight mb-2">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-white tracking-tight mb-2">
         🧠 Conceptual Mastery
         </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-3 sm:mb-4">
         Strengthen your foundational understanding in core CS concepts like OOPS, Java, and DSA Theory.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 mt-6 mb-15">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-10 mt-4 sm:mt-6 mb-8 sm:mb-15">
             <SubjectCard
                 icon="/assets/icons/java.svg"
                 title="Java"
