@@ -5,6 +5,7 @@ import { IoRocketSharp } from "react-icons/io5";
 import { Bars3Icon } from "@heroicons/react/24/solid";
 import StreakBadge from "../components/StreakBadge";
 import { useSidebar } from "../context/SidebarContext";
+
 const DashboardHeader = () => {
   const { toggleSidebar, isDashboardPage } = useSidebar();
 
@@ -28,7 +29,7 @@ const DashboardHeader = () => {
           <div className="absolute -inset-1 bg-white rounded-lg blur opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
           <div className="flex items-center p-1">
             <IoRocketSharp className="text-white mr-2 text-xl transition-transform duration-300 group-hover:rotate-45 group-hover:scale-110" />
-            <span className="text-xl md:text-2xl font-extrabold tracking-wide select-none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200">
+            <span className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-wide select-none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200">
               Track2Crack
             </span>
           </div>
@@ -37,8 +38,10 @@ const DashboardHeader = () => {
 
       {/* Right: Streak + Theme + Avatar */}
       <div className="flex items-center gap-4 ">
-        {/* 🔥 Streak */}
-        <StreakBadge />
+        {/* 🔥 Streak - Only fire icon and number on mobile */}
+        <div className="block">
+          <StreakBadge />
+        </div>
       {/* 👤 Avatar + dropdown */}
         <div className="flex items-center">
           <TopRightAvatar />

@@ -156,8 +156,9 @@ const handleSettingsClick = () => {
       {/* Dark/Light Toggle */}
        
       <ThemeToggle />
-      {/* Notification Bell */}
-      <div className="relative">
+      
+      {/* Notification Bell - Hide on mobile, will be moved to dropdown */}
+      <div className="relative hidden md:block">
         <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:shadow transition-all duration-200 relative" title="Notifications">
           <BellIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
           {notifications.some(n => !n.isSeen) && <span className="absolute top-0 right-0 h-3 w-3 rounded-full bg-red-500 border-2 border-white dark:border-gray-800"></span>}
@@ -240,6 +241,10 @@ const handleSettingsClick = () => {
               <UserCircleIcon className="w-6 h-6 text-white" />
             </div>
           )}
+          {/* Show notification indicator on mobile */}
+          {notifications.some(n => !n.isSeen) && (
+            <span className="md:hidden absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 border-2 border-white dark:border-gray-800"></span>
+          )}
           <ChevronDownIcon className="w-4 h-4 text-gray-500 dark:text-gray-300" />
         </Menu.Button>
 
@@ -252,18 +257,18 @@ const handleSettingsClick = () => {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-72 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 border border-gray-200 dark:border-gray-600 overflow-hidden">
+          <Menu.Items className="absolute right-0 mt-2 w-72 md:w-72 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 border border-gray-200 dark:border-gray-600 overflow-hidden">
             {/* Profile Header */}
             {user ? (
-              <div className="px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
-                <div className="flex items-center gap-3">
+              <div className="px-3 md:px-4 py-2 md:py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
+                <div className="flex items-center gap-2 md:gap-3">
                   <img 
                     src={avatarURL} 
-                    className="w-12 h-12 rounded-full border-2 border-white" 
+                    className="w-10 md:w-12 h-10 md:h-12 rounded-full border-2 border-white" 
                     alt="avatar" 
                   />
                   <div>
-                    <p className="text-sm font-bold truncate">{user?.name}</p>
+                    <p className="text-xs md:text-sm font-bold truncate">{user?.name}</p>
                     <p className="text-xs opacity-90 truncate">{user?.email}</p>
                     <p className="text-xs mt-1 flex items-center gap-1">
                       <AcademicCapIcon className="w-3 h-3" />
@@ -273,18 +278,77 @@ const handleSettingsClick = () => {
                 </div>
               </div>
             ) : (
-              <div className="px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-300 to-indigo-500 flex items-center justify-center border-2 border-white">
+              <div className="px-3 md:px-4 py-2 md:py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className="w-10 md:w-12 h-10 md:h-12 rounded-full bg-gradient-to-br from-indigo-300 to-indigo-500 flex items-center justify-center border-2 border-white">
                     <UserCircleIcon className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-bold">Guest User</p>
+                    <p className="text-xs md:text-sm font-bold">Guest User</p>
                     <p className="text-xs opacity-90">Not logged in</p>
                   </div>
                 </div>
               </div>
             )}
+
+            {/* Notifications Section for Mobile */}
+            <div className="md:hidden">
+              <div className="px-3 py-2 bg-gray-50 dark:bg-gray-700/30 border-b border-gray-200 dark:border-gray-600">
+                <div className="flex justify-between items-center">
+                  <h4 className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                    <BellIcon className="h-3 w-3" />
+                    Notifications
+                  </h4>
+                  <button 
+                    className="text-xs text-indigo-600 dark:text-indigo-400 underline" 
+                    onClick={handleMarkAllRead}
+                  >
+                    Mark all read
+                  </button>
+                </div>
+              </div>
+
+              {notifications.length > 0 ? (
+                <div className="max-h-32 overflow-y-auto">
+                  {notifications.slice(0, 3).map((notification) => (
+                    <div
+                      key={notification.id}
+                      onClick={() => {
+                        if (notification.link) navigate(notification.link);
+                      }}
+                      className={`px-3 py-2 border-b transition-colors duration-150 cursor-pointer
+                        ${notification.isSeen ? "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-indigo-50 dark:bg-indigo-900"}`}
+                    >
+                      <div className="flex items-start gap-2">
+                        <div className="flex-shrink-0 pt-0.5">
+                          <div className="h-6 w-6 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center">
+                            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300">
+                              {notification.type?.charAt(0).toUpperCase() || "N"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs font-medium text-gray-900 dark:text-white truncate">{notification.title}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{formatDate(notification.date)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="px-3 py-2 text-center border-t border-gray-100 dark:border-gray-700">
+                    <button 
+                      onClick={() => window.location.href = '/dashboard/revision-planner'}
+                      className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline"
+                    >
+                      View all
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="px-3 py-4 text-center">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">No notifications</p>
+                </div>
+              )}
+            </div>
 
             {/* Menu Items - Only show when logged in */}
             {user ? (
@@ -296,9 +360,9 @@ const handleSettingsClick = () => {
                         onClick={handleProfileClick}
                         className={`${
                           active ? "bg-indigo-50 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400" : "text-gray-700 dark:text-gray-200"
-                        } group flex items-center w-full px-4 py-3 text-sm transition-colors duration-150`}
+                        } group flex items-center w-full px-3 md:px-4 py-2 md:py-3 text-xs md:text-sm transition-colors duration-150`}
                       >
-                        <UserIcon className="w-5 h-5 mr-3 text-indigo-500 dark:text-indigo-400" />
+                        <UserIcon className="w-4 md:w-5 h-4 md:h-5 mr-2 md:mr-3 text-indigo-500 dark:text-indigo-400" />
                         My Profile
                       </button>
                     )}
@@ -310,9 +374,9 @@ const handleSettingsClick = () => {
                         onClick={handleSettingsClick}
                         className={`${
                           active ? "bg-indigo-50 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400" : "text-gray-700 dark:text-gray-200"
-                        } group flex items-center w-full px-4 py-3 text-sm transition-colors duration-150`}
+                        } group flex items-center w-full px-3 md:px-4 py-2 md:py-3 text-xs md:text-sm transition-colors duration-150`}
                       >
-                        <CogIcon className="w-5 h-5 mr-3 text-indigo-500 dark:text-indigo-400" />
+                        <CogIcon className="w-4 md:w-5 h-4 md:h-5 mr-2 md:mr-3 text-indigo-500 dark:text-indigo-400" />
                         Edit Profile
                       </button>
                     )}
@@ -326,9 +390,9 @@ const handleSettingsClick = () => {
                         onClick={handleLogout}
                         className={`${
                           active ? "bg-red-50 dark:bg-gray-700 text-red-600 dark:text-red-400" : "text-red-500 dark:text-red-400"
-                        } group flex items-center w-full px-4 py-3 text-sm font-medium transition-colors duration-150`}
+                        } group flex items-center w-full px-3 md:px-4 py-2 md:py-3 text-xs md:text-sm font-medium transition-colors duration-150`}
                       >
-                        <ArrowRightOnRectangleIcon className="w-5 h-5 mr-3" />
+                        <ArrowRightOnRectangleIcon className="w-4 md:w-5 h-4 md:h-5 mr-2 md:mr-3" />
                         Logout
                       </button>
                     )}
@@ -343,9 +407,9 @@ const handleSettingsClick = () => {
                       onClick={() => window.location.href = '/login'}
                       className={`${
                         active ? "bg-indigo-50 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400" : "text-indigo-500 dark:text-indigo-400"
-                      } group flex items-center w-full px-4 py-3 text-sm font-medium transition-colors duration-150`}
+                      } group flex items-center w-full px-3 md:px-4 py-2 md:py-3 text-xs md:text-sm font-medium transition-colors duration-150`}
                     >
-                      <ArrowRightOnRectangleIcon className="w-5 h-5 mr-3 rotate-180" />
+                      <ArrowRightOnRectangleIcon className="w-4 md:w-5 h-4 md:h-5 mr-2 md:mr-3 rotate-180" />
                       Login
                     </button>
                   )}

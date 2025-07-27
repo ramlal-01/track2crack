@@ -47,6 +47,9 @@ const SubjectProgressChart = ({ data }) => {
       return gradient;
     };
 
+    // Get screen width to determine mobile
+    const isMobile = window.innerWidth < 768;
+
     chartInstanceRef.current = new Chart(ctx, {
       type: "bar",
       data: {
@@ -57,13 +60,13 @@ const SubjectProgressChart = ({ data }) => {
             data: dataValues,
             backgroundColor: dataValues.map(value => createGradient(ctx, value)),
             borderRadius: {
-              topLeft: 12,
-              topRight: 12,
+              topLeft: isMobile ? 8 : 12,
+              topRight: isMobile ? 8 : 12,
               bottomLeft: 0,
               bottomRight: 0,
             },
             borderWidth: 0,
-            barThickness: 40,
+            barThickness: isMobile ? 25 : 40,
             hoverBackgroundColor: dataValues.map(value => {
               if (value < 30) return theme === 'dark' ? '#fca5a5' : '#fecaca';
               if (value < 70) return theme === 'dark' ? '#fcd34d' : '#fde68a';
@@ -97,7 +100,10 @@ const SubjectProgressChart = ({ data }) => {
             },
             ticks: {
               color: theme === 'dark' ? '#9ca3af' : '#6b7280',
-              padding: 10,
+              padding: isMobile ? 5 : 10,
+              font: {
+                size: isMobile ? 10 : 12,
+              },
               callback: function(value) {
                 return value + '%';
               }
@@ -111,7 +117,7 @@ const SubjectProgressChart = ({ data }) => {
               color: theme === 'dark' ? '#d1d5db' : '#4b5563',
               font: {
                 weight: '600',
-                size: 12,
+                size: isMobile ? 10 : 12,
               },
             },
             border: {
@@ -126,12 +132,12 @@ const SubjectProgressChart = ({ data }) => {
             bodyColor: theme === 'dark' ? '#d1d5db' : '#4b5563',
             borderColor: theme === 'dark' ? '#374151' : '#e5e7eb',
             borderWidth: 1,
-            padding: 16,
-            cornerRadius: 12,
+            padding: isMobile ? 12 : 16,
+            cornerRadius: isMobile ? 8 : 12,
             displayColors: false,
             bodyFont: {
               weight: '600',
-              size: 14,
+              size: isMobile ? 12 : 14,
             },
             callbacks: {
               label: function(context) {
@@ -148,10 +154,10 @@ const SubjectProgressChart = ({ data }) => {
         },
         layout: {
           padding: {
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 20,
+            top: isMobile ? 10 : 20,
+            right: isMobile ? 10 : 20,
+            bottom: isMobile ? 10 : 20,
+            left: isMobile ? 10 : 20,
           },
         },
       },
@@ -169,52 +175,52 @@ const SubjectProgressChart = ({ data }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="h-[28rem] w-[40rem] rounded-3xl shadow-xl p-8 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all duration-300"
+      className="h-[20rem] sm:h-[28rem] w-full max-w-[40rem] mx-auto rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-8 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all duration-300"
     >
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-8 gap-3 sm:gap-0">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-3">
-            <span className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-xl shadow-sm">
-              <span className="text-xl">📊</span>
+          <h2 className="text-lg sm:text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2 sm:gap-3">
+            <span className="p-2 sm:p-3 bg-blue-100 dark:bg-blue-900/50 rounded-lg sm:rounded-xl shadow-sm">
+              <span className="text-base sm:text-xl">📊</span>
             </span>
-            Quiz Progress Overview
+            <span className="line-clamp-1">Quiz Progress Overview</span>
           </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1 sm:mt-2">
             Visual overview of your learning progress
           </p>
         </div>
-        <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700/50 px-3 py-1.5 rounded-full">
+        <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full">
           <span className={`w-2 h-2 rounded-full ${
             dataValues.some(v => v < 30) ? 'bg-red-500' : 'bg-green-500'
           }`}></span>
-          <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+          <span className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">
             {dataKeys.length} {dataKeys.length === 1 ? 'subject' : 'subjects'}
           </span>
         </div>
       </div>
       
-      <div className="relative h-80">
+      <div className="relative h-48 sm:h-80">
         <canvas ref={chartRef} />
         {dataKeys.length === 0 && (
           <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 gap-2">
-            <div className="text-4xl">📭</div>
-            <p className="text-lg font-medium">No progress data available</p>
-            <p className="text-sm">Start learning to see your progress</p>
+            <div className="text-3xl sm:text-4xl">📭</div>
+            <p className="text-base sm:text-lg font-medium">No progress data available</p>
+            <p className="text-xs sm:text-sm">Start learning to see your progress</p>
           </div>
         )}
       </div>
       
-      <div className="flex justify-center gap-4 mt-6">
-        <div className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-full bg-red-500"></span>
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-4 sm:mt-6">
+        <div className="flex items-center gap-1 sm:gap-1.5">
+          <span className="w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-red-500"></span>
           <span className="text-xs text-gray-500 dark:text-gray-400">Beginner (0-30%)</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
+        <div className="flex items-center gap-1 sm:gap-1.5">
+          <span className="w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-yellow-500"></span>
           <span className="text-xs text-gray-500 dark:text-gray-400">Intermediate (30-70%)</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-full bg-green-500"></span>
+        <div className="flex items-center gap-1 sm:gap-1.5">
+          <span className="w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-green-500"></span>
           <span className="text-xs text-gray-500 dark:text-gray-400">Advanced (70-100%)</span>
         </div>
       </div>
