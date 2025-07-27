@@ -31,12 +31,14 @@ import Feedback from './pages/FeedbackPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './context/AuthContext';
 import DashboardHeader from './components/DashboardHeader';
-
-
+import { SidebarProvider } from './context/SidebarContext';
+import Sidebar from "./components/Sidebar";
 const App = () => {
   return (
     <BrowserRouter>
+     <SidebarProvider>
       <AppContent />
+      </SidebarProvider>
     </BrowserRouter>
   );
 };
@@ -141,13 +143,14 @@ const AppContent = () => {
   "/quiz/history"
 ];
 
+const shouldShowSidebar = dashboardRoutes.includes(location.pathname);
 
   return (
     <div className="flex flex-col min-h-screen">
       {showNavbar && <Navbar  />}
 
       {dashboardRoutes.includes(location.pathname) && <DashboardHeader />}
-
+      {shouldShowSidebar && <Sidebar />}
       <div className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -162,9 +165,9 @@ const AppContent = () => {
           {/* Theory Routes */}
           <Route path="/dashboard/theory/dsa" element={ <ProtectedRoute><DSA /> </ProtectedRoute>} />
           <Route path="/dashboard/theory/java" element={ <ProtectedRoute><Java /> </ProtectedRoute>} />
-          <Route path="/dashboard/theory/oops" element={  <OOPS />  } />
+          <Route path="/dashboard/theory/oops" element={  <ProtectedRoute> <OOPS /></ProtectedRoute>  } />
           {/* Quiz Route */}
-          <Route path="/quiz" element={   <Quiz />  } />
+          <Route path="/quiz" element={ <ProtectedRoute>  <Quiz /> </ProtectedRoute> } />
           <Route path="/quiz/history" element={<ProtectedRoute><QuizHistory /> </ProtectedRoute>} />
 
           {/* Core Routes and Core Quiz Routes  */}

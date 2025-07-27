@@ -7,11 +7,12 @@ import { FaFire } from "react-icons/fa";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import SubjectCard from "../components/SubjectCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import SubjectProgressChart from "../components/SubjectProgressChart";
 import { useEffect, useState } from "react";
 import API from "../api/api"; // your API utility
 import { Navigate } from "react-router-dom";
+import { useSidebar } from "../context/SidebarContext";
 
 const Dashboard = () => {
   const { theme } = useTheme(); // dark / light 
@@ -19,6 +20,7 @@ const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { isSidebarOpen, closeSidebar } = useSidebar();
 
     if (!user) return <Navigate to="/login" />;
 
@@ -223,91 +225,100 @@ useEffect(() => {
 }, []);
 
 
+
+
   return (
     <div className={`flex min-h-screen ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}>
       {/* Sidebar */}
       <Sidebar />
 
+      {/* Desktop overlay when sidebar is open */}
+      {/* {isSidebarOpen && (
+        <div 
+          className=" lg:block fixed inset-0 z-30   transition-all duration-300"
+          onClick={closeSidebar}
+        />
+      )} */}
+
       {/* Main content */}
-      <div className="flex-1 p-10">
-        {/* Header */}
-        
+      <div className={`flex-1 transition-all duration-300 ease-in-out ${
+        isSidebarOpen ? 'lg:ml-72' : 'lg:ml-0'
+      } p-6 lg:p-10`}>
+        {/* Welcome Message */}
+        <div className="hidden sm:block mb-10">
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
+            Welcome back, <span className="text-purple-700 dark:text-blue-300">{user?.name || "Coder"}</span>
+          </h2>
+          <p className="text-sb italic text-indigo-700 dark:text-gray-400">
+            "Track your progress. Crack your placements."
+          </p>
+        </div>
 
-          {/* Center - Welcome Message */}
-            <div className=" hidden sm:block mb-10">
-              <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
-                Welcome back, <span className="text-purple-700 dark:text-blue-300">{user?.name || "Coder"}</span>
-              </h2>
-              <p className="text-sb italic text-indigo-700 dark:text-gray-400">
-                "Track your progress. Crack your placements."
-              </p>
-            </div>
-
-        {/* --- From here, actual content starts (Step 2 onward) --- */}
-         
+        {/* DSA Sheet */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 mt-6 mb-15"> 
-            <SubjectCard
-                icon="/assets/icons/dsa-sheet.svg"
-                title="DSA Sheet"
-                progress={progress.DSASheet}
-                onClick={() => navigate("/dashboard/dsa")}
-            />    
+          <SubjectCard
+            icon="/assets/icons/dsa-sheet.svg"
+            title="DSA Sheet"
+            progress={progress.DSASheet}
+            onClick={() => navigate("/dashboard/dsa")}
+          />    
         </div>
         
+        {/* Core Subjects */}
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-white tracking-tight mb-2">📘 Core Subjects</h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Track progress in foundational subjects</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-6 mb-15">
-            <SubjectCard 
-                icon="/assets/icons/os.svg" 
-                title="Operating Systems" 
-                progress={progress.OS}   
-                onClick={() => navigate("/dashboard/core/os")}
-            />
-            <SubjectCard 
-                icon="/assets/icons/dbms.svg" 
-                title="DBMS" 
-                progress={progress.DBMS}  
-                onClick={() => navigate("/dashboard/core/dbms")}
-            />
-            <SubjectCard 
-                icon="/assets/icons/cn.svg" 
-                title="Computer Networks" 
-                progress={progress.CN}     
-                onClick={() => navigate("/dashboard/core/cn")}
-            />
+          <SubjectCard 
+            icon="/assets/icons/os.svg" 
+            title="Operating Systems" 
+            progress={progress.OS}   
+            onClick={() => navigate("/dashboard/core/os")}
+          />
+          <SubjectCard 
+            icon="/assets/icons/dbms.svg" 
+            title="DBMS" 
+            progress={progress.DBMS}  
+            onClick={() => navigate("/dashboard/core/dbms")}
+          />
+          <SubjectCard 
+            icon="/assets/icons/cn.svg" 
+            title="Computer Networks" 
+            progress={progress.CN}     
+            onClick={() => navigate("/dashboard/core/cn")}
+          />
         </div>
-        
 
-        {/* Theory Subjects  */}
+        {/* Theory Subjects */}
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-white tracking-tight mb-2">
-        🧠 Conceptual Mastery
+          🧠 Conceptual Mastery
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-        Strengthen your foundational understanding in core CS concepts like OOPS, Java, and DSA Theory.
+          Strengthen your foundational understanding in core CS concepts like OOPS, Java, and DSA Theory.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 mt-6 mb-15">
-            <SubjectCard
-                icon="/assets/icons/java.svg"
-                title="Java"
-                progress={progress.Java}  
-                onClick={() => navigate("/dashboard/theory/java")}
-            />
-            <SubjectCard
-                icon="/assets/icons/dsa.svg"
-                title="DSA Theory"
-                progress={progress.DSA}  
-                onClick={() => navigate("/dashboard/theory/dsa")}
-            />
-            <SubjectCard
-                icon="/assets/icons/oops.svg"
-                title="OOPS"
-                progress={progress.OOPS}  
-                onClick={() => navigate("/dashboard/theory/oops")}
-            />
+          <SubjectCard
+            icon="/assets/icons/java.svg"
+            title="Java"
+            progress={progress.Java}  
+            onClick={() => navigate("/dashboard/theory/java")}
+          />
+          <SubjectCard
+            icon="/assets/icons/dsa.svg"
+            title="DSA Theory"
+            progress={progress.DSA}  
+            onClick={() => navigate("/dashboard/theory/dsa")}
+          />
+          <SubjectCard
+            icon="/assets/icons/oops.svg"
+            title="OOPS"
+            progress={progress.OOPS}  
+            onClick={() => navigate("/dashboard/theory/oops")}
+          />
         </div>
- 
+
+        {/* Progress Chart */}
         <SubjectProgressChart data={{
           Java: quizProgress.Java,
           OOPS: quizProgress.OOPS,
@@ -316,9 +327,6 @@ useEffect(() => {
           DBMS: quizProgress.DBMS,
           CN: quizProgress.CN,
         }} />
-
-
-
       </div>
     </div>
   );
