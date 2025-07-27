@@ -99,22 +99,24 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside 
-        className={`${isSidebarOpen ? 'relative' : 'absolute'} top-0 lg:top-0 z-40 w-72 h-[calc(100vh-72px)] flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed lg:sticky top-[72px] left-0 z-40 flex-shrink-0 h-[calc(100vh-72px)] flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
+          isSidebarOpen ? 'w-72 translate-x-0' : 'w-0 -translate-x-full overflow-hidden'
         }`}
       >
-        {/* Cross Icon - Top Right Corner - Show on all screen sizes */}
-        <div className="flex justify-end p-4">
-          <button 
-            onClick={closeSidebar}
-            className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
-            aria-label="Close sidebar"
-          >
-            <XMarkIcon className="w-5 h-5" />
-          </button>
-        </div>
+        {/* Sidebar Content - Fixed width wrapper */}
+        <div className="w-72 h-full flex flex-col">
+          {/* Cross Icon - Top Right Corner - Show on all screen sizes */}
+          <div className="flex justify-end p-4">
+            <button 
+              onClick={closeSidebar}
+              className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+              aria-label="Close sidebar"
+            >
+              <XMarkIcon className="w-5 h-5" />
+            </button>
+          </div>
 
-        <div className="flex-1 flex flex-col p-5 overflow-y-auto">
+          <div className="flex-1 flex flex-col p-5 overflow-y-auto">
           {/* Navigation */}
           <nav className="flex-1 flex flex-col gap-4">
             {/* Dashboard */}
@@ -275,6 +277,7 @@ const Sidebar = () => {
             <span className="font-medium">Settings</span>
             <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-transform group-hover:translate-x-1" />
           </button> */}
+          </div>
         </div>
       </aside>
     </>
