@@ -12,8 +12,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 
-
-
 const CoreSubjectPage = ({ subject, title }) => {
   const [topics, setTopics] = useState([]);
   const [progress, setProgress] = useState({});
@@ -23,12 +21,8 @@ const CoreSubjectPage = ({ subject, title }) => {
   const [showQuiz, setShowQuiz] = useState(false);
   const [userHasAnswered, setUserHasAnswered] = useState(false);
   const [topicScores, setTopicScores] = useState({});
-   const { theme, toggleDarkMode } = useTheme();
+  const { theme, toggleDarkMode } = useTheme();
   const darkMode = theme === "dark";
- 
- 
-
-   
 
   const [activeFilters, setActiveFilters] = useState({
     All: true,
@@ -47,13 +41,9 @@ const CoreSubjectPage = ({ subject, title }) => {
   const reminderRefs = useRef({});
   const noteRefs = useRef({});
   const navigate = useNavigate();
-  
-
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
-  
 
   useEffect(() => {
     const handlePageShow = (event) => {
@@ -350,62 +340,62 @@ const CoreSubjectPage = ({ subject, title }) => {
   const darkHover = "dark:hover:bg-gray-700";
 
   return (
-    <div className={`px-10 py-3 max-w-8xl mx-auto min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 ${darkBg}`}> 
+    <div className={`px-4 sm:px-6 lg:px-10 py-3 max-w-8xl mx-auto min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 ${darkBg}`}> 
       
       <div 
         className={`text-center mb-8 p-6 rounded-2xl shadow-lg max-w-xl mx-auto ${darkCardBg}`}
         style={{ background: theme === 'dark' ? '#1e3a8a' : '#043E86' }}
       >
         <div className="text-center">
-  <h2 className="text-3xl font-bold text-white mb-3 font-serif tracking-wide">{title}</h2>
-</div>
-
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 font-serif tracking-wide">{title}</h2>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-10">
-        <div className={`bg-white p-4 rounded-xl min-h-[100px] shadow-md border-l-4 border-blue-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-blue-600 ${darkCardBg} ${darkBorder} dark:border-l-blue-500 dark:hover:border-l-blue-600`}>
-          <div className="flex justify-between items-center">
-            <div>
-              <div className={`text-2xl font-bold text-blue-800 ${darkText} dark:text-blue-300`}>{total}</div>
-              <div className={`text-gray-600 text-lg ${darkText} dark:text-gray-300`}>Total Topics</div>
+      {/* Stats Cards - Responsive Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-12 mb-10">
+        <div className={`bg-white p-3 sm:p-4 rounded-xl min-h-[80px] sm:min-h-[100px] shadow-md border-l-4 border-blue-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-blue-600 ${darkCardBg} ${darkBorder} dark:border-l-blue-500 dark:hover:border-l-blue-600`}>
+          <div className="flex flex-col sm:flex-row justify-between items-center">
+            <div className="text-center sm:text-left">
+              <div className={`text-xl sm:text-2xl font-bold text-blue-800 ${darkText} dark:text-blue-300`}>{total}</div>
+              <div className={`text-gray-600 text-sm sm:text-lg ${darkText} dark:text-gray-300`}>Total Topics</div>
             </div>
-            <div className={`bg-blue-100 p-2 rounded-full transition-all duration-300 group-hover:bg-blue-200 dark:bg-blue-900/50`}>
-              <div className="w-5 h-5 bg-blue-500 rounded-full dark:bg-blue-400"></div>
-            </div>
-          </div>
-        </div>
-        
-        <div className={`bg-white p-4 rounded-xl shadow-md border-l-4 border-green-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-green-600 ${darkCardBg} ${darkBorder} dark:border-l-green-500 dark:hover:border-l-green-600`}>
-          <div className="flex justify-between items-center">
-            <div>
-              <div className={`text-2xl font-bold text-green-800 ${darkText} dark:text-green-300`}>{completed}</div>
-              <div className={`text-gray-600 text-lg ${darkText} dark:text-gray-300`}>Completed</div>
-            </div>
-            <div className={`bg-green-100 p-2 rounded-full transition-all duration-300 group-hover:bg-green-200 dark:bg-green-900/50`}>
-              <div className="w-5 h-5 bg-green-500 rounded-full dark:bg-green-400"></div>
+            <div className={`bg-blue-100 p-1 sm:p-2 rounded-full transition-all duration-300 group-hover:bg-blue-200 dark:bg-blue-900/50 mt-2 sm:mt-0`}>
+              <div className="w-3 h-3 sm:w-5 sm:h-5 bg-blue-500 rounded-full dark:bg-blue-400"></div>
             </div>
           </div>
         </div>
         
-        <div className={`bg-white p-4 rounded-xl shadow-md border-l-4 border-amber-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-amber-600 ${darkCardBg} ${darkBorder} dark:border-l-amber-500 dark:hover:border-l-amber-600`}>
-          <div className="flex justify-between items-center">
-            <div>
-              <div className={`text-2xl font-bold text-amber-700 ${darkText} dark:text-amber-300`}>{bookmarked}</div>
-              <div className={`text-gray-600 text-lg ${darkText} dark:text-gray-300`}>Bookmarked</div>
+        <div className={`bg-white p-3 sm:p-4 rounded-xl shadow-md border-l-4 border-green-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-green-600 ${darkCardBg} ${darkBorder} dark:border-l-green-500 dark:hover:border-l-green-600`}>
+          <div className="flex flex-col sm:flex-row justify-between items-center">
+            <div className="text-center sm:text-left">
+              <div className={`text-xl sm:text-2xl font-bold text-green-800 ${darkText} dark:text-green-300`}>{completed}</div>
+              <div className={`text-gray-600 text-sm sm:text-lg ${darkText} dark:text-gray-300`}>Completed</div>
             </div>
-            <div className={`bg-amber-100 p-2 rounded-full transition-all duration-300 group-hover:bg-amber-200 dark:bg-amber-900/50`}>
-              <div className="w-5 h-5 bg-amber-500 rounded-full dark:bg-amber-400"></div>
+            <div className={`bg-green-100 p-1 sm:p-2 rounded-full transition-all duration-300 group-hover:bg-green-200 dark:bg-green-900/50 mt-2 sm:mt-0`}>
+              <div className="w-3 h-3 sm:w-5 sm:h-5 bg-green-500 rounded-full dark:bg-green-400"></div>
             </div>
           </div>
         </div>
         
-        <div className={`bg-white p-4 rounded-xl shadow-md border-l-4 border-purple-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-purple-600 ${darkCardBg} ${darkBorder} dark:border-l-purple-500 dark:hover:border-l-purple-600`}>
-          <div className="flex justify-between items-center">
-            <div>
-              <div className={`text-2xl font-bold text-purple-800 ${darkText} dark:text-purple-300`}>{progressPercent}%</div>
-              <div className={`text-gray-600 text-lg ${darkText} dark:text-gray-300`}>Progress</div>
+        <div className={`bg-white p-3 sm:p-4 rounded-xl shadow-md border-l-4 border-amber-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-amber-600 ${darkCardBg} ${darkBorder} dark:border-l-amber-500 dark:hover:border-l-amber-600`}>
+          <div className="flex flex-col sm:flex-row justify-between items-center">
+            <div className="text-center sm:text-left">
+              <div className={`text-xl sm:text-2xl font-bold text-amber-700 ${darkText} dark:text-amber-300`}>{bookmarked}</div>
+              <div className={`text-gray-600 text-sm sm:text-lg ${darkText} dark:text-gray-300`}>Bookmarked</div>
             </div>
-            <div style={{ width: 50, height: 50 }}>
+            <div className={`bg-amber-100 p-1 sm:p-2 rounded-full transition-all duration-300 group-hover:bg-amber-200 dark:bg-amber-900/50 mt-2 sm:mt-0`}>
+              <div className="w-3 h-3 sm:w-5 sm:h-5 bg-amber-500 rounded-full dark:bg-amber-400"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div className={`bg-white p-3 sm:p-4 rounded-xl shadow-md border-l-4 border-purple-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-purple-600 ${darkCardBg} ${darkBorder} dark:border-l-purple-500 dark:hover:border-l-purple-600`}>
+          <div className="flex flex-col sm:flex-row justify-between items-center">
+            <div className="text-center sm:text-left">
+              <div className={`text-xl sm:text-2xl font-bold text-purple-800 ${darkText} dark:text-purple-300`}>{progressPercent}%</div>
+              <div className={`text-gray-600 text-sm sm:text-lg ${darkText} dark:text-gray-300`}>Progress</div>
+            </div>
+            <div style={{ width: 40, height: 40 }} className="mt-2 sm:mt-0">
               <CircularProgressbarWithChildren 
                 value={progressPercent} 
                 styles={buildStyles({ 
@@ -415,21 +405,21 @@ const CoreSubjectPage = ({ subject, title }) => {
                 })}
               />
             </div>
-            {quizCount > 0 && (
-              <div className={`text-lg text-purple-600 mt-1 ${darkText} dark:text-purple-300`}>
-                {quizCount} quiz taken
-              </div>
-            )}
           </div>
+          {quizCount > 0 && (
+            <div className={`text-sm sm:text-lg text-purple-600 mt-1 text-center sm:text-left ${darkText} dark:text-purple-300`}>
+              {quizCount} quiz taken
+            </div>
+          )}
         </div>
       </div> 
       
-      {/* Current Active Topic Section */}
+      {/* Current Active Topic Section - Responsive Layout */}
       {currentTopic && (
-        <div className={`bg-white rounded-xl shadow-md p-6 mb-8 border-2 border-indigo-200 relative ${darkCardBg} ${darkBorder} dark:border-indigo-800`}>
-          <div className="flex justify-between">
+        <div className={`bg-white rounded-xl shadow-md p-4 sm:p-6 mb-8 border-2 border-indigo-200 relative ${darkCardBg} ${darkBorder} dark:border-indigo-800`}>
+          <div className="flex flex-col lg:flex-row lg:justify-between gap-6">
             <div className="flex-1">
-              <h3 className={`text-2xl font-bold text-indigo-700 mb-4 ${darkText} dark:text-indigo-300`}>
+              <h3 className={`text-xl sm:text-2xl font-bold text-indigo-700 mb-4 ${darkText} dark:text-indigo-300`}>
                 Current Topic: {currentTopic.title}
               </h3>
 
@@ -437,7 +427,7 @@ const CoreSubjectPage = ({ subject, title }) => {
               {userKnowsTopic === null && !topicProgress.quizTaken && (
                 <div className="mb-6">
                   <p className={`text-gray-700 mb-4 ${darkText}`}>Do you already know this topic?</p>
-                  <div className="flex gap-4">
+                  <div className="flex flex-col sm:flex-row gap-4">
                     <button
                       onClick={() => handleUserResponse(true)}
                       className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors dark:bg-green-600 dark:hover:bg-green-700"
@@ -470,11 +460,11 @@ const CoreSubjectPage = ({ subject, title }) => {
                 </div>
               )}
 
-              {/* Resources */}
+              {/* Resources - Mobile Responsive */}
               {showResources && (
                 <div className="mb-6">
                   <h4 className={`font-semibold text-gray-800 mb-3 ${darkText}`}>Learning Resources:</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {currentTopic.resources?.map((resource, idx) => (
                       <a
                         key={idx}
@@ -486,13 +476,13 @@ const CoreSubjectPage = ({ subject, title }) => {
                         <img
                           src={getIconUrl(resource.type, resource.url)}
                           alt={resource.type}
-                          className="w-8 h-8 mr-3"
+                          className="w-6 h-6 sm:w-8 sm:h-8 mr-3 flex-shrink-0"
                         />
-                        <div>
-                          <p className={`font-medium text-gray-800 ${darkText}`}>
+                        <div className="min-w-0 flex-1">
+                          <p className={`font-medium text-gray-800 truncate ${darkText}`}>
                             {resource.title || resource.type}
                           </p>
-                          <p className={`text-xs text-gray-500 ${darkText} dark:text-gray-400`}>
+                          <p className={`text-xs text-gray-500 truncate ${darkText} dark:text-gray-400`}>
                             {new URL(resource.url).hostname}
                           </p>
                         </div>
@@ -504,7 +494,7 @@ const CoreSubjectPage = ({ subject, title }) => {
                       setShowQuiz(true);
                       setShowResources(false);
                     }}
-                    className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors dark:bg-indigo-700 dark:hover:bg-indigo-800"
+                    className="mt-4 w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors dark:bg-indigo-700 dark:hover:bg-indigo-800"
                   >
                     I've reviewed the resources, test me now
                   </button>
@@ -520,7 +510,7 @@ const CoreSubjectPage = ({ subject, title }) => {
                   </p>
                   <button
                     onClick={() => handleSingleTopicQuiz(currentTopic.title)}
-                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors dark:bg-purple-700 dark:hover:bg-purple-800"
+                    className="w-full sm:w-auto px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors dark:bg-purple-700 dark:hover:bg-purple-800"
                   >
                     Start Quiz
                   </button>
@@ -538,8 +528,8 @@ const CoreSubjectPage = ({ subject, title }) => {
               )}
 
               {/* Bookmark, Reminder, Notes, Mark Complete */}
-              <div className={`flex justify-between items-center pt-4 border-t border-gray-200 ${darkBorder}`}>
-                <div className="flex items-center gap-4">
+              <div className={`flex flex-col sm:flex-row justify-between items-start sm:items-center pt-4 border-t border-gray-200 gap-4 ${darkBorder}`}>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                   <div className="flex items-center">
                     <input
                       type="checkbox"
@@ -559,10 +549,10 @@ const CoreSubjectPage = ({ subject, title }) => {
                       className={`flex items-center gap-1 ${topicProgress.remindOn ? "text-sky-600 dark:text-sky-400" : "text-gray-500 dark:text-gray-400"}`}
                     >
                       <span>{topicProgress.remindOn ? "⏰" : "🕒"}</span>
-                      <span>{topicProgress.remindOn ? "Change Reminder" : "Set Reminder"}</span>
+                      <span className="text-sm sm:text-base">{topicProgress.remindOn ? "Change Reminder" : "Set Reminder"}</span>
                     </button>
                     {openReminderId === currentTopic._id && (
-                      <div className={`absolute z-50 top-8 bg-white border border-gray-200 shadow-lg rounded-lg p-2 ${darkCardBg} ${darkBorder}`}>
+                      <div className={`absolute z-50 top-8 left-0 bg-white border border-gray-200 shadow-lg rounded-lg p-2 ${darkCardBg} ${darkBorder}`}>
                         <DatePicker
                           selected={topicProgress.remindOn ? new Date(topicProgress.remindOn) : null}
                           onChange={(date) => updateProgress(currentTopic._id, "remindOn", date)}
@@ -578,17 +568,17 @@ const CoreSubjectPage = ({ subject, title }) => {
               </div>
             </div>
 
-            {/* Current Highest Score Card - Right Side */}
-            <div className="ml-6 w-75">
-              <div className={`bg-blue-50 border border-blue-200 rounded-xl p-4 shadow-sm sticky top-6 ${darkCardBg} ${darkBorder} dark:border-blue-800`}>
+            {/* Current Highest Score Card - Responsive Position */}
+            <div className="w-full lg:w-75 lg:ml-6">
+              <div className={`bg-blue-50 border border-blue-200 rounded-xl p-4 shadow-sm lg:sticky lg:top-6 ${darkCardBg} ${darkBorder} dark:border-blue-800`}>
                 <h4 className={`text-lg font-bold text-blue-700 mb-2 ${darkText} dark:text-blue-300`}>Current Topic Highest Score</h4>
 
                 {topicScores[currentTopic?.title] ? (
-                  <div className={`text-4xl font-extrabold text-blue-600 mb-2 ${darkText} dark:text-blue-400`}>
+                  <div className={`text-3xl sm:text-4xl font-extrabold text-blue-600 mb-2 ${darkText} dark:text-blue-400`}>
                     {`${topicScores[currentTopic.title].score}/${topicScores[currentTopic.title].total}`}
                   </div>
                 ) : (
-                  <div className={`text-2xl font-semibold text-gray-500 mb-2 ${darkText} dark:text-gray-400`}>
+                  <div className={`text-xl sm:text-2xl font-semibold text-gray-500 mb-2 ${darkText} dark:text-gray-400`}>
                     Not Attempted
                   </div>
                 )}
@@ -614,14 +604,15 @@ const CoreSubjectPage = ({ subject, title }) => {
         </div>
       )}
 
-      <div className={`bg-white p-5 rounded-xl shadow-md mb-8 ${darkCardBg}`}>
-        <div className="flex flex-wrap justify-between items-center gap-4">
+      {/* Filters Section - Mobile Responsive */}
+      <div className={`bg-white p-4 sm:p-5 rounded-xl shadow-md mb-8 ${darkCardBg}`}>
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
           <div className="flex flex-wrap gap-2">
             {["All", "Important", "Other", "Bookmarked", "Remind"].map((type) => (
               <button
                 key={type}
                 onClick={() => toggleFilter(type)}
-                className={`px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${
+                className={`px-3 sm:px-4 py-2 rounded-lg transition-all flex items-center gap-2 text-sm sm:text-base ${
                   activeFilters[type]
                     ? type === "Important"
                       ? "bg-emerald-100 text-emerald-800 border border-emerald-300 hover:bg-emerald-200 dark:bg-emerald-900/50 dark:text-emerald-200 dark:border-emerald-700 dark:hover:bg-emerald-900"
@@ -636,41 +627,43 @@ const CoreSubjectPage = ({ subject, title }) => {
                 }`}
               >
                 {type === "Bookmarked" && (
-                  <FaBookmark className={activeFilters[type] ? "text-purple-600 dark:text-purple-400" : "text-gray-500 dark:text-gray-400"} />
+                  <FaBookmark className={`text-sm ${activeFilters[type] ? "text-purple-600 dark:text-purple-400" : "text-gray-500 dark:text-gray-400"}`} />
                 )}
                 {type === "Remind" && (
-                  <FaBell className={activeFilters[type] ? "text-cyan-600 dark:text-cyan-400" : "text-gray-500 dark:text-gray-400"} />
+                  <FaBell className={`text-sm ${activeFilters[type] ? "text-cyan-600 dark:text-cyan-400" : "text-gray-500 dark:text-gray-400"}`} />
                 )}
                 {type}
               </button>
             ))}
           </div>
-          <div className="flex gap-3 items-center">
-            <label className={`inline-flex items-center space-x-2 bg-gray-100 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600`}>
+          <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center w-full lg:w-auto">
+            <label className={`inline-flex items-center space-x-2 bg-gray-100 px-3 sm:px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600`}>
               <input
                 type="checkbox"
                 checked={showOnlyCompleted}
                 onChange={() => setShowOnlyCompleted(!showOnlyCompleted)}
-                className="w-5 h-5 accent-emerald-500 dark:accent-emerald-400"
+                className="w-4 h-4 sm:w-5 sm:h-5 accent-emerald-500 dark:accent-emerald-400"
               />
-              <span className={`text-gray-700 ${darkText}`}>Completed Only</span>
+              <span className={`text-gray-700 text-sm sm:text-base ${darkText}`}>Completed Only</span>
             </label>
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <input
                 type="text"
                 placeholder="Search topics..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className={`pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 hover:border-gray-400 transition-colors ${darkInput}`}
+                className={`pl-10 pr-4 py-2 w-full sm:w-auto rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 hover:border-gray-400 transition-colors text-sm sm:text-base ${darkInput}`}
               />
-              <FaSearch className="absolute left-3 top-3 text-gray-400 dark:text-gray-500" />
+              <FaSearch className="absolute left-3 top-3 text-gray-400 dark:text-gray-500 text-sm" />
             </div>
           </div>
         </div>
       </div>
 
+      {/* Topics List - Mobile Responsive */}
       <div className={`bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 ${darkCardBg} ${darkBorder}`}>
-        <div className={`grid grid-cols-[100px_6fr_1fr_1fr_1fr_1.5fr_1fr_200px] font-bold text-gray-700 bg-gray-100 p-4 border-b border-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600`}>
+        {/* Desktop Table Header */}
+        <div className={`hidden lg:grid grid-cols-[100px_6fr_1fr_1fr_1fr_1.5fr_1fr_200px] font-bold text-gray-700 bg-gray-100 p-4 border-b border-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600`}>
           <div className="text-center text-base uppercase tracking-wider">Status</div>
           <div className="pl-5 text-base uppercase tracking-wider">Topic</div>
           <div className="text-center text-base uppercase tracking-wider">GFG</div>
@@ -694,234 +687,471 @@ const CoreSubjectPage = ({ subject, title }) => {
             r.url?.toLowerCase().includes("youtu.be")
           );
           const isEnabled = isTopicEnabled(topic._id, index, filteredTopics);
-
           const isCurrentTopic = topic._id === activeTopic;
           const canAttemptQuiz = isEnabled && (isCurrentTopic || progress[topic._id]?.isCompleted);
 
           return (
-            <div
-              key={topic._id}
-              className={`grid grid-cols-[100px_6fr_1fr_1fr_1fr_1.5fr_1fr_200px] items-center p-4 rounded-xl transition-all border-gray-200 ${
-                isCompleted 
-                  ? "bg-green-50 border-2 border-green-400 hover:border-green-500 dark:bg-green-900/20 dark:border-green-700 dark:hover:border-green-600" 
-                  : isCurrentTopic 
-                    ? "bg-indigo-50 border-2 border-indigo-400 dark:bg-indigo-900/20 dark:border-indigo-700"
-                    : !isEnabled
-                      ? "bg-gray-100 border border-gray-300 opacity-60 dark:bg-gray-700/50 dark:border-gray-600"
-                      : "bg-white border border-gray-200 hover:border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600"
-              } transition-colors duration-200`}
-            >
-              <div className="flex justify-center">
-                {isCompleted ? (
-                  <span className="text-green-600 text-xl dark:text-green-400">✓</span>
-                ) : (
-                  <span className="text-gray-400 text-xl dark:text-gray-500">○</span>
-                )}
-              </div>
-
-              <div className="pl-3">
-                <div className={`font-bold ${
+            <div key={topic._id}>
+              {/* Desktop Layout */}
+              <div
+                className={`hidden lg:grid grid-cols-[100px_6fr_1fr_1fr_1fr_1.5fr_1fr_200px] items-center p-4 rounded-xl transition-all border-gray-200 ${
                   isCompleted 
-                    ? "text-green-800 dark:text-green-300" 
+                    ? "bg-green-50 border-2 border-green-400 hover:border-green-500 dark:bg-green-900/20 dark:border-green-700 dark:hover:border-green-600" 
                     : isCurrentTopic 
-                      ? "text-indigo-800 text-lg dark:text-indigo-300" 
-                      : !isEnabled 
-                        ? "text-gray-500 dark:text-gray-400" 
-                        : "text-gray-700 dark:text-gray-200"
-                }`}>
-                  {topic.title}
-                </div>
-                {topic.notes && (
-                  <div className={`text-sb text-gray-700 mt-1 ${darkText} dark:text-gray-300`}>{topic.notes}</div>
-                )}
-              </div>
-
-              <div className="flex justify-center">
-                {gfg ? (
-                  <a 
-                    href={gfg.url} 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className={`hover:scale-125 transition-transform duration-200 text-green-600 hover:text-green-700 dark:text-green-500 dark:hover:text-green-400 ${!isEnabled ? 'opacity-50 pointer-events-none' : ''}`}
-                    title="GeeksforGeeks Resource"
-                  >
-                    <SiGeeksforgeeks className="text-2xl" />
-                  </a>
-                ) : (
-                  <span className="text-gray-400 dark:text-gray-500">-</span>
-                )}
-              </div>
-              
-              <div className="flex justify-center">
-                {yt ? (
-                  <a 
-                    href={yt.url} 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className={`hover:scale-125 transition-transform duration-200 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500 ${!isEnabled ? 'opacity-50 pointer-events-none' : ''}`}
-                    title="YouTube Resource"
-                  >
-                    <SiYoutube className="text-2xl" />
-                  </a>
-                ) : (
-                  <span className="text-gray-400 dark:text-gray-500">-</span>
-                )}
-              </div>
-              
-              <div className="flex justify-center">
-                <button 
-                  onClick={() => handleSingleTopicQuiz(topic.title)} 
-                  disabled={!canAttemptQuiz}
-                  className={`px-2 py-1 text-xs rounded border transition-all ${
-                    canAttemptQuiz
-                      ? "bg-gradient-to-br from-purple-100 to-purple-50 hover:from-purple-200 hover:to-purple-100 text-purple-800 border-purple-200 dark:from-purple-900/50 dark:to-purple-800/50 dark:hover:from-purple-900 dark:hover:to-purple-800 dark:text-purple-200 dark:border-purple-700"
-                      : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600"
-                  }`}
-                >
-                  <MdQuiz className="text-xl" />
-                </button>
-              </div>
-              
-              <div className="flex justify-center">
-                <button 
-                  onClick={() => updateProgress(topic._id, "isBookmarked")}
-                  disabled={!isEnabled}
-                  className={`text-xl hover:scale-125 transition-transform duration-200 ${!isEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  title={isBookmarked ? "Remove bookmark" : "Add bookmark"}
-                >
-                  {isBookmarked ? (
-                    <FaBookmark className="text-amber-500 hover:text-amber-600 dark:text-amber-400 dark:hover:text-amber-300" />
+                      ? "bg-indigo-50 border-2 border-indigo-400 dark:bg-indigo-900/20 dark:border-indigo-700"
+                      : !isEnabled
+                        ? "bg-gray-100 border border-gray-300 opacity-60 dark:bg-gray-700/50 dark:border-gray-600"
+                        : "bg-white border border-gray-200 hover:border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600"
+                } transition-colors duration-200`}
+              >
+                <div className="flex justify-center">
+                  {isCompleted ? (
+                    <span className="text-green-600 text-xl dark:text-green-400">✓</span>
                   ) : (
-                    <FaRegBookmark className="text-gray-400 hover:text-amber-400 dark:text-gray-500 dark:hover:text-amber-400" />
+                    <span className="text-gray-400 text-xl dark:text-gray-500">○</span>
                   )}
-                </button>
-              </div>
-              
-              <div ref={(el) => (reminderRefs.current[topic._id] = el)} className="relative flex justify-center">
-                {remindOn ? (
-                  <div className="flex items-center gap-1">
-                    <span 
-                      className={`text-sm text-blue-600 cursor-pointer hover:underline hover:text-blue-700 transition-colors dark:text-blue-400 dark:hover:text-blue-300 ${!isEnabled ? 'opacity-50 pointer-events-none' : ''}`}
-                      onClick={() => setOpenReminderId(topic._id)}
+                </div>
+
+                <div className="pl-3">
+                  <div className={`font-bold ${
+                    isCompleted 
+                      ? "text-green-800 dark:text-green-300" 
+                      : isCurrentTopic 
+                        ? "text-indigo-800 text-lg dark:text-indigo-300" 
+                        : !isEnabled 
+                          ? "text-gray-500 dark:text-gray-400" 
+                          : "text-gray-700 dark:text-gray-200"
+                  }`}>
+                    {topic.title}
+                  </div>
+                  {topic.notes && (
+                    <div className={`text-sb text-gray-700 mt-1 ${darkText} dark:text-gray-300`}>{topic.notes}</div>
+                  )}
+                </div>
+
+                <div className="flex justify-center">
+                  {gfg ? (
+                    <a 
+                      href={gfg.url} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className={`hover:scale-125 transition-transform duration-200 text-green-600 hover:text-green-700 dark:text-green-500 dark:hover:text-green-400 ${!isEnabled ? 'opacity-50 pointer-events-none' : ''}`}
+                      title="GeeksforGeeks Resource"
                     >
-                      {new Date(remindOn).toLocaleDateString('en-IN')}
-                    </span>
-                    {isEnabled && (
-                      <button 
-                        onClick={() => handleReminderChange(topic._id, null)}
-                        className="text-sm text-red-500 hover:text-red-700 transition-colors dark:text-red-400 dark:hover:text-red-300"
-                      >
-                        ×
-                      </button>
-                    )}
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => {
-                      setOpenNoteId(null);
-                      setOpenReminderId(openReminderId === topic._id ? null : topic._id);
-                    }}
-                    disabled={!isEnabled}
-                    className={`text-xl hover:scale-125 transition-transform duration-200 text-yellow-500 hover:text-yellow-600 dark:text-yellow-400 dark:hover:text-yellow-300 ${!isEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    title="Set reminder"
+                      <SiGeeksforgeeks className="text-2xl" />
+                    </a>
+                  ) : (
+                    <span className="text-gray-400 dark:text-gray-500">-</span>
+                  )}
+                </div>
+                
+                <div className="flex justify-center">
+                  {yt ? (
+                    <a 
+                      href={yt.url} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className={`hover:scale-125 transition-transform duration-200 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500 ${!isEnabled ? 'opacity-50 pointer-events-none' : ''}`}
+                      title="YouTube Resource"
+                    >
+                      <SiYoutube className="text-2xl" />
+                    </a>
+                  ) : (
+                    <span className="text-gray-400 dark:text-gray-500">-</span>
+                  )}
+                </div>
+                
+                <div className="flex justify-center">
+                  <button 
+                    onClick={() => handleSingleTopicQuiz(topic.title)} 
+                    disabled={!canAttemptQuiz}
+                    className={`px-2 py-1 text-xs rounded border transition-all ${
+                      canAttemptQuiz
+                        ? "bg-gradient-to-br from-purple-100 to-purple-50 hover:from-purple-200 hover:to-purple-100 text-purple-800 border-purple-200 dark:from-purple-900/50 dark:to-purple-800/50 dark:hover:from-purple-900 dark:hover:to-purple-800 dark:text-purple-200 dark:border-purple-700"
+                        : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600"
+                    }`}
                   >
-                    <FaBell />
+                    <MdQuiz className="text-xl" />
                   </button>
-                )}
-
-                {openReminderId === topic._id && (
-                  <div className={`absolute z-50 top-8 bg-white border border-gray-200 shadow-lg rounded-lg p-2 ${darkCardBg} ${darkBorder}`}>
-                    <DatePicker
-                      selected={remindOn ? new Date(remindOn) : null}
-                      onChange={(date) => handleReminderChange(topic._id, date)}
-                      dateFormat="dd/MM/yyyy"
-                      minDate={new Date()}
-                      inline
-                      className="dark:bg-gray-800"
-                    />
-                  </div>
-                )}
-              </div>
-
-              <div ref={(el) => (noteRefs.current[topic._id] = el)} className="relative flex justify-center">
-                {note ? (
-                  <div className="flex items-center gap-1 group">
-                    <span className={`text-lg text-yellow-600 max-w-[100px] truncate dark:text-yellow-400 ${!isEnabled ? 'opacity-50' : ''}`}>
-                      {note}
-                    </span>
-                    {isEnabled && (
-                      <button
-                        onClick={() => {
-                          setOpenReminderId(null);
-                          setOpenNoteId(openNoteId === topic._id ? null : topic._id);
-                          setNoteText(note);
-                        }}
-                        className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-gray-700 transition-opacity dark:text-gray-400 dark:hover:text-gray-300"
-                      >
-                        ✏️
-                      </button>
-                    )}
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => {
-                      setOpenReminderId(null);
-                      setOpenNoteId(openNoteId === topic._id ? null : topic._id);
-                      setNoteText('');
-                    }}
+                </div>
+                
+                <div className="flex justify-center">
+                  <button 
+                    onClick={() => updateProgress(topic._id, "isBookmarked")}
                     disabled={!isEnabled}
-                    className={`text-blue-500 hover:text-blue-700 text-sm flex items-center gap-1 transition-colors dark:text-blue-400 dark:hover:text-blue-300 ${!isEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`text-xl hover:scale-125 transition-transform duration-200 ${!isEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    title={isBookmarked ? "Remove bookmark" : "Add bookmark"}
                   >
-                    <span>📝</span>
-                    <span>Add</span>
+                    {isBookmarked ? (
+                      <FaBookmark className="text-amber-500 hover:text-amber-600 dark:text-amber-400 dark:hover:text-amber-300" />
+                    ) : (
+                      <FaRegBookmark className="text-gray-400 hover:text-amber-400 dark:text-gray-500 dark:hover:text-amber-400" />
+                    )}
                   </button>
-                )}
+                </div>
+                
+                <div ref={(el) => (reminderRefs.current[topic._id] = el)} className="relative flex justify-center">
+                  {remindOn ? (
+                    <div className="flex items-center gap-1">
+                      <span 
+                        className={`text-sm text-blue-600 cursor-pointer hover:underline hover:text-blue-700 transition-colors dark:text-blue-400 dark:hover:text-blue-300 ${!isEnabled ? 'opacity-50 pointer-events-none' : ''}`}
+                        onClick={() => setOpenReminderId(topic._id)}
+                      >
+                        {new Date(remindOn).toLocaleDateString('en-IN')}
+                      </span>
+                      {isEnabled && (
+                        <button 
+                          onClick={() => handleReminderChange(topic._id, null)}
+                          className="text-sm text-red-500 hover:text-red-700 transition-colors dark:text-red-400 dark:hover:text-red-300"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setOpenNoteId(null);
+                        setOpenReminderId(openReminderId === topic._id ? null : topic._id);
+                      }}
+                      disabled={!isEnabled}
+                      className={`text-xl hover:scale-125 transition-transform duration-200 text-yellow-500 hover:text-yellow-600 dark:text-yellow-400 dark:hover:text-yellow-300 ${!isEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      title="Set reminder"
+                    >
+                      <FaBell />
+                    </button>
+                  )}
 
-                {openNoteId === topic._id && (
-                  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/30">
-                    <div className={`bg-white rounded-lg shadow-xl p-5 w-96 max-w-[90vw] ${darkCardBg}`}>
-                      <h3 className={`font-semibold text-lg mb-3 text-gray-800 ${darkText}`}>Notes for: {topic.title}</h3>
-                      <textarea
-                        value={noteText}
-                        onChange={(e) => setNoteText(e.target.value)}
-                        rows={5}
-                        placeholder="Type your notes here..."
-                        className={`w-full p-3 border border-gray-300 rounded-lg text-sm mb-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${darkInput}`}
-                        autoFocus
+                  {openReminderId === topic._id && (
+                    <div className={`absolute z-50 top-8 bg-white border border-gray-200 shadow-lg rounded-lg p-2 ${darkCardBg} ${darkBorder}`}>
+                      <DatePicker
+                        selected={remindOn ? new Date(remindOn) : null}
+                        onChange={(date) => handleReminderChange(topic._id, date)}
+                        dateFormat="dd/MM/yyyy"
+                        minDate={new Date()}
+                        inline
+                        className="dark:bg-gray-800"
                       />
-                      <div className="flex justify-between items-center">
-                        {note && (
-                          <button
-                            onClick={() => {
-                              updateProgress(topic._id, "note", "");
-                              setOpenNoteId(null);
-                            }}
-                            className={`text-sm px-3 py-1 text-red-600 hover:bg-red-50 rounded transition-colors dark:text-red-400 dark:hover:bg-red-900/30`}
-                          >
-                            Clear Note
-                          </button>
-                        )}
-                        <div className="flex gap-2">
-                          <button 
-                            onClick={() => setOpenNoteId(null)} 
-                            className={`text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 transition-colors dark:border-gray-600 dark:hover:bg-gray-700`}
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            onClick={() => {
-                              updateProgress(topic._id, "note", noteText);
-                              setOpenNoteId(null);
-                            }}
-                            className="text-sm px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors dark:bg-indigo-700 dark:hover:bg-indigo-800"
-                          >
-                            Save
-                          </button>
+                    </div>
+                  )}
+                </div>
+
+                <div ref={(el) => (noteRefs.current[topic._id] = el)} className="relative flex justify-center">
+                  {note ? (
+                    <div className="flex items-center gap-1 group">
+                      <span className={`text-lg text-yellow-600 max-w-[100px] truncate dark:text-yellow-400 ${!isEnabled ? 'opacity-50' : ''}`}>
+                        {note}
+                      </span>
+                      {isEnabled && (
+                        <button
+                          onClick={() => {
+                            setOpenReminderId(null);
+                            setOpenNoteId(openNoteId === topic._id ? null : topic._id);
+                            setNoteText(note);
+                          }}
+                          className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-gray-700 transition-opacity dark:text-gray-400 dark:hover:text-gray-300"
+                        >
+                          ✏️
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setOpenReminderId(null);
+                        setOpenNoteId(openNoteId === topic._id ? null : topic._id);
+                        setNoteText('');
+                      }}
+                      disabled={!isEnabled}
+                      className={`text-blue-500 hover:text-blue-700 text-sm flex items-center gap-1 transition-colors dark:text-blue-400 dark:hover:text-blue-300 ${!isEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      <span>📝</span>
+                      <span>Add</span>
+                    </button>
+                  )}
+
+                  {openNoteId === topic._id && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/30 p-4">
+                      <div className={`bg-white rounded-lg shadow-xl p-5 w-full max-w-md ${darkCardBg}`}>
+                        <h3 className={`font-semibold text-lg mb-3 text-gray-800 ${darkText}`}>Notes for: {topic.title}</h3>
+                        <textarea
+                          value={noteText}
+                          onChange={(e) => setNoteText(e.target.value)}
+                          rows={5}
+                          placeholder="Type your notes here..."
+                          className={`w-full p-3 border border-gray-300 rounded-lg text-sm mb-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${darkInput}`}
+                          autoFocus
+                        />
+                        <div className="flex justify-between items-center">
+                          {note && (
+                            <button
+                              onClick={() => {
+                                updateProgress(topic._id, "note", "");
+                                setOpenNoteId(null);
+                              }}
+                              className={`text-sm px-3 py-1 text-red-600 hover:bg-red-50 rounded transition-colors dark:text-red-400 dark:hover:bg-red-900/30`}
+                            >
+                              Clear Note
+                            </button>
+                          )}
+                          <div className="flex gap-2">
+                            <button 
+                              onClick={() => setOpenNoteId(null)} 
+                              className={`text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 transition-colors dark:border-gray-600 dark:hover:bg-gray-700`}
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={() => {
+                                updateProgress(topic._id, "note", noteText);
+                                setOpenNoteId(null);
+                              }}
+                              className="text-sm px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors dark:bg-indigo-700 dark:hover:bg-indigo-800"
+                            >
+                              Save
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Mobile Layout */}
+              <div className={`lg:hidden p-4 border-b border-gray-200 ${
+                isCompleted 
+                  ? "bg-green-50 border-l-4 border-l-green-500 dark:bg-green-900/20 dark:border-l-green-600" 
+                  : isCurrentTopic 
+                    ? "bg-indigo-50 border-l-4 border-l-indigo-500 dark:bg-indigo-900/20 dark:border-l-indigo-600"
+                    : !isEnabled
+                      ? "bg-gray-100 opacity-60 dark:bg-gray-700/50"
+                      : "bg-white dark:bg-gray-800"
+              } ${darkBorder}`}>
+                {/* Topic Header */}
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div className="flex-shrink-0">
+                      {isCompleted ? (
+                        <span className="text-green-600 text-xl dark:text-green-400">✓</span>
+                      ) : (
+                        <span className="text-gray-400 text-xl dark:text-gray-500">○</span>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className={`font-bold text-sm sm:text-base ${
+                        isCompleted 
+                          ? "text-green-800 dark:text-green-300" 
+                          : isCurrentTopic 
+                            ? "text-indigo-800 dark:text-indigo-300" 
+                            : !isEnabled 
+                              ? "text-gray-500 dark:text-gray-400" 
+                              : "text-gray-700 dark:text-gray-200"
+                      }`}>
+                        {topic.title}
+                      </h3>
+                      {topic.notes && (
+                        <div className={`text-xs text-gray-600 mt-1 ${darkText} dark:text-gray-400`}>{topic.notes}</div>
+                      )}
+                    </div>
                   </div>
-                )}
+                </div>
+
+                {/* Actions Row */}
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  {/* Resource Links */}
+                  <div className="flex items-center gap-4">
+                    {gfg ? (
+                      <a 
+                        href={gfg.url} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className={`flex items-center gap-1 text-green-600 hover:text-green-700 dark:text-green-500 dark:hover:text-green-400 ${!isEnabled ? 'opacity-50 pointer-events-none' : ''}`}
+                        title="GeeksforGeeks Resource"
+                      >
+                        <SiGeeksforgeeks className="text-lg" />
+                        <span className="text-xs">GFG</span>
+                      </a>
+                    ) : (
+                      <span className="text-gray-400 dark:text-gray-500 text-xs">No GFG</span>
+                    )}
+                    
+                    {yt ? (
+                      <a 
+                        href={yt.url} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className={`flex items-center gap-1 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500 ${!isEnabled ? 'opacity-50 pointer-events-none' : ''}`}
+                        title="YouTube Resource"
+                      >
+                        <SiYoutube className="text-lg" />
+                        <span className="text-xs">YT</span>
+                      </a>
+                    ) : (
+                      <span className="text-gray-400 dark:text-gray-500 text-xs">No YT</span>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-3">
+                    {/* Quiz Button */}
+                    <button 
+                      onClick={() => handleSingleTopicQuiz(topic.title)} 
+                      disabled={!canAttemptQuiz}
+                      className={`px-2 py-1 text-xs rounded border transition-all flex items-center gap-1 ${
+                        canAttemptQuiz
+                          ? "bg-gradient-to-br from-purple-100 to-purple-50 hover:from-purple-200 hover:to-purple-100 text-purple-800 border-purple-200 dark:from-purple-900/50 dark:to-purple-800/50 dark:hover:from-purple-900 dark:hover:to-purple-800 dark:text-purple-200 dark:border-purple-700"
+                          : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600"
+                      }`}
+                    >
+                      <MdQuiz className="text-sm" />
+                      <span>Quiz</span>
+                    </button>
+                    
+                    {/* Bookmark Button */}
+                    <button 
+                      onClick={() => updateProgress(topic._id, "isBookmarked")}
+                      disabled={!isEnabled}
+                      className={`text-lg hover:scale-110 transition-transform duration-200 ${!isEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      title={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+                    >
+                      {isBookmarked ? (
+                        <FaBookmark className="text-amber-500 hover:text-amber-600 dark:text-amber-400 dark:hover:text-amber-300" />
+                      ) : (
+                        <FaRegBookmark className="text-gray-400 hover:text-amber-400 dark:text-gray-500 dark:hover:text-amber-400" />
+                      )}
+                    </button>
+                    
+                    {/* Reminder Button */}
+                    <div ref={(el) => (reminderRefs.current[topic._id] = el)} className="relative">
+                      {remindOn ? (
+                        <div className="flex items-center gap-1">
+                          <span 
+                            className={`text-xs text-blue-600 cursor-pointer hover:underline hover:text-blue-700 transition-colors dark:text-blue-400 dark:hover:text-blue-300 ${!isEnabled ? 'opacity-50 pointer-events-none' : ''}`}
+                            onClick={() => setOpenReminderId(topic._id)}
+                          >
+                            {new Date(remindOn).toLocaleDateString('en-IN')}
+                          </span>
+                          {isEnabled && (
+                            <button 
+                              onClick={() => handleReminderChange(topic._id, null)}
+                              className="text-xs text-red-500 hover:text-red-700 transition-colors dark:text-red-400 dark:hover:text-red-300"
+                            >
+                              ×
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            setOpenNoteId(null);
+                            setOpenReminderId(openReminderId === topic._id ? null : topic._id);
+                          }}
+                          disabled={!isEnabled}
+                          className={`text-lg hover:scale-110 transition-transform duration-200 text-yellow-500 hover:text-yellow-600 dark:text-yellow-400 dark:hover:text-yellow-300 ${!isEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          title="Set reminder"
+                        >
+                          <FaBell />
+                        </button>
+                      )}
+
+                      {openReminderId === topic._id && (
+                        <div className={`absolute z-50 top-8 right-0 bg-white border border-gray-200 shadow-lg rounded-lg p-2 ${darkCardBg} ${darkBorder}`}>
+                          <DatePicker
+                            selected={remindOn ? new Date(remindOn) : null}
+                            onChange={(date) => handleReminderChange(topic._id, date)}
+                            dateFormat="dd/MM/yyyy"
+                            minDate={new Date()}
+                            inline
+                            className="dark:bg-gray-800"
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Notes Button */}
+                    <div ref={(el) => (noteRefs.current[topic._id] = el)} className="relative">
+                      {note ? (
+                        <div className="flex items-center gap-1 group">
+                          <span className={`text-xs text-yellow-600 max-w-[60px] truncate dark:text-yellow-400 ${!isEnabled ? 'opacity-50' : ''}`}>
+                            {note}
+                          </span>
+                          {isEnabled && (
+                            <button
+                              onClick={() => {
+                                setOpenReminderId(null);
+                                setOpenNoteId(openNoteId === topic._id ? null : topic._id);
+                                setNoteText(note);
+                              }}
+                              className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-gray-700 transition-opacity dark:text-gray-400 dark:hover:text-gray-300"
+                            >
+                              ✏️
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            setOpenReminderId(null);
+                            setOpenNoteId(openNoteId === topic._id ? null : topic._id);
+                            setNoteText('');
+                          }}
+                          disabled={!isEnabled}
+                          className={`text-blue-500 hover:text-blue-700 text-xs flex items-center gap-1 transition-colors dark:text-blue-400 dark:hover:text-blue-300 ${!isEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                          <span>📝</span>
+                          <span>Note</span>
+                        </button>
+                      )}
+
+                      {openNoteId === topic._id && (
+                        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/30 p-4">
+                          <div className={`bg-white rounded-lg shadow-xl p-5 w-full max-w-md ${darkCardBg}`}>
+                            <h3 className={`font-semibold text-lg mb-3 text-gray-800 ${darkText}`}>Notes for: {topic.title}</h3>
+                            <textarea
+                              value={noteText}
+                              onChange={(e) => setNoteText(e.target.value)}
+                              rows={5}
+                              placeholder="Type your notes here..."
+                              className={`w-full p-3 border border-gray-300 rounded-lg text-sm mb-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${darkInput}`}
+                              autoFocus
+                            />
+                            <div className="flex justify-between items-center">
+                              {note && (
+                                <button
+                                  onClick={() => {
+                                    updateProgress(topic._id, "note", "");
+                                    setOpenNoteId(null);
+                                  }}
+                                  className={`text-sm px-3 py-1 text-red-600 hover:bg-red-50 rounded transition-colors dark:text-red-400 dark:hover:bg-red-900/30`}
+                                >
+                                  Clear Note
+                                </button>
+                              )}
+                              <div className="flex gap-2">
+                                <button 
+                                  onClick={() => setOpenNoteId(null)} 
+                                  className={`text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 transition-colors dark:border-gray-600 dark:hover:bg-gray-700`}
+                                >
+                                  Cancel
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    updateProgress(topic._id, "note", noteText);
+                                    setOpenNoteId(null);
+                                  }}
+                                  className="text-sm px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors dark:bg-indigo-700 dark:hover:bg-indigo-800"
+                                >
+                                  Save
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           );
