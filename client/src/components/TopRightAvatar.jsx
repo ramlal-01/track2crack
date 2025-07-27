@@ -19,6 +19,8 @@ const TopRightAvatar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notificationPage, setNotificationPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [showMobileNotifications, setShowMobileNotifications] = useState(false);
+  const [streak, setStreak] = useState(null);
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const [avatarURL, setAvatarURL] = useState(null);
@@ -82,6 +84,16 @@ const fetchNotifications = async (userId, page = 1) => {
     }
   };
 
+  // Fetch streak data
+  const fetchStreak = async () => {
+    try {
+      const res = await API.post("/streak/update");
+      setStreak(res.data.streak);
+    } catch (error) {
+      console.error("❌ Failed to fetch streak:", error);
+      setStreak(0);
+    }
+  };
 
   useEffect(() => {
     const checkUser = () => {
@@ -90,7 +102,10 @@ const fetchNotifications = async (userId, page = 1) => {
         if (storedUser) {
           const parsedUser = JSON.parse(storedUser);
           setUser(parsedUser);
-          if (parsedUser._id) fetchNotifications(parsedUser._id);
+          if (parsedUser._id) {
+            fetchNotifications(parsedUser._id);
+            fetchStreak();
+          }
         } else {
           setUser(null);
           localStorage.removeItem('avatarUrl');
@@ -111,7 +126,10 @@ const fetchNotifications = async (userId, page = 1) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (userId) fetchNotifications(userId);
+      if (userId) {
+        fetchNotifications(userId);
+        fetchStreak();
+      }
     }, 60000);
     return () => clearInterval(interval);
   }, [userId]);
@@ -257,7 +275,7 @@ const handleSettingsClick = () => {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-72 md:w-72 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 border border-gray-200 dark:border-gray-600 overflow-hidden">
+          <Menu.Items className="absolute right-0 mt-2 w-80 md:w-72 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 border border-gray-200 dark:border-gray-600 overflow-hidden max-h-[90vh] transform -translate-x-4 md:translate-x-0">
             {/* Profile Header */}
             {user ? (
               <div className="px-3 md:px-4 py-2 md:py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
@@ -291,63 +309,95 @@ const handleSettingsClick = () => {
               </div>
             )}
 
-            {/* Notifications Section for Mobile */}
+            {/* Mobile-only sections */}
             <div className="md:hidden">
-              <div className="px-3 py-2 bg-gray-50 dark:bg-gray-700/30 border-b border-gray-200 dark:border-gray-600">
-                <div className="flex justify-between items-center">
-                  <h4 className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-1">
-                    <BellIcon className="h-3 w-3" />
-                    Notifications
-                  </h4>
-                  <button 
-                    className="text-xs text-indigo-600 dark:text-indigo-400 underline" 
-                    onClick={handleMarkAllRead}
-                  >
-                    Mark all read
-                  </button>
+              {/* Streak Section for Mobile */}
+              <div className="px-3 py-3 bg-orange-50 dark:bg-orange-900/20 border-b border-gray-200 dark:border-gray-600">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🔥</span>
+                  <div>
+                    <h4 className="text-xs font-bold text-orange-600 dark:text-orange-400">Current Streak</h4>
+                    <p className="text-sm font-semibold text-orange-700 dark:text-orange-300">
+                      {streak !== null ? `${streak} Day${streak !== 1 ? "s" : ""}` : "Loading..."}
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              {notifications.length > 0 ? (
-                <div className="max-h-32 overflow-y-auto">
-                  {notifications.slice(0, 3).map((notification) => (
-                    <div
-                      key={notification.id}
-                      onClick={() => {
-                        if (notification.link) navigate(notification.link);
-                      }}
-                      className={`px-3 py-2 border-b transition-colors duration-150 cursor-pointer
-                        ${notification.isSeen ? "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-indigo-50 dark:bg-indigo-900"}`}
-                    >
-                      <div className="flex items-start gap-2">
-                        <div className="flex-shrink-0 pt-0.5">
-                          <div className="h-6 w-6 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center">
-                            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300">
-                              {notification.type?.charAt(0).toUpperCase() || "N"}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-xs font-medium text-gray-900 dark:text-white truncate">{notification.title}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{formatDate(notification.date)}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  <div className="px-3 py-2 text-center border-t border-gray-100 dark:border-gray-700">
-                    <button 
-                      onClick={() => window.location.href = '/dashboard/revision-planner'}
-                      className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline"
-                    >
-                      View all
-                    </button>
+              {/* Notifications Section for Mobile */}
+              <div>
+                <button 
+                  onClick={() => setShowMobileNotifications(!showMobileNotifications)}
+                  className="w-full px-3 py-3 bg-gray-50 dark:bg-gray-700/30 border-b border-gray-200 dark:border-gray-600 flex justify-between items-center hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <BellIcon className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                    <h4 className="text-sm font-bold text-gray-700 dark:text-gray-300">Notifications</h4>
+                    {notifications.some(n => !n.isSeen) && (
+                      <span className="h-2 w-2 rounded-full bg-red-500"></span>
+                    )}
                   </div>
-                </div>
-              ) : (
-                <div className="px-3 py-4 text-center">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">No notifications</p>
-                </div>
-              )}
+                  <ChevronDownIcon className={`h-4 w-4 text-gray-400 transform transition-transform ${showMobileNotifications ? 'rotate-180' : ''}`} />
+                </button>
+
+                {showMobileNotifications && (
+                  <div className="bg-white dark:bg-gray-800">
+                    {notifications.length > 0 ? (
+                      <div className="max-h-40 overflow-y-auto">
+                        {notifications.slice(0, 4).map((notification) => (
+                          <div
+                            key={notification.id}
+                            onClick={() => {
+                              setShowMobileNotifications(false);
+                              if (notification.link) navigate(notification.link);
+                            }}
+                            className={`px-3 py-2 border-b border-gray-100 dark:border-gray-700 transition-colors duration-150 cursor-pointer
+                              ${notification.isSeen ? "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-indigo-50 dark:bg-indigo-900/50"}`}
+                          >
+                            <div className="flex items-start gap-2">
+                              <div className="flex-shrink-0 pt-0.5">
+                                <div className="h-5 w-5 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center">
+                                  <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300">
+                                    {notification.type?.charAt(0).toUpperCase() || "N"}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="text-xs font-medium text-gray-900 dark:text-white truncate">{notification.title}</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">{formatDate(notification.date)}</p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="px-3 py-4 text-center">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">No notifications</p>
+                      </div>
+                    )}
+                    <div className="px-3 py-2 text-center border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30">
+                      <button 
+                        onClick={() => {
+                          setShowMobileNotifications(false);
+                          handleMarkAllRead();
+                        }}
+                        className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline mr-3"
+                      >
+                        Mark all read
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setShowMobileNotifications(false);
+                          window.location.href = '/dashboard/revision-planner';
+                        }}
+                        className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline"
+                      >
+                        View all
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Menu Items - Only show when logged in */}

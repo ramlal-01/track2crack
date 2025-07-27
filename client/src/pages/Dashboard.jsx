@@ -241,7 +241,7 @@ useEffect(() => {
 
         {/* --- From here, actual content starts (Step 2 onward) --- */}
          
-        <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:gap-10 mt-4 sm:mt-6 mb-8 sm:mb-12 lg:mb-15"> 
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-10 mt-4 sm:mt-6 mb-8 sm:mb-12 lg:mb-15"> 
             <SubjectCard
                 icon="/assets/icons/dsa-sheet.svg"
                 title="DSA Sheet"

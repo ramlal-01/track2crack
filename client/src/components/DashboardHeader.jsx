@@ -38,8 +38,8 @@ const DashboardHeader = () => {
 
       {/* Right: Streak + Theme + Avatar */}
       <div className="flex items-center gap-4 ">
-        {/* 🔥 Streak - Only fire icon and number on mobile */}
-        <div className="block">
+        {/* 🔥 Streak - Only fire icon and number on mobile, hidden on mobile for dropdown */}
+        <div className="hidden md:block">
           <StreakBadge />
         </div>
       {/* 👤 Avatar + dropdown */}
