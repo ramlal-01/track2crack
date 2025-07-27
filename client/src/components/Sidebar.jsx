@@ -103,7 +103,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed top-[72px] lg:top-[72px] bottom-0 left-0 z-40 w-72 flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 sidebar-full-height ${
+        className={`fixed top-[72px] bottom-0 left-0 z-40 w-72 flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -111,17 +111,16 @@ const Sidebar = () => {
         {isSidebarOpen && (
           <button
             onClick={closeSidebar}
-            className="absolute top-4 right-4 z-50 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
+            className="absolute top-4 right-4 z-50 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 lg:hidden"
             aria-label="Close sidebar"
           >
             <XMarkIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           </button>
         )}
-         
 
-        <div className="flex-1 flex flex-col p-5 overflow-y-auto sidebar-scroll sidebar-content relative">
+        <div className="flex-1 flex flex-col p-5 overflow-y-auto sidebar-scroll relative">
           {/* Navigation */}
-          <nav className="flex-1 flex flex-col gap-4">
+          <nav className="flex-1 flex flex-col gap-4 pb-20">
             {/* Dashboard */}
             <button 
               onClick={() => {
@@ -267,7 +266,7 @@ const Sidebar = () => {
             </button>
           </nav>
 
-          {/* Bottom fade gradient */}
+          {/* Bottom fade gradient to indicate more content or footer boundary */}
           <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white dark:from-gray-900 to-transparent pointer-events-none"></div>
         </div>
       </aside>
