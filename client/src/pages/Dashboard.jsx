@@ -1,6 +1,5 @@
 // src/pages/Deskboard.jsx
 import React from "react";
-import Sidebar from "../components/Sidebar";
 import TopRightAvatar from "../components/TopRightAvatar";
 import { useTheme } from "../context/ThemeContext"; // global dark/light theme
 import { FaFire } from "react-icons/fa";
@@ -224,10 +223,7 @@ useEffect(() => {
 
 
   return (
-    <div className={`flex min-h-screen ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}>
-      {/* Sidebar */}
-      <Sidebar />
-
+    <div className={`min-h-screen ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}>
       {/* Main content */}
       <div className="flex-1 p-10">
         {/* Header */}

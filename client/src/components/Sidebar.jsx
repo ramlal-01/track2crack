@@ -23,14 +23,15 @@ import { useNavigate } from "react-router-dom";
 import API from "../api/api";
 import { useState, useEffect } from "react";
 import { useTheme } from "../context/ThemeContext";
+import { useSidebar } from "../context/SidebarContext";
 
 const Sidebar = () => {
   const [showCoreMenu, setShowCoreMenu] = useState(false);
   const [showTheoryMenu, setShowTheoryMenu] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const { theme } = useTheme();
+  const { isSidebarOpen, closeSidebar, isDashboardPage } = useSidebar();
 
   useEffect(() => {
     const id = localStorage.getItem("userId");
@@ -52,6 +53,7 @@ const Sidebar = () => {
       case "DBMS": navigate("/dashboard/core/dbms"); break;
       case "OS": navigate("/dashboard/core/os"); break;
     }
+    closeSidebar(); // Close sidebar on mobile after navigation
   };
 
   const handleTheoryClick = async (subject) => {
@@ -67,6 +69,7 @@ const Sidebar = () => {
       case "Java": navigate("/dashboard/theory/java"); break;
       case "OOPS": navigate("/dashboard/theory/oops"); break;
     }
+    closeSidebar(); // Close sidebar on mobile after navigation
   };
 
   const coreIcons = {
@@ -81,36 +84,35 @@ const Sidebar = () => {
     "OOPS": <CubeIcon className="w-5 h-5 mr-3 text-indigo-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-300" />
   };
 
+  // Don't render sidebar if not on dashboard pages
+  if (!isDashboardPage) return null;
+
   return (
     <>
-      {/* Mobile Hamburger Button */}
-      <button 
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-3 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
-        aria-label="Toggle sidebar"
-      >
-        {isSidebarOpen ? (
-          <XMarkIcon className="w-6 h-6" />
-        ) : (
-          <Bars3Icon className="w-6 h-6" />
-        )}
-      </button>
-
       {/* Sidebar Overlay */}
       <div 
         className={`fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden transition-all duration-300 ease-in-out ${
           isSidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`} 
-        onClick={() => setIsSidebarOpen(false)}
+        onClick={closeSidebar}
       />
 
       {/* Sidebar */}
       <aside 
-        className={`fixed lg:sticky top-18 z-40 w-72 h-[calc(100vh-4rem)]  flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
+        className={`fixed lg:sticky top-[72px] z-40 w-72 h-[calc(100vh-72px)] flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
-         
+        {/* Cross Icon - Top Right Corner */}
+        <div className="flex justify-end p-4 lg:hidden">
+          <button 
+            onClick={closeSidebar}
+            className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+            aria-label="Close sidebar"
+          >
+            <XMarkIcon className="w-5 h-5" />
+          </button>
+        </div>
 
         <div className="flex-1 flex flex-col p-5 overflow-y-auto">
           {/* Navigation */}
@@ -119,7 +121,7 @@ const Sidebar = () => {
             <button 
               onClick={() => {
                 navigate("/dashboard");
-                setIsSidebarOpen(false);
+                closeSidebar();
               }}
               className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
             >
@@ -158,7 +160,6 @@ const Sidebar = () => {
                       key={subject} 
                       onClick={() => {
                         handleTheoryClick(subject);
-                        setIsSidebarOpen(false);
                       }} 
                       className="flex items-center w-full px-4 py-2.5 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50 text-sm transition-all hover:translate-x-1 group"
                     >
@@ -196,7 +197,6 @@ const Sidebar = () => {
                       key={subject} 
                       onClick={() => {
                         handleCoreClick(subject);
-                        setIsSidebarOpen(false);
                       }} 
                       className="flex items-center w-full px-4 py-2.5 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50 text-sm transition-all hover:translate-x-1 group"
                     >
@@ -216,7 +216,7 @@ const Sidebar = () => {
             <button 
               onClick={() => {
                 navigate("/dashboard/quizhistory");
-                setIsSidebarOpen(false);
+                closeSidebar();
               }}
               className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
             >
@@ -231,7 +231,7 @@ const Sidebar = () => {
             <button 
               onClick={() => {
                 navigate("/dashboard/revision-planner");
-                setIsSidebarOpen(false);
+                closeSidebar();
               }}
               className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
             >
@@ -246,7 +246,7 @@ const Sidebar = () => {
             <button 
               onClick={() => {
                 navigate("/dashboard/feedback");
-                setIsSidebarOpen(false);
+                closeSidebar();
               }}
               className="flex items-center px-4 py-3 rounded-xl text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all group hover:shadow-sm border border-transparent hover:border-indigo-100 dark:hover:border-gray-700"
             >

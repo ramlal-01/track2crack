@@ -31,12 +31,16 @@ import Feedback from './pages/FeedbackPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './context/AuthContext';
 import DashboardHeader from './components/DashboardHeader';
+import { SidebarProvider } from './context/SidebarContext';
+import Sidebar from './components/Sidebar';
 
 
 const App = () => {
   return (
     <BrowserRouter>
-      <AppContent />
+      <SidebarProvider>
+        <AppContent />
+      </SidebarProvider>
     </BrowserRouter>
   );
 };
@@ -148,8 +152,13 @@ const AppContent = () => {
 
       {dashboardRoutes.includes(location.pathname) && <DashboardHeader />}
 
-      <div className="flex-grow">
-        <Routes>
+      <div className="flex flex-grow">
+        {/* Sidebar - only shows on dashboard pages */}
+        <Sidebar />
+        
+        {/* Main content area */}
+        <div className="flex-grow">
+          <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -182,7 +191,8 @@ const AppContent = () => {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />  
           <Route path="/dashboard/feedback" element = {<Feedback />} />
 
-        </Routes>
+          </Routes>
+        </div>
       </div>
       <Footer />
 
