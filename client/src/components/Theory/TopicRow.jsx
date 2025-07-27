@@ -190,18 +190,77 @@ const TopicRow = ({
 
           {openReminderId === topic._id && (
             <div 
-              className={`absolute z-50 top-8 bg-white border border-gray-200 shadow-lg rounded-lg p-2 ${darkCardBg} ${darkBorder}`}
+              className={`absolute z-[60] top-8 right-0 bg-white border border-gray-200 shadow-xl rounded-lg p-3 ${darkCardBg} ${darkBorder} ${darkMode ? 'dark-datepicker' : ''}`}
               onClick={(e) => e.stopPropagation()}
+              style={{ minWidth: '280px' }}
             >
               <DatePicker
                 selected={remindOn ? new Date(remindOn) : null}
-                                  onChange={(date) => handleReminderChange(topic._id, date)}
+                onChange={(date) => handleReminderChange(topic._id, date)}
                 dateFormat="dd/MM/yyyy"
                 minDate={new Date()}
                 inline
-                className="dark:bg-gray-800"
-                portalId="root"
+                className="w-full"
+                wrapperClassName="w-full"
+                calendarClassName="!font-sans !border-0"
+                dayClassName={(date) => 
+                  darkMode 
+                    ? "hover:!bg-indigo-600 hover:!text-white cursor-pointer !text-gray-200" 
+                    : "hover:!bg-indigo-100 cursor-pointer"
+                }
               />
+              
+              {/* Dark mode styles */}
+              {darkMode && (
+                <style jsx>{`
+                  .dark-datepicker .react-datepicker {
+                    background-color: #374151 !important;
+                    border: none !important;
+                    color: #f9fafb !important;
+                    font-family: inherit !important;
+                  }
+                  .dark-datepicker .react-datepicker__header {
+                    background-color: #4b5563 !important;
+                    border-bottom-color: #6b7280 !important;
+                    border-radius: 0.5rem 0.5rem 0 0 !important;
+                  }
+                  .dark-datepicker .react-datepicker__current-month,
+                  .dark-datepicker .react-datepicker__day-name {
+                    color: #f9fafb !important;
+                    font-weight: 600 !important;
+                  }
+                  .dark-datepicker .react-datepicker__day {
+                    color: #d1d5db !important;
+                    border-radius: 0.375rem !important;
+                  }
+                  .dark-datepicker .react-datepicker__day:hover {
+                    background-color: #6366f1 !important;
+                    color: #ffffff !important;
+                  }
+                  .dark-datepicker .react-datepicker__day--selected {
+                    background-color: #4f46e5 !important;
+                    color: #ffffff !important;
+                  }
+                  .dark-datepicker .react-datepicker__day--today {
+                    background-color: #1f2937 !important;
+                    color: #60a5fa !important;
+                    font-weight: 600 !important;
+                  }
+                  .dark-datepicker .react-datepicker__navigation {
+                    border-color: #9ca3af !important;
+                  }
+                  .dark-datepicker .react-datepicker__navigation:hover {
+                    border-color: #f9fafb !important;
+                  }
+                  .dark-datepicker .react-datepicker__day--disabled {
+                    color: #6b7280 !important;
+                    cursor: not-allowed !important;
+                  }
+                  .dark-datepicker .react-datepicker__day--outside-month {
+                    color: #6b7280 !important;
+                  }
+                `}</style>
+              )}
             </div>
           )}
         </div>
