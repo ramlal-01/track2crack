@@ -178,7 +178,7 @@ const handleSettingsClick = () => {
       
       {/* Mobile Notification Overlay */}
       {showMobileNotificationOverlay && (
-        <div className="fixed inset-0 z-[100] bg-black bg-opacity-50 backdrop-blur-sm flex items-start justify-center pt-4 px-4">
+        <div className="fixed inset-0 z-[100] bg-white/10 dark:bg-black/10 backdrop-blur-md flex items-start justify-center pt-4 px-4">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md max-h-[80vh] overflow-hidden">
             {/* Header */}
             <div className="px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white flex justify-between items-center">
