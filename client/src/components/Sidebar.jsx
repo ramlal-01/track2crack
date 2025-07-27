@@ -111,13 +111,12 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed left-0 z-40 w-72 flex flex-col transition-all duration-300 ease-in-out shadow-xl border-r-4 border-green-500 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        className="fixed left-0 z-40 w-72 flex flex-col shadow-xl border-r-4 border-green-500"
         style={{ 
           top: '72px',
           height: 'calc(100vh - 72px)',
-          backgroundColor: '#10b981' // Green background for visibility
+          backgroundColor: '#10b981', // Green background for visibility
+          transform: 'translateX(0)' // Always visible for debugging
         }}
       >
         <div className="p-4 text-white">

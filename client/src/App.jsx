@@ -147,6 +147,12 @@ const shouldShowSidebar = dashboardRoutes.includes(location.pathname);
 
   return (
     <div className="flex flex-col min-h-screen">
+      {/* Debug info */}
+      <div className="fixed top-0 left-0 z-50 bg-red-500 text-white p-2 text-xs">
+        Route: {location.pathname}<br/>
+        Should show sidebar: {shouldShowSidebar ? 'YES' : 'NO'}
+      </div>
+
       {showNavbar && <Navbar  />}
 
       {dashboardRoutes.includes(location.pathname) && <DashboardHeader />}
