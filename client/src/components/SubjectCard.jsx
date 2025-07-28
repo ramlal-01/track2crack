@@ -22,9 +22,9 @@ const SubjectCard = ({ icon, title, progress, onClick }) => {
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
       className={`relative cursor-pointer bg-gradient-to-br from-white to-purple-50 dark:from-gray-900 dark:to-gray-800 
-                 rounded-2xl p-5 shadow-lg hover:shadow-xl border border-gray-100 dark:border-gray-700 
+                 rounded-2xl p-3 sm:p-5 shadow-lg hover:shadow-xl border border-gray-100 dark:border-gray-700 
                  flex flex-col justify-between transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] 
-                 min-h-[140px] overflow-hidden group`}
+                 min-h-[120px] sm:min-h-[140px] overflow-hidden group`}
     >
       {/* Decorative left border - now gradient blue */}
       <div className="absolute top-0 left-0 h-full w-1 bg-gradient-to-b from-blue-400 to-blue-600"></div>
@@ -40,23 +40,23 @@ const SubjectCard = ({ icon, title, progress, onClick }) => {
 
       {/* Top Content */}
       <div className="flex justify-between items-start z-10">
-        <div className="flex items-center gap-3">
-          {/* Enhanced icon container - larger size */}
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+          {/* Enhanced icon container - responsive sizing */}
           <motion.div 
             whileHover={{ y: -2 }}
-            className="p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 
-                      shadow-sm group-hover:shadow-md transition-all flex items-center justify-center"
+            className="p-2 sm:p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 
+                      shadow-sm group-hover:shadow-md transition-all flex items-center justify-center flex-shrink-0"
           >
             <img
               src={icon}
               alt={`${title} icon`}
-              className="w-10 h-10 dark:invert opacity-80 dark:opacity-90"
+              className="w-6 h-6 sm:w-10 sm:h-10 dark:invert opacity-80 dark:opacity-90"
             />
           </motion.div>
           
-          <div>
-            <h3 className="text-base font-semibold text-gray-800 dark:text-white line-clamp-1">{title}</h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+          <div className="min-w-0 flex-1">
+            <h3 className="text-sm sm:text-base font-semibold text-gray-800 dark:text-white line-clamp-1">{title}</h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-1">
               {progress < 30 ? "Keep going!" : 
                progress < 70 ? "Good progress!" : 
                "Almost mastered!"}
@@ -64,8 +64,8 @@ const SubjectCard = ({ icon, title, progress, onClick }) => {
           </div>
         </div>
 
-        {/* Progress percentage with animated circle */}
-        <div className="relative w-10 h-10">
+        {/* Progress percentage with animated circle - responsive sizing */}
+        <div className="relative w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0">
           <svg className="w-full h-full" viewBox="0 0 36 36">
             <path
               d="M18 2.0845
@@ -101,7 +101,7 @@ const SubjectCard = ({ icon, title, progress, onClick }) => {
       </div>
 
       {/* Bottom Progress Bar */}
-      <div className="relative z-10 w-full h-2.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden mt-4">
+      <div className="relative z-10 w-full h-2 sm:h-2.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden mt-3 sm:mt-4">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
