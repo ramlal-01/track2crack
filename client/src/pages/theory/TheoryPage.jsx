@@ -1,7 +1,6 @@
 import API from "../../api/api";
 import React, { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 

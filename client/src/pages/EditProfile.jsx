@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
 import AvatarCropper from "../components/AvatarCropper"; 
+import { useTheme } from "../context/ThemeContext"; 
 
 const EditProfile = () => {
   const userId = localStorage.getItem("userId");
@@ -19,6 +20,7 @@ const EditProfile = () => {
   const [previewImage, setPreviewImage] = useState(null);
   const [croppedBlob, setCroppedBlob] = useState(null);
   const [currentAvatar, setCurrentAvatar] = useState(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (!userId) return;

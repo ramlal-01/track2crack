@@ -200,7 +200,6 @@ const TopicRow = ({
                 minDate={new Date()}
                 inline
                 className="dark:bg-gray-800"
-                portalId="root"
               />
             </div>
           )}
@@ -387,7 +386,6 @@ const TopicRow = ({
                     minDate={new Date()}
                     inline
                     className="dark:bg-gray-800"
-                    portalId="root"
                   />
                 </div>
               )}
