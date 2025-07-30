@@ -19,6 +19,10 @@ const EditProfile = () => {
   const [previewImage, setPreviewImage] = useState(null);
   const [croppedBlob, setCroppedBlob] = useState(null);
   const [currentAvatar, setCurrentAvatar] = useState(null);
+  const [selectedFileName, setSelectedFileName] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [selectedFileSize, setSelectedFileSize] = useState("");
 
   useEffect(() => {
     if (!userId) return;
@@ -84,22 +88,51 @@ const EditProfile = () => {
 
     if (!croppedBlob) return alert("Please crop and save your image first");
 
+    setIsUploading(true);
+    setUploadProgress(0);
+    
     const formData = new FormData();
     formData.append("avatar", croppedBlob);
 
     try {
       const token = localStorage.getItem("token");
-      await API.post(`/users/avatar/${userId}`, formData, {
+      
+      // Simulate progress for better UX
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          if (prev >= 90) return prev;
+          return prev + 10;
+        });
+      }, 200);
+
+      const response = await API.post(`/users/avatar/${userId}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
-      alert("Avatar updated successfully");
-      navigate("/profile");
+      
+      clearInterval(progressInterval);
+      setUploadProgress(100);
+      
+      // Update the current avatar with the new URL
+      setCurrentAvatar(response.data.avatarUrl);
+      setCroppedBlob(null);
+      setSelectedFileName("");
+      setSelectedFileSize("");
+      
+      setTimeout(() => {
+        alert("Avatar updated successfully");
+        navigate("/profile");
+      }, 500);
+      
     } catch (err) {
       console.error("Avatar Upload Failed:", err);
-      alert("Failed to upload avatar");
+      const errorMessage = err.response?.data?.message || "Failed to upload avatar";
+      alert(errorMessage);
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -107,15 +140,39 @@ const EditProfile = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      alert("Please select a valid image file (JPG, PNG, or WebP)");
+      return;
+    }
+
     if (file.size > 5 * 1024 * 1024) {
       return alert("File too large. Max 5MB allowed.");
     }
+
+    // Set the file name and size
+    setSelectedFileName(file.name);
+    setSelectedFileSize((file.size / (1024 * 1024)).toFixed(2));
 
     const reader = new FileReader();
     reader.onloadend = () => {
       setPreviewImage(reader.result);
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      const event = { target: { files: [file] } };
+      handleFileChange(event);
+    }
   };
 
   return (
@@ -135,7 +192,11 @@ const EditProfile = () => {
               <div className="flex flex-col items-center h-full">
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-6">Profile Picture</h3>
                 
-                <div className="relative group mb-6 flex-grow flex flex-col items-center justify-center">
+                <div 
+                  className="relative group mb-6 flex-grow flex flex-col items-center justify-center"
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                >
                   {currentAvatar ? (
                     <>
                       <img 
@@ -154,8 +215,11 @@ const EditProfile = () => {
                       </label>
                     </>
                   ) : (
-                    <label className="w-40 h-40 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-gray-600 dark:to-gray-500 flex items-center justify-center cursor-pointer relative shadow-lg">
-                      <span className="text-blue-500 dark:text-blue-300 text-4xl font-bold">+</span>
+                    <label className="w-40 h-40 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-gray-600 dark:to-gray-500 flex items-center justify-center cursor-pointer relative shadow-lg border-2 border-dashed border-blue-300 dark:border-blue-600 hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
+                      <div className="text-center">
+                        <span className="text-blue-500 dark:text-blue-300 text-4xl font-bold block mb-2">+</span>
+                        <span className="text-xs text-blue-600 dark:text-blue-400">Click or drag image here</span>
+                      </div>
                       <input
                         type="file"
                         accept="image/*"
@@ -166,18 +230,51 @@ const EditProfile = () => {
                   )}
                 </div>
                 
+                {/* File name display */}
+                {selectedFileName && (
+                  <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+                    <p className="text-sm text-blue-700 dark:text-blue-300 font-medium">Selected file:</p>
+                    <p className="text-xs text-blue-600 dark:text-blue-400 truncate">{selectedFileName}</p>
+                    <p className="text-xs text-blue-500 dark:text-blue-400">Size: {selectedFileSize} MB</p>
+                  </div>
+                )}
+                
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 text-center">JPG or PNG, no larger than 5MB</p>
+                
+                {isUploading && (
+                  <div className="mb-4">
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                      <div 
+                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${uploadProgress}%` }}
+                      ></div>
+                    </div>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 text-center">
+                      Uploading... {uploadProgress}%
+                    </p>
+                  </div>
+                )}
                 
                 <button
                   onClick={handleAvatarUpload}
-                  disabled={!croppedBlob}
+                  disabled={!croppedBlob || isUploading}
                   className={`px-6 py-3 text-white rounded-full w-full font-medium shadow-md transition-all ${
-                    croppedBlob 
+                    croppedBlob && !isUploading
                       ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700" 
                       : "bg-gray-300 dark:bg-gray-600 cursor-not-allowed"
                   }`}
                 >
-                  Update Avatar
+                  {isUploading ? (
+                    <span className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Uploading...
+                    </span>
+                  ) : (
+                    "Update Avatar"
+                  )}
                 </button>
               </div>
             </div>

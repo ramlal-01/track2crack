@@ -4,6 +4,8 @@ const TheoryProgress = require('../models/UserTheoryProgress');
 const Quiz = require('../models/Quiz');
 const cloudinary = require('../utils/cloudinary');
 const User = require('../models/User');
+const fs = require('fs');
+const path = require('path');
 
 exports.getUserDashboard = async (req, res) => {
   try {
@@ -69,23 +71,36 @@ exports.uploadAvatar = async (req, res) => {
     if (user.avatarPublicId) {
       try {
         await cloudinary.uploader.destroy(user.avatarPublicId);
+        console.log("Old avatar deleted successfully:", user.avatarPublicId);
       } catch (err) {
         console.warn("Failed to delete old Cloudinary image:", err.message);
       }
     }
 
-    // 🆕 Upload new avatar
+    // 🆕 Upload new avatar - use the file path from multer
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "track2crack/avatars",
       width: 300,
       height: 300,
-      crop: "fill"
+      crop: "fill",
+      quality: "auto",
+      format: "jpg"
     });
 
     // 🔃 Update user with new avatar data
     user.avatarUrl = result.secure_url;
     user.avatarPublicId = result.public_id;
     await user.save();
+
+    // 🧹 Clean up temporary file
+    try {
+      fs.unlinkSync(req.file.path);
+      console.log("Temporary file cleaned up:", req.file.path);
+    } catch (err) {
+      console.warn("Failed to clean up temporary file:", err.message);
+    }
+
+    console.log("Avatar uploaded successfully:", result.public_id);
 
     return res.status(200).json({ avatarUrl: user.avatarUrl });
 
