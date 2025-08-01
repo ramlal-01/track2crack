@@ -20,6 +20,8 @@ const EditProfile = () => {
   const [previewImage, setPreviewImage] = useState(null);
   const [croppedBlob, setCroppedBlob] = useState(null);
   const [currentAvatar, setCurrentAvatar] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [selectedFileName, setSelectedFileName] = useState("");
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -41,8 +43,9 @@ const EditProfile = () => {
           github: user.github || "",
           linkedin: user.linkedin || "",
         });
-         if (user.avatar) {
-          setCurrentAvatar(user.avatar);
+        // Fix: Use avatarUrl instead of avatar
+        if (user.avatarUrl) {
+          setCurrentAvatar(user.avatarUrl);
         }
       } catch (err) {
         console.error("Error loading profile:", err);
@@ -85,23 +88,40 @@ const EditProfile = () => {
     e.preventDefault();
 
     if (!croppedBlob) return alert("Please crop and save your image first");
+    if (isUploading) return; // Prevent multiple clicks
+
+    setIsUploading(true);
 
     const formData = new FormData();
     formData.append("avatar", croppedBlob);
 
     try {
       const token = localStorage.getItem("token");
-      await API.post(`/users/avatar/${userId}`, formData, {
+      const response = await API.post(`/users/avatar/${userId}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
+        timeout: 30000, // 30 second timeout
       });
-      alert("Avatar updated successfully");
-      navigate("/profile");
+      
+      // Update the current avatar with the new URL
+      if (response.data.avatarUrl) {
+        setCurrentAvatar(response.data.avatarUrl);
+        // Update localStorage if needed
+        localStorage.setItem('avatarUrl', response.data.avatarUrl);
+      }
+      
+      alert(response.data.message || "Avatar updated successfully");
+      setCroppedBlob(null);
+      setSelectedFileName("");
+      // Don't navigate immediately, let user see the updated avatar
     } catch (err) {
       console.error("Avatar Upload Failed:", err);
-      alert("Failed to upload avatar");
+      const errorMessage = err.response?.data?.message || "Failed to upload avatar. Please try again.";
+      alert(errorMessage);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -112,6 +132,8 @@ const EditProfile = () => {
     if (file.size > 5 * 1024 * 1024) {
       return alert("File too large. Max 5MB allowed.");
     }
+
+    setSelectedFileName(file.name);
 
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -152,6 +174,7 @@ const EditProfile = () => {
                           accept="image/*"
                           onChange={handleFileChange}
                           className="hidden"
+                          disabled={isUploading}
                         />
                       </label>
                     </>
@@ -163,23 +186,47 @@ const EditProfile = () => {
                         accept="image/*"
                         onChange={handleFileChange}
                         className="hidden"
+                        disabled={isUploading}
                       />
                     </label>
                   )}
                 </div>
                 
+                {/* File selection feedback */}
+                {selectedFileName && (
+                  <p className="text-sm text-green-600 dark:text-green-400 mb-2 text-center">
+                    Selected: {selectedFileName}
+                  </p>
+                )}
+                
+                {croppedBlob && (
+                  <p className="text-sm text-blue-600 dark:text-blue-400 mb-2 text-center">
+                    ✓ Image cropped and ready to upload
+                  </p>
+                )}
+                
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 text-center">JPG or PNG, no larger than 5MB</p>
                 
                 <button
                   onClick={handleAvatarUpload}
-                  disabled={!croppedBlob}
-                  className={`px-6 py-3 text-white rounded-full w-full font-medium shadow-md transition-all ${
-                    croppedBlob 
+                  disabled={!croppedBlob || isUploading}
+                  className={`px-6 py-3 text-white rounded-full w-full font-medium shadow-md transition-all flex items-center justify-center ${
+                    croppedBlob && !isUploading
                       ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700" 
                       : "bg-gray-300 dark:bg-gray-600 cursor-not-allowed"
                   }`}
                 >
-                  Update Avatar
+                  {isUploading ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Uploading...
+                    </>
+                  ) : (
+                    "Update Avatar"
+                  )}
                 </button>
               </div>
             </div>
@@ -298,7 +345,10 @@ const EditProfile = () => {
       {previewImage && (
         <AvatarCropper
           image={previewImage}
-          onClose={() => setPreviewImage(null)}
+          onClose={() => {
+            setPreviewImage(null);
+            setSelectedFileName("");
+          }}
           onCropDone={(blob) => {
             setCroppedBlob(blob);
             setPreviewImage(null);
