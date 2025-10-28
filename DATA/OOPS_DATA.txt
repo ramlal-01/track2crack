@@ -1,0 +1,407 @@
+[
+  {
+    "subject": "OOPS",
+    "title": "Introduction to OOPS",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "OOPS in Java - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/object-oriented-programming-oops-concept-in-java/",
+        "type": "article"
+      },
+      {
+        "label": "OOPS Concepts - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=1e6y4h6zVi0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Comprehensive list of OOPS topics covering foundational to advanced concepts"
+      }
+    ],
+    "notes": "Object-Oriented Programming (OOPS) is a programming paradigm based on objects and classes, emphasizing modularity, reusability, and scalability over procedural programming.",
+    "order": 1
+  },
+  {
+    "subject": "OOPS",
+    "title": "Classes and Objects",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Classes and Objects in Java - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/classes-objects-java/",
+        "type": "article"
+      },
+      {
+        "label": "Classes and Objects - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=3u1fu6f8Hto",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Covers definition, creation, and differences between classes and objects"
+      }
+    ],
+    "notes": "Classes are blueprints for objects, defining properties and behaviors, while objects are instances of classes.",
+    "order": 2
+  },
+  {
+    "subject": "OOPS",
+    "title": "Encapsulation",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Encapsulation in Java - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/encapsulation-in-java/",
+        "type": "article"
+      },
+      {
+        "label": "Encapsulation - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=8YXM7pN0w5Y",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Explains data hiding, access modifiers, and getters/setters"
+      }
+    ],
+    "notes": "Encapsulation ensures data hiding by restricting access to class members using access modifiers and providing controlled access via getters and setters.",
+    "order": 3
+  },
+  {
+    "subject": "OOPS",
+    "title": "Abstraction",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Abstraction in Java - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/abstraction-in-java-2/",
+        "type": "article"
+      },
+      {
+        "label": "Abstraction - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=0Y7eQ5aW5D4",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Covers abstract classes, interfaces, and hiding implementation details"
+      }
+    ],
+    "notes": "Abstraction hides complex implementation details, exposing only necessary features through abstract classes and interfaces.",
+    "order": 4
+  },
+  {
+    "subject": "OOPS",
+    "title": "Inheritance",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Inheritance in Java - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/inheritance-in-java/",
+        "type": "article"
+      },
+      {
+        "label": "Inheritance - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=2W3XShX1f9o",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Details single, multiple, multilevel, and hierarchical inheritance, super and this keywords"
+      }
+    ],
+    "notes": "Inheritance allows a class to inherit properties and methods from another class, promoting code reuse.",
+    "order": 5
+  },
+  {
+    "subject": "OOPS",
+    "title": "Polymorphism",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Polymorphism in Java - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/polymorphism-in-java/",
+        "type": "article"
+      },
+      {
+        "label": "Polymorphism - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=2W3XShX1f9o",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Explains compile-time and run-time polymorphism, virtual functions, and dynamic binding"
+      }
+    ],
+    "notes": "Polymorphism enables one interface to represent different underlying forms, achieved through method overloading and overriding.",
+    "order": 6
+  },
+  {
+    "subject": "OOPS",
+    "title": "Constructors and Destructors",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Constructors in Java - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/constructors-in-java/",
+        "type": "article"
+      },
+      {
+        "label": "Constructors - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=0Y7eQ5aW5D4",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Covers default, parameterized, and copy constructors, and destructors"
+      }
+    ],
+    "notes": "Constructors initialize objects, while destructors clean up resources; constructors can be overloaded for flexibility.",
+    "order": 7
+  },
+  {
+    "subject": "OOPS",
+    "title": "Static Members",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "Static Keyword in Java - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/static-keyword-java/",
+        "type": "article"
+      },
+      {
+        "label": "Static Members - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=2W3XShX1f9o",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Explains static variables, methods, and blocks with use cases"
+      }
+    ],
+    "notes": "Static members belong to the class rather than instances, shared across all objects, useful for utility methods.",
+    "order": 8
+  },
+  {
+    "subject": "OOPS",
+    "title": "Operator Overloading",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "Operator Overloading in C++ - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/operator-overloading-cpp/",
+        "type": "article"
+      },
+      {
+        "label": "Operator Overloading - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=BOvAbjfJ0x0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Covers overloading unary and binary operators with examples"
+      }
+    ],
+    "notes": "Operator overloading allows redefining operator behavior for user-defined types, primarily in languages like C++.",
+    "order": 9
+  },
+  {
+    "subject": "OOPS",
+    "title": "Exception Handling in OOPS",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Exception Handling in Java - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/exceptions-in-java/",
+        "type": "article"
+      },
+      {
+        "label": "Exception Handling - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=2W3XShX1f9o",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Details try-catch blocks, throwing, catching, and custom exceptions"
+      }
+    ],
+    "notes": "Exception handling manages runtime errors using try-catch blocks and custom exceptions for robust applications.",
+    "order": 10
+  },
+  {
+    "subject": "OOPS",
+    "title": "Interfaces and Abstract Classes",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Interfaces vs Abstract Classes - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/difference-between-abstract-class-and-interface-in-java/",
+        "type": "article"
+      },
+      {
+        "label": "Interfaces and Abstract Classes - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=2W3XShX1f9o",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Compares interfaces and abstract classes, their use in design patterns"
+      }
+    ],
+    "notes": "Interfaces and abstract classes provide abstraction; interfaces support multiple inheritance, while abstract classes allow partial implementation.",
+    "order": 11
+  },
+  {
+    "subject": "OOPS",
+    "title": "Association, Aggregation, and Composition",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "Association, Aggregation, Composition - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/association-composition-aggregation-java/",
+        "type": "article"
+      },
+      {
+        "label": "Class Relationships - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=2W3XShX1f9o",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Explains types of class relationships and their implementation"
+      }
+    ],
+    "notes": "Association, aggregation, and composition define relationships between classes, differing in dependency and lifetime.",
+    "order": 12
+  },
+  {
+    "subject": "OOPS",
+    "title": "Design Patterns in OOPS",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "Design Patterns in Java - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/software-design-patterns/",
+        "type": "article"
+      },
+      {
+        "label": "Design Patterns - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=2W3XShX1f9o",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Covers Singleton, Factory, and Observer patterns"
+      }
+    ],
+    "notes": "Design patterns like Singleton, Factory, and Observer provide reusable solutions to common software design problems.",
+    "order": 13
+  },
+  {
+    "subject": "OOPS",
+    "title": "Object Serialization",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "Serialization in Java - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/serialization-in-java/",
+        "type": "article"
+      },
+      {
+        "label": "Serialization - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=2W3XShX1f9o",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Details serialization, deserialization, and transient fields"
+      }
+    ],
+    "notes": "Serialization converts objects into a byte stream for storage or transmission, with deserialization restoring them.",
+    "order": 14
+  },
+  {
+    "subject": "OOPS",
+    "title": "Garbage Collection",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "Garbage Collection in Java - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/garbage-collection-java/",
+        "type": "article"
+      },
+      {
+        "label": "Garbage Collection - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=2W3XShX1f9o",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Explains automatic memory management in OOPS languages"
+      }
+    ],
+    "notes": "Garbage collection automatically manages memory by reclaiming unused objects, reducing manual memory management overhead.",
+    "order": 15
+  },
+  {
+    "subject": "OOPS",
+    "title": "OOPS in Different Languages",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "OOPS in Python - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/python-oops-concepts/",
+        "type": "article"
+      },
+      {
+        "label": "OOPS in C++ - GeeksforGeeks",
+        "url": "https://www.geeksforgeeks.org/object-oriented-programming-in-cpp/",
+        "type": "article"
+      },
+      {
+        "label": "OOPS in Different Languages - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=2W3XShX1f9o",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [
+      {
+        "filename": "01bd8cb8-8bfb-49f5-b789-4cab8d3e3fab.pdf",
+        "description": "Compares OOPS features in Java, C++, and Python"
+      }
+    ],
+    "notes": "OOPS implementation varies across languages like Java, C++, and Python, each with unique features and syntax.",
+    "order": 16
+  }
+]
