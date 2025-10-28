@@ -1,7 +1,7 @@
 import React from "react";
 import TopRightAvatar from "./TopRightAvatar";
-import { FaFire } from "react-icons/fa"; 
 import { Bars3Icon } from "@heroicons/react/24/solid";
+import { FaFire } from "react-icons/fa"; 
 import StreakBadge from "../components/StreakBadge";
 import { useSidebar } from "../context/SidebarContext";
 

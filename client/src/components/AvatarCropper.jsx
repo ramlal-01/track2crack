@@ -5,8 +5,8 @@ import Modal from "react-modal";
 
 const AvatarCropper = ({ image, onClose, onCropDone }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [zoom, setZoom] = useState(1);
 
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
