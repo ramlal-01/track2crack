@@ -134,8 +134,8 @@ const Sidebar = () => {
               <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-transform group-hover:translate-x-1" />
             </button>
 
-            {/* Divider */}
             <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+            {/* Divider */}
 
             {/* Theory Subjects */}
             <div className="rounded-xl overflow-hidden">
