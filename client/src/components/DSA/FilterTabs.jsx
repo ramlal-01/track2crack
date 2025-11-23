@@ -4,8 +4,8 @@ const FilterTabs = ({
   filter, 
   setFilter, 
   difficultyFilter, 
-  setDifficultyFilter, 
   setSearchQuery, 
+  setDifficultyFilter, 
   darkMode 
 }) => {
   const tabs = ["All", "Solved", "Bookmarked", "Reminders"];
