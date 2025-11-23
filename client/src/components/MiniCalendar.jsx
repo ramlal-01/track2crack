@@ -10,7 +10,7 @@ const MiniCalendar = ({ onDateSelect, reminderDates = [] }) => {
     onDateSelect(date);
     console.log("📅 Selected Date:", date);
   };
-
+// 
   return (
     <div className="mini-calendar-wrapper">
       <Calendar
