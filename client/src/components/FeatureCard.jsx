@@ -1,3 +1,4 @@
+//Adding the feature
 const FeatureCard = ({ icon, title, description }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">

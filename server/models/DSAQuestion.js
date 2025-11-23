@@ -1,4 +1,4 @@
-// models/DSAQuestion.js
+// DSAQuestion Model - Defines the schema for DSA questions
 const mongoose = require('mongoose');
 
 const dsaQuestionSchema = new mongoose.Schema({

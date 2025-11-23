@@ -1,3 +1,4 @@
+//dsaController - Manages DSA questions and user progress: fetching questions, updating progress, and retrieving user progress.
 const DSAQuestion = require('../models/DSAQuestion');
 const UserDSAProgress = require('../models/UserDSAProgress');
 // GET /api/dsa/questions

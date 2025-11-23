@@ -17,11 +17,11 @@ const CurrentTopicSection = ({
 }) => {
   if (!currentTopic) return null;
 
-  const darkCardBg = "dark:bg-gray-800";
   const darkBorder = "dark:border-gray-700";
+  const darkCardBg = "dark:bg-gray-800";
   const darkText = "dark:text-gray-200";
-  const darkInput = "dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white";
   const darkHover = "dark:hover:bg-gray-700";
+  const darkInput = "dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white";
 
   return (
     <div className={`bg-white rounded-xl shadow-md p-3 lg:p-4 mb-6 border-2 border-indigo-200 relative ${darkCardBg} ${darkBorder} dark:border-indigo-800`}>

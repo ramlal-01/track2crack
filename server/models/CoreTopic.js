@@ -1,3 +1,4 @@
+// CoreTopic Model - Defines the schema for core topics in subjects like OS, DBMS, CN
 const mongoose = require('mongoose');
 
 const coreTopicSchema = new mongoose.Schema({

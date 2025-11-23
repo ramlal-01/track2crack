@@ -1,3 +1,4 @@
+//coreController - Manages core topics and user progress: fetching topics by subject, updating progress, and retrieving user progress.
 const CoreTopic = require('../models/CoreTopic');
 const UserCoreProgress = require('../models/UserCoreProgress');
 

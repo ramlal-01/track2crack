@@ -6,8 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 const ReminderModal = ({ 
   openReminderId, 
   progressMap, 
-  handleReminderChange, 
   darkMode, 
+  handleReminderChange, 
   onClose // optional, for overlay click
 }) => {
   if (!openReminderId) return null;

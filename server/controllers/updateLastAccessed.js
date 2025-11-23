@@ -1,3 +1,4 @@
+//updateLastAccessed - Updates the last accessed timestamp for DSA questions, core topics, or theory topics based on user activity.
 const UserDSAProgress = require('../models/UserDSAProgress');
 const UserCoreProgress = require('../models/UserCoreProgress');
 const UserTheoryProgress = require('../models/UserTheoryProgress');

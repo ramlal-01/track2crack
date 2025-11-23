@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import Calendar from 'react-calendar';
+import React, { useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 
 const MiniCalendar = ({ onDateSelect, reminderDates = [] }) => {

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import API from "../../api/api";
@@ -400,8 +399,6 @@ const CoreSubjectPage = ({ subject, title }) => {
         reminderRefs={reminderRefs}
         noteRefs={noteRefs}
       />
-
-      <ToastContainer position="bottom-right" autoClose={3000} />
     </div>
   );
 };

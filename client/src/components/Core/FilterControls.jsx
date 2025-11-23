@@ -1,3 +1,4 @@
+//FilterControls- A responsive component for filtering topics and searching, optimized for mobile and desktop views.
 import React from "react";
 import { FaBookmark, FaBell, FaSearch } from "react-icons/fa";
 
