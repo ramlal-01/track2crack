@@ -1,3 +1,4 @@
+//userController - Manages user dashboard, profile, avatar upload, password change, account deletion, and FCM token storage.
 const DSAProgress = require('../models/UserDSAProgress');
 const CoreProgress = require('../models/UserCoreProgress');
 const TheoryProgress = require('../models/UserTheoryProgress');
