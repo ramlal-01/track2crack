@@ -1,3 +1,4 @@
+//  Streak Model - Defines the schema for user activity streaks
 const mongoose = require('mongoose');
 
 const streakSchema = new mongoose.Schema({

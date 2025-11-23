@@ -397,6 +397,6 @@ const TheoryPage = ({ subject, title }) => {
 
     </div>
   );
-};
+};//h
 
 export default TheoryPage;
