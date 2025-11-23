@@ -1,3 +1,4 @@
+// client/src/pages/quiz/Quiz.jsx
 import React, { useEffect, useState, useRef } from "react";
 
 import { toast } from "react-toastify";
@@ -10,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { FiArrowLeft, } from "react-icons/fi";
 import API from '../../api/api';
 import { useTheme } from '../../context/ThemeContext';
-
+// 
 const Quiz = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
