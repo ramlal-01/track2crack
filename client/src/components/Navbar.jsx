@@ -6,7 +6,7 @@ const Navbar = () => {
 
   // Close menu on navigation
   const handleNavClick = () => setMenuOpen(false);
-
+// 
   return (
     <nav className="sticky top-0 z-50 bg-gradient-to-r from-[#000C40] to-[#F0F2F0] shadow-md px-4 sm:px-6 py-4 flex items-center justify-between">
       {/* Left: Logo + Nav Links */}
