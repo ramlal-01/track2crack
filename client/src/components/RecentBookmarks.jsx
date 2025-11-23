@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
+import { useNavigate } from "react-router-dom";
 import API from "../api/api";
 const RecentBookmarks = () => {
   const [bookmarks, setBookmarks] = useState([]);
