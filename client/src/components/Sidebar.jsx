@@ -1,8 +1,8 @@
 import { 
   ChevronDownIcon, 
   ChevronRightIcon,
-  ChartBarIcon,
   CodeBracketIcon,
+  ChartBarIcon,
   ServerIcon,
   BookOpenIcon,
   LifebuoyIcon,
