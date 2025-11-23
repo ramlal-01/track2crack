@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import API from "../api/api";
-
+//change the ChangePasswordModal
 const ChangePasswordModal = ({ onClose }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
