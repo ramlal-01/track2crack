@@ -10,4 +10,5 @@ const CoreCN = () => {
   );
 };
 
+//ug
 export default CoreCN;
