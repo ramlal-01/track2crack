@@ -1,4 +1,4 @@
-// Notification Model-Defines the schema for user notifications
+// Notification Model - Defines the schema for user notifications
 const mongoose = require("mongoose");
 
 const notificationSchema = new mongoose.Schema({

@@ -1,4 +1,4 @@
-//Feedback Model-Defines the schema for user feedback
+// Feedback Model - Defines the schema for user feedback
 const mongoose = require('mongoose');
 
 const feedbackSchema = new mongoose.Schema({
