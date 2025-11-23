@@ -1,3 +1,4 @@
+// Sidebar.jsx - A responsive sidebar component for navigation within the dashboard, optimized for mobile and desktop views.
 import { 
   ChevronDownIcon, 
   ChevronRightIcon,
