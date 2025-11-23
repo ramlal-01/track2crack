@@ -7,8 +7,8 @@ import {
   CategoryScale,
   Tooltip,
 } from "chart.js";
-import { motion } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
+import { motion } from "framer-motion";
 
 Chart.register(BarController, BarElement, LinearScale, CategoryScale, Tooltip);
 
