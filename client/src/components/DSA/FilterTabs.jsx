@@ -14,7 +14,7 @@ const FilterTabs = ({
     <div className={`flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 p-4 md:p-6 rounded-xl shadow-sm ${
       darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
     }`}>
-      {/* Filter Tabs */}
+      {/* Filter Tabsdfss */}
       <div className="flex flex-wrap justify-center items-center gap-2 md:gap-6 px-2">
         {tabs.map((tab) => (
           <button
