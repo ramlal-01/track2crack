@@ -12,7 +12,7 @@ const ProgressCards = ({
   const darkCardBg = "dark:bg-gray-800";
   const darkBorder = "dark:border-gray-700";
   const darkText = "dark:text-gray-200";
-
+// 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-12 mb-6 lg:mb-10">
       <div className={`bg-white p-3 sm:p-4 rounded-xl min-h-[100px] shadow-md border-l-4 border-blue-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.03] hover:border-blue-600 ${darkCardBg} ${darkBorder} dark:border-l-blue-500 dark:hover:border-l-blue-600`}>
