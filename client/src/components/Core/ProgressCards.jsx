@@ -1,3 +1,4 @@
+//ProgressCards- A responsive component displaying progress metrics with adaptive layouts for mobile and desktop.
 import React from "react";
 import { CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
 
