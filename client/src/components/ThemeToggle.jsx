@@ -1,3 +1,4 @@
+// ThemeToggle.jsx - A button component to toggle between light and dark themes using context.
 import { useTheme } from "../context/ThemeContext";
 import { Moon, Sun } from "lucide-react";
 
