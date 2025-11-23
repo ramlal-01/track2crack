@@ -1,4 +1,4 @@
-// models/UserCoreProgress.js
+//UserCoreProgress model definition using Mongoose
 const mongoose = require('mongoose');
 
 const userCoreProgressSchema = new mongoose.Schema({
