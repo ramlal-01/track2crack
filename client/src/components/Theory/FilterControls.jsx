@@ -2,8 +2,8 @@ import React from "react";
 import { FaBookmark, FaBell, FaSearch } from "react-icons/fa";
 
 const FilterControls = ({
-  activeFilters,
   searchTerm,
+  activeFilters,
   toggleFilter,
   setSearchTerm
 }) => {

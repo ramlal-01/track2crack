@@ -2,8 +2,8 @@ import React from "react";
 import { FaBookmark, FaRegBookmark, FaBell } from "react-icons/fa";
 import { SiYoutube, SiGeeksforgeeks } from "react-icons/si";
 import { MdQuiz } from "react-icons/md";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 
 const TopicRow = ({
   topic,
@@ -200,7 +200,6 @@ const TopicRow = ({
                 minDate={new Date()}
                 inline
                 className="dark:bg-gray-800"
-                portalId="root"
               />
             </div>
           )}
@@ -387,7 +386,6 @@ const TopicRow = ({
                     minDate={new Date()}
                     inline
                     className="dark:bg-gray-800"
-                    portalId="root"
                   />
                 </div>
               )}

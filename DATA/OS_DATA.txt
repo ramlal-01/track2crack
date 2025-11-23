@@ -1,0 +1,882 @@
+[
+  {
+    "subject": "OS",
+    "title": "Introduction to Operating Systems",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Introduction to OS",
+        "url": "https://www.geeksforgeeks.org/introduction-of-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube OS Basics",
+        "url": "https://www.youtube.com/watch?v=9GDX-IyZ_C8",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "OS manages hardware and software resources, acts as an intermediary between user and hardware. Provides services like process management, memory management, file systems, and I/O operations.",
+    "order": 1
+  },
+  {
+    "subject": "OS",
+    "title": "Types of Operating Systems",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Types of OS",
+        "url": "https://www.geeksforgeeks.org/types-of-operating-systems/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Types of OS",
+        "url": "https://www.youtube.com/watch?v=Ad4HwyNTo4Q",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Types: Batch, Multiprogramming, Multitasking, Real-Time, Distributed, Network, Mobile OS. Each designed for specific use cases like efficiency, responsiveness, or distributed computing.",
+    "order": 2
+  },
+  {
+    "subject": "OS",
+    "title": "Functions of OS",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Functions of OS",
+        "url": "https://www.geeksforgeeks.org/functions-of-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube OS Functions",
+        "url": "https://www.youtube.com/watch?v=pVzRTmdd9j0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Key functions: Process management (CPU scheduling), Memory management, File management, Device management, Security, and User interface.",
+    "order": 3
+  },
+  {
+    "subject": "OS",
+    "title": "OS Architectures (Monolithic, Layered, Microkernel)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG OS Architectures",
+        "url": "https://www.geeksforgeeks.org/operating-system-structure/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube OS Architectures",
+        "url": "https://www.youtube.com/watch?v=1gAc5B-2uAc",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Monolithic: Single large kernel, fast but bulky. Layered: Modular, easier to manage. Microkernel: Minimal kernel, services in user space, modular but slower.",
+    "order": 4
+  },
+  {
+    "subject": "OS",
+    "title": "User vs Kernel Mode",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG User vs Kernel Mode",
+        "url": "https://www.geeksforgeeks.org/user-mode-and-kernel-mode/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube User vs Kernel Mode",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "User mode: Restricted access, runs user apps. Kernel mode: Full access to hardware, handles system calls, interrupts. Switch via system calls.",
+    "order": 5
+  },
+  {
+    "subject": "OS",
+    "title": "System Calls",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG System Calls",
+        "url": "https://www.geeksforgeeks.org/introduction-of-system-call/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube System Calls",
+        "url": "https://www.youtube.com/watch?v=x0p2MnbqU0g",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Interface between user apps and OS. Types: Process control, File management, Device management, Information maintenance, Communication.",
+    "order": 6
+  },
+  {
+    "subject": "OS",
+    "title": "Process Concept",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Process Concept",
+        "url": "https://www.geeksforgeeks.org/introduction-of-process-management/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Process Concept",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Program in execution. Includes code, data, stack, registers. Managed via Process Control Block (PCB).",
+    "order": 7
+  },
+  {
+    "subject": "OS",
+    "title": "Process States and PCB",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Process States",
+        "url": "https://www.geeksforgeeks.org/states-of-a-process-in-operating-systems/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Process States",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "States: New, Ready, Running, Waiting, Terminated. PCB stores process info: PID, state, CPU registers, memory info.",
+    "order": 8
+  },
+  {
+    "subject": "OS",
+    "title": "Thread vs Process",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Thread vs Process",
+        "url": "https://www.geeksforgeeks.org/difference-between-process-and-thread/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Thread vs Process",
+        "url": "https://www.youtube.com/watch?v=3hTwCf1Oz3A",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Process: Independent, own memory. Thread: Lightweight, shares process memory. Threads faster to create/switch, used for multitasking.",
+    "order": 9
+  },
+  {
+    "subject": "OS",
+    "title": "Multithreading Models",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Multithreading Models",
+        "url": "https://www.geeksforgeeks.org/multithreading-models-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Multithreading",
+        "url": "https://www.youtube.com/watch?v=LOfWJcCcXa0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Models: Many-to-One, One-to-One, Many-to-Many. Maps user threads to kernel threads. One-to-One most common in modern OS.",
+    "order": 10
+  },
+  {
+    "subject": "OS",
+    "title": "Context Switching",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Context Switching",
+        "url": "https://www.geeksforgeeks.org/context-switch-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Context Switching",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Switching CPU from one process/thread to another. Saves/restores state (PCB/TCB). Overhead affects performance.",
+    "order": 11
+  },
+  {
+    "subject": "OS",
+    "title": "CPU Scheduling Algorithms (FCFS, SJF, RR, Priority)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG CPU Scheduling",
+        "url": "https://www.geeksforgeeks.org/cpu-scheduling-in-operating-systems/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube CPU Scheduling",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "FCFS: First Come First Serve, simple but long waiting. SJF: Shortest Job First, optimal but starvation. RR: Round Robin, fair, time quantum. Priority: High priority first, may starve low-priority.",
+    "order": 12
+  },
+  {
+    "subject": "OS",
+    "title": "Scheduling Criteria & Dispatcher",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Scheduling Criteria",
+        "url": "https://www.geeksforgeeks.org/cpu-scheduling-criteria/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Scheduling Criteria",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Criteria: CPU utilization, Throughput, Turnaround, Waiting, Response time. Dispatcher: Allocates CPU to selected process, handles context switch.",
+    "order": 13
+  },
+  {
+    "subject": "OS",
+    "title": "Critical Section Problem",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Critical Section",
+        "url": "https://www.geeksforgeeks.org/critical-section-in-synchronization/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Critical Section",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Code section accessing shared resources. Requires mutual exclusion, progress, bounded waiting. Solved using semaphores, monitors.",
+    "order": 14
+  },
+  {
+    "subject": "OS",
+    "title": "Race Conditions and Synchronization Tools",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Synchronization",
+        "url": "https://www.geeksforgeeks.org/introduction-of-process-synchronization/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Synchronization",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Race condition: Unpredictable outcome due to unsynchronized access. Tools: Semaphores, Monitors, Locks, Condition variables.",
+    "order": 15
+  },
+  {
+    "subject": "OS",
+    "title": "Classical Problems (Dining Philosophers etc.)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Dining Philosophers",
+        "url": "https://www.geeksforgeeks.org/dining-philosopher-problem-using-semaphores/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Dining Philosophers",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Dining Philosophers: Synchronization problem, 5 philosophers, 5 forks, avoid deadlock/starvation. Other problems: Producer-Consumer, Reader-Writer. Solved using semaphores/monitors.",
+    "order": 16
+  },
+  {
+    "subject": "OS",
+    "title": "Deadlock Characterization",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Deadlock",
+        "url": "https://www.geeksforgeeks.org/introduction-of-deadlock-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Deadlock",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Deadlock: Processes stuck, each waiting for resources held by others. Conditions: Mutual exclusion, Hold-and-wait, No preemption, Circular wait.",
+    "order": 17
+  },
+  {
+    "subject": "OS",
+    "title": "Banker's Algorithm",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Banker's Algorithm",
+        "url": "https://www.geeksforgeeks.org/bankers-algorithm-in-operating-system-2/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Banker's Algorithm",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Deadlock avoidance algorithm. Uses resource allocation state (Available, Max, Allocation, Need) to ensure safe state before granting resources.",
+    "order": 18
+  },
+  {
+    "subject": "OS",
+    "title": "Deadlock Detection and Recovery",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Deadlock Detection",
+        "url": "https://www.geeksforgeeks.org/deadlock-detection-and-recovery/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Deadlock Detection",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Detection: Resource allocation graph or Banker's-like algorithm. Recovery: Terminate process, preempt resources, or rollback.",
+    "order": 19
+  },
+  {
+    "subject": "OS",
+    "title": "Logical vs Physical Address",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Logical vs Physical Address",
+        "url": "https://www.geeksforgeeks.org/logical-and-physical-address-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Logical vs Physical Address",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Logical: Virtual address seen by process. Physical: Actual memory location. MMU maps logical to physical addresses.",
+    "order": 20
+  },
+  {
+    "subject": "OS",
+    "title": "Contiguous Allocation",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Contiguous Allocation",
+        "url": "https://www.geeksforgeeks.org/file-allocation-methods/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Contiguous Allocation",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Memory allocated in single continuous block. Simple but causes external fragmentation. Fixed and dynamic partitioning used.",
+    "order": 21
+  },
+  {
+    "subject": "OS",
+    "title": "Paging and Segmentation",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Paging",
+        "url": "https://www.geeksforgeeks.org/paging-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Paging and Segmentation",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Paging: Divide memory into fixed-size pages, no external fragmentation. Segmentation: Divide into logical segments (code, data), supports modularity.",
+    "order": 22
+  },
+  {
+    "subject": "OS",
+    "title": "Fragmentation (Internal/External)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Fragmentation",
+        "url": "https://www.geeksforgeeks.org/difference-between-internal-and-external-fragmentation/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Fragmentation",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Internal: Wasted space within allocated block. External: Free memory scattered, unusable for large allocations. Paging reduces external fragmentation.",
+    "order": 23
+  },
+  {
+    "subject": "OS",
+    "title": "Virtual Memory & Demand Paging",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Virtual Memory",
+        "url": "https://www.geeksforgeeks.org/virtual-memory-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Virtual Memory",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Virtual Memory: Abstracts physical memory, allows larger programs. Demand Paging: Pages loaded only when needed, reduces memory usage.",
+    "order": 24
+  },
+  {
+    "subject": "OS",
+    "title": "Page Replacement Algorithms (FIFO, LRU, Optimal)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Page Replacement",
+        "url": "https://www.geeksforgeeks.org/page-replacement-algorithms-in-operating-systems/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Page Replacement",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "FIFO: Replace oldest page. LRU: Replace least recently used page. Optimal: Replace page not used for longest in future (theoretical).",
+    "order": 25
+  },
+  {
+    "subject": "OS",
+    "title": "Thrashing and Working Set Model",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Thrashing",
+        "url": "https://www.geeksforgeeks.org/thrashing-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Thrashing",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Thrashing: Excessive page faults, low CPU utilization. Working Set Model: Tracks pages actively used by process to reduce thrashing.",
+    "order": 26
+  },
+  {
+    "subject": "OS",
+    "title": "File Concepts and Access Methods",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG File Concepts",
+        "url": "https://www.geeksforgeeks.org/file-systems-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube File Systems",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "File: Named collection of data. Access methods: Sequential, Direct, Indexed. Attributes: Name, Size, Type, Permissions.",
+    "order": 27
+  },
+  {
+    "subject": "OS",
+    "title": "Directory Structures",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Directory Structures",
+        "url": "https://www.geeksforgeeks.org/structures-of-directory-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Directory Structures",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Organizes files: Single-level, Two-level, Tree, Acyclic Graph. Supports efficient file lookup and organization.",
+    "order": 28
+  },
+  {
+    "subject": "OS",
+    "title": "File Allocation Methods",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG File Allocation",
+        "url": "https://www.geeksforgeeks.org/file-allocation-methods/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube File Allocation",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Methods: Contiguous, Linked, Indexed. Contiguous: Fast but fragmented. Linked: Flexible but slow. Indexed: Efficient for large files.",
+    "order": 29
+  },
+  {
+    "subject": "OS",
+    "title": "Free Space Management",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Free Space Management",
+        "url": "https://www.geeksforgeeks.org/free-space-management-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Free Space Management",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Tracks free disk space: Bit Vector, Linked List, Grouping, Counting. Optimizes storage allocation.",
+    "order": 30
+  },
+  {
+    "subject": "OS",
+    "title": "Disk Scheduling Algorithms",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Disk Scheduling",
+        "url": "https://www.geeksforgeeks.org/disk-scheduling-algorithms/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Disk Scheduling",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Optimizes disk access: FCFS, SSTF, SCAN, C-SCAN, LOOK. Minimizes seek time, improves throughput.",
+    "order": 31
+  },
+  {
+    "subject": "OS",
+    "title": "RAID Levels",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG RAID Levels",
+        "url": "https://www.geeksforgeeks.org/raid-redundant-arrays-of-independent-disks/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube RAID Levels",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "RAID: Redundant Array of Independent Disks. Levels 0-6: Striping, Mirroring, Parity. Enhances reliability, performance.",
+    "order": 32
+  },
+  {
+    "subject": "OS",
+    "title": "Disk Structure and Booting",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Disk Structure",
+        "url": "https://www.geeksforgeeks.org/disk-management-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Disk Structure",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Disk: Tracks, Sectors, Cylinders. Booting: BIOS/UEFI loads bootloader, initializes OS kernel.",
+    "order": 33
+  },
+  {
+    "subject": "OS",
+    "title": "I/O Hardware and DMA",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG I/O Hardware",
+        "url": "https://www.geeksforgeeks.org/i/o-scheduling-in-operating-systems/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube I/O Hardware",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "I/O: Devices communicate via ports, buses. DMA: Direct Memory Access, transfers data without CPU involvement.",
+    "order": 34
+  },
+  {
+    "subject": "OS",
+    "title": "Polling vs Interrupts",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Polling vs Interrupts",
+        "url": "https://www.geeksforgeeks.org/difference-between-interrupt-and-polling/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Polling vs Interrupts",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Polling: CPU checks device status repeatedly. Interrupts: Device signals CPU when ready, more efficient.",
+    "order": 35
+  },
+  {
+    "subject": "OS",
+    "title": "Spooling and Buffering",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Spooling",
+        "url": "https://www.geeksforgeeks.org/difference-between-spooling-and-buffering/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Spooling",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Spooling: Queue I/O jobs (e.g., printing). Buffering: Temporary storage to match speed between devices/processes.",
+    "order": 36
+  },
+  {
+    "subject": "OS",
+    "title": "Access Matrix, ACL, Capabilities",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Access Matrix",
+        "url": "https://www.geeksforgeeks.org/access-matrix-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Access Matrix",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Access Matrix: Defines permissions for subjects/objects. ACL: List of permissions per object. Capabilities: Tokens granting access to objects.",
+    "order": 37
+  },
+  {
+    "subject": "OS",
+    "title": "Authentication Methods",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Authentication",
+        "url": "https://www.geeksforgeeks.org/operating-system-security/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Authentication",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Methods: Passwords, Biometrics, Tokens, Multi-factor. Ensures user identity verification.",
+    "order": 38
+  },
+  {
+    "subject": "OS",
+    "title": "Basic Encryption",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Encryption",
+        "url": "https://www.geeksforgeeks.org/operating-system-security/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Encryption",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Encrypts data to prevent unauthorized access. Symmetric (same key) and Asymmetric (public/private key) encryption.",
+    "order": 39
+  },
+  {
+    "subject": "OS",
+    "title": "Boot Process",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Boot Process",
+        "url": "https://www.geeksforgeeks.org/boot-block-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Boot Process",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Steps: Power-on, BIOS/UEFI, Bootloader (e.g., GRUB), Kernel loading, Init process, System ready.",
+    "order": 40
+  },
+  {
+    "subject": "OS",
+    "title": "Real-Time Operating Systems",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Real-Time OS",
+        "url": "https://www.geeksforgeeks.org/real-time-operating-system-rtos/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Real-Time OS",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "RTOS: Handles time-critical tasks. Types: Hard (strict deadlines), Soft (flexible deadlines). Used in embedded systems.",
+    "order": 41
+  },
+  {
+    "subject": "OS",
+    "title": "Distributed Operating Systems",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Distributed OS",
+        "url": "https://www.geeksforgeeks.org/what-is-a-distributed-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Distributed OS",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Manages multiple computers as single system. Features: Transparency, Resource sharing, Fault tolerance.",
+    "order": 42
+  },
+  {
+    "subject": "OS",
+    "title": "Virtualization Concepts",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Virtualization",
+        "url": "https://www.geeksforgeeks.org/virtualization-in-operating-system/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Virtualization",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Creates virtual resources (VMs). Types: Full, Para-virtualization. Hypervisor manages VMs, isolates guest OS.",
+    "order": 43
+  },
+  {
+    "subject": "OS",
+    "title": "OS Case Studies: Linux, Windows",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Linux vs Windows",
+        "url": "https://www.geeksforgeeks.org/difference-between-linux-and-windows/",
+        "type": "article"
+      },
+      {
+        "label": "YouTube Linux vs Windows",
+        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Linux: Open-source, Unix-like, modular kernel. Windows: Proprietary, user-friendly, hybrid kernel. Differ in file systems, security, usage.",
+    "order": 44
+  }
+]

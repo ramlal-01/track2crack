@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaBookReader, FaFilter, FaChartLine, FaSmile, FaMeh, FaFrown } from "react-icons/fa";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import API from '../../api/api';
 import { useTheme } from "../../context/ThemeContext";
 
@@ -119,8 +118,6 @@ const QuizHistory = () => {
 
   return (
     <div className={`min-h-screen px-6 py-8 bg-gradient-to-br ${darkMode ? "from-gray-900 to-gray-800" : "from-blue-50 to-purple-50"} ${darkBg}`}>
-      <ToastContainer position="top-center" theme={darkMode ? "dark" : "light"} />
-
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div className="flex items-center gap-3">

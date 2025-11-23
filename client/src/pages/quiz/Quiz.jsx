@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { FiBookmark, FiClock, FiAward, FiHelpCircle } from "react-icons/fi";
@@ -187,8 +186,6 @@ const Quiz = () => {
       <div className={showDisclaimer ? 'pointer-events-none select-none filter blur-md' : ''}>
         {/* --- BEGIN: Quiz Content --- */}
         <div className={`min-h-screen p-4 md:p-6 ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gradient-to-br from-blue-50 to-pink-50"}`}>
-          <ToastContainer position="top-center" theme={darkMode ? "dark" : "light"} />
-          
           {/* Enhanced Header with back button and dark mode toggle */}
           <div className="sticky top-0 z-20 bg-white dark:bg-gray-900 flex justify-between items-center mb-6 px-6 py-3 shadow-sm dark:shadow-gray-800/30 border-b border-gray-200 dark:border-gray-800">
             <div className="flex items-center gap-3">
