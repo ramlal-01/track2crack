@@ -5,7 +5,7 @@ const Footer = () => {
           <p className="text-sm">© {new Date().getFullYear()} Track2Crack. Built by students for students.</p>
         </div>
       </footer>
-  );
+  );//  
 };
 
 export default Footer;
