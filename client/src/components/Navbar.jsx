@@ -1,3 +1,4 @@
+// Navbar.jsx - A responsive navigation bar component with mobile menu functionality.
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
