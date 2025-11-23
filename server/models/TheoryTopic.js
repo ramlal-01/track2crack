@@ -1,4 +1,4 @@
-// TheoryTopic Model - Defines the schema for theory topics in subjects like Java, OOPS, DSA
+//  TheoryTopic Model - Defines the schema for theory topics in subjects like Java, OOPS, DSA
 const mongoose = require('mongoose');
 
 const theoryTopicSchema = new mongoose.Schema({

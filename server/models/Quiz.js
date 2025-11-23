@@ -1,4 +1,4 @@
-// Quiz Model - Defines the schema for quizzes taken by users
+//  Quiz Model - Defines the schema for quizzes taken by users
 const mongoose = require('mongoose');
 
 const quizSchema = new mongoose.Schema({
