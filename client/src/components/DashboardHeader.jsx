@@ -4,7 +4,7 @@ import { Bars3Icon } from "@heroicons/react/24/solid";
 //import { FaFire } from "react-icons/fa"; 
 import StreakBadge from "../components/StreakBadge";
 import { useSidebar } from "../context/SidebarContext";
-
+//dashboard header
 const DashboardHeader = () => {
   const { toggleSidebar, isDashboardPage } = useSidebar();
 
