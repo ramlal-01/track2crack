@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen,setMenuOpen] = useState(false);
 
   // Close menu on navigation
   const handleNavClick = () => setMenuOpen(false);
@@ -110,8 +110,7 @@ const Navbar = () => {
             to="/login"
             onClick={handleNavClick}
             className="inline-block rounded-sm border border-current px-8 py-3 text-sb font-bold bg-white text-indigo-900 transition hover:scale-105 hover:shadow-xl focus:ring-3 focus:outline-hidden"
-          >
-            Login
+          >Login
           </Link>
           <Link
             to="/register"
