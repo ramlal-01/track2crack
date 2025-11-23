@@ -5,7 +5,7 @@ const CoreDBMS = () => {
     <CoreSubjectPage 
       subject="DBMS" 
       title="Database Management System" 
-      // Add any other subject-specific props if needed
+      // Add any other subject-specific props if needed ok 
     />
   );
 };
