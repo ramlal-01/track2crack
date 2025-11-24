@@ -6,7 +6,7 @@
     "resources": [
       {
         "label": "Basics of Computer Networking - GFG",
-        "url": "https://www.geeksforgeeks.org/basics-computer-networking/",
+        "url": "https://www.geeksforgeeks.org/basics-computer-networki  ng/",
         "type": "article"
       },
       {
@@ -26,12 +26,12 @@
     "resources": [
       {
         "label": "Types of Computer Networks - GFG",
-        "url": "https://www.geeksforgeeks.org/types-of-computer-network/",
+        "url": "https://www.geeksforgeeks.org/computer-networks/types-of-computer-networks/",
         "type": "article"
       },
       {
         "label": "Types of Networks - PowerCert Animated Videos",
-        "url": "https://www.youtube.com/watch?v=ek2u83ZmV2g",
+        "url": "https://www.youtube.com/watch?v=nMYapL6RQzU",
         "type": "video"
       }
     ],
