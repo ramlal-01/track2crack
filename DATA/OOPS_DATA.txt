@@ -11,7 +11,7 @@
       },
       {
         "label": "OOPS Concepts - Neso Academy",
-        "url": "https://www.youtube.com/watch?v=1e6y4h6zVi0",
+        "url": "https://www.youtube.com/watch?v=mlIUKyZIUUU",
         "type": "video"
       }
     ],
@@ -36,7 +36,7 @@
       },
       {
         "label": "Classes and Objects - Neso Academy",
-        "url": "https://www.youtube.com/watch?v=3u1fu6f8Hto",
+        "url": "https://www.youtube.com/watch?v=mlIUKyZIUUU&t=218s",
         "type": "video"
       }
     ],
