@@ -1,0 +1,800 @@
+[
+  {
+    "subject": "DSA",
+    "title": "Introduction to DSA and Complexity Analysis",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Introduction to DSA",
+        "url": "https://www.geeksforgeeks.org/data-structures/",
+        "type": "article"
+      },
+      {
+        "label": "Time Complexity Analysis YouTube",
+        "url": "https://www.youtube.com/watch?v=hUdqNPhXOh4",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Understand basics of data structures, algorithms, and Big-O notation for time and space complexity.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 1
+  },
+  {
+    "subject": "DSA",
+    "title": "Arrays",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Arrays",
+        "url": "https://www.geeksforgeeks.org/array-data-structure/",
+        "type": "article"
+      },
+      {
+        "label": "Arrays Tutorial YouTube",
+        "url": "youtube.com/watch?v=qqRDHzPli3o",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn array operations, traversal, insertion, deletion, and common problems like Kadane's algorithm.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 2
+  },
+  {
+    "subject": "DSA",
+    "title": "Strings",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Strings",
+        "url": "https://www.geeksforgeeks.org/string-data-structure/",
+        "type": "article"
+      },
+      {
+        "label": "String Manipulation YouTube",
+        "url": "https://www.youtube.com/watch?v=vCRD36bG8xQ",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Focus on string operations, pattern matching, and algorithms like KMP and Rabin-Karp.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 3
+  },
+  {
+    "subject": "DSA",
+    "title": "Linked Lists",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Linked Lists",
+        "url": "https://www.geeksforgeeks.org/data-structures/linked-list/",
+        "type": "article"
+      },
+      {
+        "label": "Linked List Tutorial YouTube",
+        "url": "https://www.youtube.com/watch?v=WwfhLC16bis",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Understand singly, doubly, and circular linked lists, along with operations like reversal and cycle detection.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 4
+  },
+  {
+    "subject": "DSA",
+    "title": "Stacks",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Stacks",
+        "url": "https://www.geeksforgeeks.org/stack-data-structure/",
+        "type": "article"
+      },
+      {
+        "label": "Stack Implementation YouTube",
+        "url": "https://www.youtube.com/watch?v=3gZftH7ND54",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn LIFO principle, stack operations, and applications like expression evaluation.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 5
+  },
+  {
+    "subject": "DSA",
+    "title": "Queues and Deques",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Queues",
+        "url": "https://www.geeksforgeeks.org/queue-data-structure/",
+        "type": "article"
+      },
+      {
+        "label": "Queue Tutorial YouTube",
+        "url": "https://www.youtube.com/watch?v=zp6pBNbUB2U",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Study FIFO principle, circular queues, and double-ended queues with applications.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 6
+  },
+  {
+    "subject": "DSA",
+    "title": "Recursion",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Recursion",
+        "url": "https://www.geeksforgeeks.org/recursion/",
+        "type": "article"
+      },
+      {
+        "label": "Recursion Explained YouTube",
+        "url": "https://www.youtube.com/watch?v=6oDQaB2one8",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Understand recursion, base cases, and problems like factorial and Fibonacci.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 7
+  },
+  {
+    "subject": "DSA",
+    "title": "Backtracking",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Backtracking",
+        "url": "https://www.geeksforgeeks.org/backtracking-algorithms/",
+        "type": "article"
+      },
+      {
+        "label": "Backtracking Tutorial YouTube",
+        "url": "https://www.youtube.com/watch?v=DKCbsiDBN6c",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn backtracking for problems like N-Queens, Sudoku, and permutations.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 8
+  },
+  {
+    "subject": "DSA",
+    "title": "Searching Algorithms",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Searching",
+        "url": "https://www.geeksforgeeks.org/searching-algorithms/",
+        "type": "article"
+      },
+      {
+        "label": "Binary Search YouTube",
+        "url": "https://www.youtube.com/watch?v=GU7DpgH1PwY",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Study linear search, binary search, and their applications in sorted and unsorted data.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 9
+  },
+  {
+    "subject": "DSA",
+    "title": "Sorting Algorithms",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Sorting",
+        "url": "https://www.geeksforgeeks.org/sorting-algorithms/",
+        "type": "article"
+      },
+      {
+        "label": "Sorting Visualized YouTube",
+        "url": "https://www.youtube.com/watch?v=kPRA0W1kECg",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn bubble, selection, insertion, merge, quick, and heap sort with complexities.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 10
+  },
+  {
+    "subject": "DSA",
+    "title": "Hashing",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Hashing",
+        "url": "https://www.geeksforgeeks.org/hashing-data-structure/",
+        "type": "article"
+      },
+      {
+        "label": "Hashing Tutorial YouTube",
+        "url": "https://www.youtube.com/watch?v=2BldESGZKB8",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Understand hash functions, collision resolution, and hash table applications.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 11
+  },
+  {
+    "subject": "DSA",
+    "title": "Heaps and Priority Queues",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Heaps",
+        "url": "https://www.geeksforgeeks.org/heap-data-structure/",
+        "type": "article"
+      },
+      {
+        "label": "Heap Tutorial YouTube",
+        "url": "https://www.youtube.com/watch?v=t0Cq6tVNRBA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Study min/max heaps, heapify, and priority queue applications.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 12
+  },
+  {
+    "subject": "DSA",
+    "title": "Trees",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Trees",
+        "url": "https://www.geeksforgeeks.org/binary-tree-data-structure/",
+        "type": "article"
+      },
+      {
+        "label": "Tree Traversal YouTube",
+        "url": "https://www.youtube.com/watch?v=IpyCqR-dQJI",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn tree terminologies, traversals (inorder, preorder, postorder), and basic operations.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 13
+  },
+  {
+    "subject": "DSA",
+    "title": "Binary Search Trees (BST)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG BST",
+        "url": "https://www.geeksforgeeks.org/binary-search-tree-data-structure/",
+        "type": "article"
+      },
+      {
+        "label": "BST Tutorial YouTube",
+        "url": "https://www.youtube.com/watch?v=pYT9F8_LFTM",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Understand BST properties, insertion, deletion, and search operations.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 14
+  },
+  {
+    "subject": "DSA",
+    "title": "Balanced Trees (AVL, Red-Black Trees)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG AVL Trees",
+        "url": "https://www.geeksforgeeks.org/avl-tree-set-1-insertion/",
+        "type": "article"
+      },
+      {
+        "label": "Red-Black Trees YouTube",
+        "url": "https://www.youtube.com/watch?v=qvZGUFHWChY",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Study AVL and Red-Black tree balancing techniques and their applications.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 15
+  },
+  {
+    "subject": "DSA",
+    "title": "Segment Trees and Binary Indexed Trees (Fenwick Tree)",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Segment Trees",
+        "url": "https://www.geeksforgeeks.org/segment-tree-set-1-sum-of-given-range/",
+        "type": "article"
+      },
+      {
+        "label": "Fenwick Tree YouTube",
+        "url": "https://www.youtube.com/watch?v=CWDQJGaN1gY",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn range queries, updates, and applications of segment and Fenwick trees.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 16
+  },
+  {
+    "subject": "DSA",
+    "title": "Graphs",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Graphs",
+        "url": "https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/",
+        "type": "article"
+      },
+      {
+        "label": "Graph Basics YouTube",
+        "url": "https://www.youtube.com/watch?v=59fUtYYz7ZU",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Understand graph representations (adjacency list/matrix) and basic concepts.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 17
+  },
+  {
+    "subject": "DSA",
+    "title": "Graph Traversal (BFS, DFS)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG BFS",
+        "url": "https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/",
+        "type": "article"
+      },
+      {
+        "label": "DFS Tutorial YouTube",
+        "url": "https://www.youtube.com/watch?v=7fujbpJ0LB4",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn breadth-first and depth-first search with their applications.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 18
+  },
+  {
+    "subject": "DSA",
+    "title": "Topological Sorting",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Topological Sort",
+        "url": "https://www.geeksforgeeks.org/topological-sorting/",
+        "type": "article"
+      },
+      {
+        "label": "Topological Sort YouTube",
+        "url": "https://www.youtube.com/watch?v=eL-KzMXSXXI",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Study topological sorting for DAGs using DFS and Kahn’s algorithm.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 19
+  },
+  {
+    "subject": "DSA",
+    "title": "Cycle Detection in Graphs",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Cycle Detection",
+        "url": "https://www.geeksforgeeks.org/detect-cycle-in-a-graph/",
+        "type": "article"
+      },
+      {
+        "label": "Cycle Detection YouTube",
+        "url": "https://www.youtube.com/watch?v=TXkDpqV3Y9E",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn cycle detection in directed and undirected graphs using DFS and Union-Find.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 20
+  },
+  {
+    "subject": "DSA",
+    "title": "Shortest Path Algorithms (Dijkstra, Bellman-Ford, Floyd-Warshall)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Dijkstra",
+        "url": "https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/",
+        "type": "article"
+      },
+      {
+        "label": "Bellman-Ford YouTube",
+        "url": "https://www.youtube.com/watch?v=obWXjtg0L64",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Understand single-source and all-pairs shortest path algorithms.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 21
+  },
+  {
+    "subject": "DSA",
+    "title": "Minimum Spanning Tree (Kruskal’s, Prim’s)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Kruskal’s Algorithm",
+        "url": "https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/",
+        "type": "article"
+      },
+      {
+        "label": "Prim’s Algorithm YouTube",
+        "url": "https://www.youtube.com/watch?v=HnD6VaH7vJs",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn MST algorithms and their applications in network design.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 22
+  },
+  {
+    "subject": "DSA",
+    "title": "Disjoint Set Union (Union-Find)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Union-Find",
+        "url": "https://www.geeksforgeeks.org/union-find/",
+        "type": "article"
+      },
+      {
+        "label": "Union-Find YouTube",
+        "url": "https://www.youtube.com/watch?v=0jNmHPfA_yE",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Study union-find with path compression and rank for efficient connectivity checks.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 23
+  },
+  {
+    "subject": "DSA",
+    "title": "Greedy Algorithms",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Greedy Algorithms",
+        "url": "https://www.geeksforgeeks.org/greedy-algorithms/",
+        "type": "article"
+      },
+      {
+        "label": "Greedy Algorithms YouTube",
+        "url": "https://www.youtube.com/watch?v=ARvQcqJ_-NY",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn greedy strategy for problems like activity selection and Huffman coding.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 24
+  },
+  {
+    "subject": "DSA",
+    "title": "Divide and Conquer",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Divide and Conquer",
+        "url": "https://www.geeksforgeeks.org/divide-and-conquer/",
+        "type": "article"
+      },
+      {
+        "label": "Divide and Conquer YouTube",
+        "url": "https://www.youtube.com/watch?v=2Rr2tW9zvRg",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Understand divide-and-conquer for merge sort, quicksort, and binary search.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 25
+  },
+  {
+    "subject": "DSA",
+    "title": "Dynamic Programming",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Dynamic Programming",
+        "url": "https://www.geeksforgeeks.org/dynamic-programming/",
+        "type": "article"
+      },
+      {
+        "label": "DP Tutorial YouTube",
+        "url": "https://www.youtube.com/watch?v=8LusJS5-AGk",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn DP concepts like memoization, tabulation, and problems like knapsack and LCS.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 26
+  },
+  {
+    "subject": "DSA",
+    "title": "Bit Manipulation",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Bit Manipulation",
+        "url": "https://www.geeksforgeeks.org/bit-manipulation/",
+        "type": "article"
+      },
+      {
+        "label": "Bit Manipulation YouTube",
+        "url": "https://www.youtube.com/watch?v=7U1MYZUz4l0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Study bitwise operations and problems like finding single numbers or power sets.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 27
+  },
+  {
+    "subject": "DSA",
+    "title": "Tries (Prefix Trees)",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Tries",
+        "url": "https://www.geeksforgeeks.org/trie-insert-and-search/",
+        "type": "article"
+      },
+      {
+        "label": "Tries Tutorial YouTube",
+        "url": "https://www.youtube.com/watch?v=AXjmTQ8LEoI",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn trie data structure for prefix-based searches and autocomplete systems.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 28
+  },
+  {
+    "subject": "DSA",
+    "title": "Suffix Arrays and LCP",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Suffix Arrays",
+        "url": "https://www.geeksforgeeks.org/suffix-array-set-1-introduction/",
+        "type": "article"
+      },
+      {
+        "label": "Suffix Arrays YouTube",
+        "url": "https://www.youtube.com/watch?v=IzHrFGjF8lw",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Understand suffix arrays and longest common prefix for string processing.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 29
+  },
+  {
+    "subject": "DSA",
+    "title": "Sliding Window",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Sliding Window",
+        "url": "https://www.geeksforgeeks.org/window-sliding-technique/",
+        "type": "article"
+      },
+      {
+        "label": "Sliding Window YouTube",
+        "url": "https://www.youtube.com/watch?v=MK-NZ4hymp0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn sliding window for problems like maximum subarray sum or longest substring.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 30
+  },
+  {
+    "subject": "DSA",
+    "title": "Two Pointer Technique",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Two Pointer",
+        "url": "https://www.geeksforgeeks.org/two-pointer-technique/",
+        "type": "article"
+      },
+      {
+        "label": "Two Pointer YouTube",
+        "url": "https://www.youtube.com/watch?v=yc0C3OIG8jY",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Study two-pointer technique for problems like pair sum or container with most water.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 31
+  },
+  {
+    "subject": "DSA",
+    "title": "Binary Search on Answer",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Binary Search on Answer",
+        "url": "https://www.geeksforgeeks.org/binary-search-on-answer/",
+        "type": "article"
+      },
+      {
+        "label": "Binary Search on Answer YouTube",
+        "url": "https://www.youtube.com/watch?v=WjpswYrS2nY",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn binary search on answer for optimization problems like minimizing maximum.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 32
+  },
+  {
+    "subject": "DSA",
+    "title": "Monotonic Stack and Queue",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Monotonic Stack",
+        "url": "https://www.geeksforgeeks.org/introduction-to-monotonic-stack/",
+        "type": "article"
+      },
+      {
+        "label": "Monotonic Stack YouTube",
+        "url": "https://www.youtube.com/watch?v=D7AFvFrkM_0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Study monotonic stacks/queues for problems like next greater element.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 33
+  },
+  {
+    "subject": "DSA",
+    "title": "DP on Trees",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG DP on Trees",
+        "url": "https://www.geeksforgeeks.org/dynamic-programming-on-trees/",
+        "type": "article"
+      },
+      {
+        "label": "DP on Trees YouTube",
+        "url": "https://www.youtube.com/watch?v=3I6vA3gzrC4",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn dynamic programming on tree structures for problems like diameter or subtree sum.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 34
+  },
+  {
+    "subject": "DSA",
+    "title": "DP with Bitmasking",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG DP with Bitmasking",
+        "url": "https://www.geeksforgeeks.org/bitmasking-and-dynamic-programming-set-1/",
+        "type": "article"
+      },
+      {
+        "label": "Bitmasking DP YouTube",
+        "url": "https://www.youtube.com/watch?v=7fm5lurooaY",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Study bitmasking with DP for problems like traveling salesman or subset problems.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 35
+  },
+  {
+    "subject": "DSA",
+    "title": "Space Optimization Techniques in DP",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Space Optimization in DP",
+        "url": "https://www.geeksforgeeks.org/space-optimized-dp-solution/",
+        "type": "article"
+      },
+      {
+        "label": "Space Optimization YouTube",
+        "url": "https://www.youtube.com/watch?v=1mtvm2ubHCY",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Learn techniques to reduce space complexity in DP problems like knapsack or LCS.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 36
+  },
+  {
+    "subject": "DSA",
+    "title": "Advanced Graph Algorithms (Bridges, Articulation Points, Tarjan’s Algorithm)",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "GFG Tarjan’s Algorithm",
+        "url": "https://www.geeksforgeeks.org/tarjan-algorithm-find-strongly-connected-components/",
+        "type": "article"
+      },
+      {
+        "label": "Bridges and Articulation Points YouTube",
+        "url": "https://www.youtube.com/watch?v=2kREIkF9Upo",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Study advanced graph algorithms for finding bridges, articulation points, and SCCs.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 37
+  },
+  {
+    "subject": "DSA",
+    "title": "Interview Problem Solving Techniques",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "GFG Interview Preparation",
+        "url": "https://www.geeksforgeeks.org/must-do-coding-questions-for-companies/",
+        "type": "article"
+      },
+      {
+        "label": "DSA Interview Tips YouTube",
+        "url": "https://www.youtube.com/watch?v=8hly31xKli0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Practice common DSA patterns and problem-solving strategies for interviews.",
+    "createdAt": "2025-07-12T11:15:00Z",
+    "order": 38
+  }
+]

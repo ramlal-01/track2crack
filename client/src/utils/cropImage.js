@@ -29,15 +29,19 @@ export default async function getCroppedImg(imageSrc, pixelCrop) {
     pixelCrop.height
   );
 
-  const base64 = canvas.toDataURL("image/jpeg");
+  // Use webp format for better compression, fallback to jpeg
+  const format = "image/jpeg";
+  const quality = 0.8; // Good balance between quality and file size
+  const base64 = canvas.toDataURL(format, quality);
 
-  // compress final image
+  // compress final image with optimized settings
   const blob = await fetch(base64).then((res) => res.blob());
 
   const compressed = await imageCompression(blob, {
-    maxSizeMB: 0.5,
+    maxSizeMB: 0.3, // Reduced from 0.5 for faster uploads
     maxWidthOrHeight: 300,
     useWebWorker: true,
+    initialQuality: 0.8 // Set initial quality
   });
 
   return compressed; // compressed Blob

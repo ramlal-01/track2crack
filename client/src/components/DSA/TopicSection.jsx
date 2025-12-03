@@ -16,7 +16,7 @@ const TopicSection = ({
   openNoteId, 
   noteText, 
   setNoteText, 
-  updateProgress, 
+  updateProgress, // S
   setProgressMap, 
   handleReminderChange, 
   handleResetTopic, 

@@ -10,8 +10,8 @@ const ProgressCards = ({
   darkMode 
 }) => {
   const darkCardBg = "dark:bg-gray-800";
-  const darkBorder = "dark:border-gray-700";
   const darkText = "dark:text-gray-200";
+  const darkBorder = "dark:border-gray-700";
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-12 mb-6 lg:mb-10">

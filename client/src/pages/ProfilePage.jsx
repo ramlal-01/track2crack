@@ -12,10 +12,7 @@ import {
   FaTrash,
   FaKey,
   FaUserEdit,
-  FaMoon,
-  FaSun,
-  FaBars,
-  FaTimes,
+
   FaCalendarAlt,
   FaUser,
   FaIdCard,
@@ -25,6 +22,7 @@ import {
   FaExternalLinkAlt
 } from "react-icons/fa";
 import ChangePasswordModal from "../components/ChangePasswordModal";
+import { useTheme } from "../context/ThemeContext";
 
 const ProfilePage = () => {
   const userId = localStorage.getItem("userId");
@@ -32,8 +30,8 @@ const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const [completion, setCompletion] = useState(0);
   const [showPassModal, setShowPassModal] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme } = useTheme();
+  const darkMode = theme === "dark";
 
   useEffect(() => {
     if (!userId) return;
@@ -58,16 +56,7 @@ const ProfilePage = () => {
     };
 
     fetchProfile();
-    
-    const savedMode = localStorage.getItem("darkMode") === "true";
-    setDarkMode(savedMode);
   }, [userId]);
-
-  const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    localStorage.setItem("darkMode", newMode.toString());
-  };
 
   const handleDeleteAccount = async () => {
     if (!confirm("Are you sure you want to delete your account? This is permanent.")) return;
@@ -90,103 +79,8 @@ const ProfilePage = () => {
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${darkMode ? "bg-gray-900 text-gray-200" : "bg-gray-100 text-gray-800"}`}>
-      {/* Mobile Menu Button */}
-      <div className="md:hidden fixed top-4 right-4 z-50">
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className={`p-2 rounded-full ${darkMode ? "bg-gray-700 text-white" : "bg-white text-gray-800"} shadow-md`}
-        >
-          {mobileMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
-        </button>
-      </div>
-
-      {/* Mobile Sidebar Menu */}
-      {mobileMenuOpen && (
-        <div className={`fixed inset-0 z-40 md:hidden ${darkMode ? "bg-gray-800" : "bg-white"}`}>
-          <div className="flex flex-col items-center justify-center h-full space-y-8">
-            <button
-              onClick={() => navigate("/")}
-              className={`text-xl ${darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}`}
-            >
-              Home
-            </button>
-            <button
-              onClick={() => navigate("/features")}
-              className={`text-xl ${darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}`}
-            >
-              Features
-            </button>
-            <button
-              onClick={() => navigate("/about")}
-              className={`text-xl ${darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}`}
-            >
-              About
-            </button>
-            <button
-              onClick={() => navigate("/contact")}
-              className={`text-xl ${darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}`}
-            >
-              Contact
-            </button>
-            <button
-              onClick={toggleDarkMode}
-              className={`p-2 rounded-full ${darkMode ? "bg-gray-700 text-yellow-300 hover:bg-gray-600" : "bg-gray-200 text-gray-800 hover:bg-gray-300"}`}
-            >
-              {darkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Desktop Sidebar */}
-      <div className={`hidden md:flex fixed left-0 top-0 h-full w-16 flex-col items-center py-4 space-y-8 ${darkMode ? "bg-gray-800" : "bg-gray-200"}`}>
-        <button
-          onClick={() => navigate("/")}
-          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-blue-600 hover:bg-gray-300"}`}
-          title="Home"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-          </svg>
-        </button>
-        <button
-          onClick={() => navigate("/features")}
-          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-blue-600 hover:bg-gray-300"}`}
-          title="Features"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-        </button>
-        <button
-          onClick={() => navigate("/about")}
-          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-blue-600 hover:bg-gray-300"}`}
-          title="About"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </button>
-        <button
-          onClick={() => navigate("/contact")}
-          className={`p-2 rounded-full ${darkMode ? "text-blue-400 hover:bg-gray-700" : "text-blue-600 hover:bg-gray-300"}`}
-          title="Contact"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-          </svg>
-        </button>
-        <button
-          onClick={toggleDarkMode}
-          className={`p-2 rounded-full ${darkMode ? "text-yellow-300 hover:bg-gray-700" : "text-gray-800 hover:bg-gray-300"}`}
-          title={darkMode ? "Light Mode" : "Dark Mode"}
-        >
-          {darkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
-        </button>
-      </div>
-
       {/* Main Content */}
-      <main className={`min-h-screen transition-all duration-300 ${mobileMenuOpen ? "opacity-50" : "opacity-100"}`}>
+      <main className="min-h-screen transition-all duration-300">
         <div className={`h-full w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ${darkMode ? "bg-gray-800" : "bg-white"} rounded-lg shadow-md overflow-hidden`}>
           {/* Profile Header */}
           <div className={`p-6 md:p-8 ${darkMode ? "bg-gray-700" : "bg-gradient-to-r from-[#000C40] to-[#F0F2F0]"} text-white`}>

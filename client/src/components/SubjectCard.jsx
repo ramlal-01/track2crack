@@ -1,7 +1,7 @@
 // components/SubjectCard.jsx
 import React from "react";
-import { motion } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
+import { motion } from "framer-motion";
 
 const SubjectCard = ({ icon, title, progress, onClick }) => {
   // Color based on progress percentage

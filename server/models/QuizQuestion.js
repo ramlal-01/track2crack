@@ -1,3 +1,4 @@
+//  QuizQuestion Model - Defines the schema for quiz questions across various subjects
 const mongoose = require('mongoose');
 
 const quizQuestionSchema = new mongoose.Schema({

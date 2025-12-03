@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import API from "../api/api";
-import { FaTimes } from "react-icons/fa";
 
 const ReminderUpcoming = () => {
   const [reminders, setReminders] = useState([]);

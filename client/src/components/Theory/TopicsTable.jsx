@@ -7,6 +7,7 @@ const TopicsTable = ({
   activeTopic,
   isTopicEnabled,
   updateProgress,
+  // 
   handleReminderChange,
   handleSingleTopicQuiz,
   openReminderId,
@@ -14,6 +15,7 @@ const TopicsTable = ({
   noteText,
   setOpenReminderId,
   setOpenNoteId,
+  // ss
   setNoteText,
   reminderRefs,
   noteRefs,
@@ -77,3 +79,4 @@ const TopicsTable = ({
 };
 
 export default TopicsTable;
+//

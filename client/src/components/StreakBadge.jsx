@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import API from "../api/api"; // Axios instance with baseURL and token
+import React, { useEffect, useState } from "react";
 
 const StreakBadge = () => {
   const [streak, setStreak] = useState(null);

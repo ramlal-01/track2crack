@@ -1,0 +1,442 @@
+[
+  {
+    "subject": "DBMS",
+    "title": "Introduction to DBMS",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Introduction to DBMS - GFG",
+        "url": "https://www.geeksforgeeks.org/introduction-of-dbms-database-management-system/",
+        "type": "article"
+      },
+      {
+        "label": "DBMS Introduction - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=0W7n_6khOQA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "A DBMS manages databases, enabling efficient data storage, retrieval, and management, with advantages over file systems.",
+    "order": 1
+  },
+  {
+    "subject": "DBMS",
+    "title": "Types of Databases",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Types of Databases - GFG",
+        "url": "https://www.geeksforgeeks.org/types-of-databases/",
+        "type": "article"
+      },
+      {
+        "label": "Types of Databases - Gate Smashers",
+        "url": "https://www.youtube.com/watch?v=7B6t3VrU4kg",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Databases are classified into hierarchical, network, relational, and object-oriented based on data organization.",
+    "order": 2
+  },
+  {
+    "subject": "DBMS",
+    "title": "Entity-Relationship (ER) Model",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "ER Model - GFG",
+        "url": "https://www.geeksforgeeks.org/introduction-of-er-model/",
+        "type": "article"
+      },
+      {
+        "label": "ER Model - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=2W1LXnJ7rlE",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "The ER model represents database structure using entities, attributes, and relationships, mapped to relational schemas.",
+    "order": 3
+  },
+  {
+    "subject": "DBMS",
+    "title": "Relational Model",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Relational Model - GFG",
+        "url": "https://www.geeksforgeeks.org/relational-model-in-dbms/",
+        "type": "article"
+      },
+      {
+        "label": "Relational Model - Gate Smashers",
+        "url": "https://www.youtube.com/watch?v=3l6QUL2j9M0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "The relational model organizes data into relations (tables) with tuples, attributes, and keys ensuring integrity.",
+    "order": 4
+  },
+  {
+    "subject": "DBMS",
+    "title": "Functional Dependencies",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Functional Dependency - GFG",
+        "url": "https://www.geeksforgeeks.org/functional-dependency-and-attribute-closure/",
+        "type": "article"
+      },
+      {
+        "label": "Functional Dependency - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=8g0bA2j7O0o",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Functional dependencies define relationships between attributes, crucial for normalization and schema design.",
+    "order": 5
+  },
+  {
+    "subject": "DBMS",
+    "title": "Normalization",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Normalization in DBMS - GFG",
+        "url": "https://www.geeksforgeeks.org/normalization-process-in-dbms/",
+        "type": "article"
+      },
+      {
+        "label": "Normalization - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=GFQaEYEc8_8",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Normalization eliminates data anomalies by structuring tables into normal forms (1NF, 2NF, 3NF, BCNF).",
+    "order": 6
+  },
+  {
+    "subject": "DBMS",
+    "title": "Structured Query Language (SQL)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "SQL Tutorial - GFG",
+        "url": "https://www.geeksforgeeks.org/sql-tutorial/",
+        "type": "article"
+      },
+      {
+        "label": "SQL Basics - Tech With Tim",
+        "url": "https://www.youtube.com/watch?v=7S_tz1z_5bA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "SQL is used for querying and managing relational databases with commands like DDL, DML, and joins.",
+    "order": 7
+  },
+  {
+    "subject": "DBMS",
+    "title": "Views in SQL",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "SQL Views - GFG",
+        "url": "https://www.geeksforgeeks.org/sql-views/",
+        "type": "article"
+      },
+      {
+        "label": "SQL Views - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=4o1a2h2dP4c",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Views are virtual tables created from queries, simplifying data access and enhancing security.",
+    "order": 8
+  },
+  {
+    "subject": "DBMS",
+    "title": "Stored Procedures & Functions",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Stored Procedures - GFG",
+        "url": "https://www.geeksforgeeks.org/stored-procedures-in-sql/",
+        "type": "article"
+      },
+      {
+        "label": "Stored Procedures - TutorialsPoint",
+        "url": "https://www.youtube.com/watch?v=4i3bS6VQVb0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Stored procedures and functions encapsulate reusable SQL logic, improving efficiency and modularity.",
+    "order": 9
+  },
+  {
+    "subject": "DBMS",
+    "title": "Triggers",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "SQL Triggers - GFG",
+        "url": "https://www.geeksforgeeks.org/sql-trigger/",
+        "type": "article"
+      },
+      {
+        "label": "Triggers - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=3U0vQv7lQ8U",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Triggers automatically execute SQL code in response to database events like insertions or updates.",
+    "order": 10
+  },
+  {
+    "subject": "DBMS",
+    "title": "Cursors in SQL",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "SQL Cursors - GFG",
+        "url": "https://www.geeksforgeeks.org/cursors-in-sql/",
+        "type": "article"
+      },
+      {
+        "label": "Cursors in SQL - TutorialsPoint",
+        "url": "https://www.youtube.com/watch?v=3H0v-QY4e0M",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Cursors enable row-by-row processing of query results for complex data manipulation.",
+    "order": 11
+  },
+  {
+    "subject": "DBMS",
+    "title": "Relational Algebra & Calculus",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Relational Algebra - GFG",
+        "url": "https://www.geeksforgeeks.org/relational-algebra/",
+        "type": "article"
+      },
+      {
+        "label": "Relational Algebra - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=0BQr10y2kOQ",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Relational algebra and calculus provide formal query languages for manipulating and retrieving data.",
+    "order": 12
+  },
+  {
+    "subject": "DBMS",
+    "title": "Indexing and File Organization",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Indexing in DBMS - GFG",
+        "url": "https://www.geeksforgeeks.org/indexing-in-databases/",
+        "type": "article"
+      },
+      {
+        "label": "Indexing - Gate Smashers",
+        "url": "https://www.youtube.com/watch?v=6o6gfoP2B2Q",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Indexing and file organization optimize data retrieval using structures like B+ trees and hashing.",
+    "order": 13
+  },
+  {
+    "subject": "DBMS",
+    "title": "Storage Management",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Storage Management - GFG",
+        "url": "https://www.geeksforgeeks.org/storage-management-in-dbms/",
+        "type": "article"
+      },
+      {
+        "label": "DBMS Storage - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=3T0vZ6I7f4Q",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Storage management handles data on disks using pages, blocks, and RAID for reliability.",
+    "order": 14
+  },
+  {
+    "subject": "DBMS",
+    "title": "Transactions & Concurrency Control",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Transactions and Concurrency - GFG",
+        "url": "https://www.geeksforgeeks.org/concurrency-control-in-dbms/",
+        "type": "article"
+      },
+      {
+        "label": "Transactions - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=0mW3D0A4E7w",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Transactions ensure data consistency with ACID properties; concurrency control prevents conflicts.",
+    "order": 15
+  },
+  {
+    "subject": "DBMS",
+    "title": "Checkpoints in DBMS",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "Checkpoints in DBMS - GFG",
+        "url": "https://www.geeksforgeeks.org/checkpoints-in-dbms/",
+        "type": "article"
+      },
+      {
+        "label": "Checkpoints - Gate Smashers",
+        "url": "https://www.youtube.com/watch?v=3iW6K_4K5oU",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Checkpoints synchronize database states for efficient recovery after failures.",
+    "order": 16
+  },
+  {
+    "subject": "DBMS",
+    "title": "Database Recovery Techniques",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Database Recovery - GFG",
+        "url": "https://www.geeksforgeeks.org/database-recovery-techniques-in-dbms/",
+        "type": "article"
+      },
+      {
+        "label": "Recovery Techniques - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=3K4s1qY3o4Q",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Recovery techniques like log-based and shadow paging restore databases after failures.",
+    "order": 17
+  },
+  {
+    "subject": "DBMS",
+    "title": "Shadow Paging",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "Shadow Paging - GFG",
+        "url": "https://www.geeksforgeeks.org/shadow-paging-in-dbms/",
+        "type": "article"
+      },
+      {
+        "label": "Shadow Paging - Gate Smashers",
+        "url": "https://www.youtube.com/watch?v=3iW6K_4K5oU",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Shadow paging maintains a shadow copy of the database for recovery, avoiding log-based overhead.",
+    "order": 18
+  },
+  {
+    "subject": "DBMS",
+    "title": "Distributed Databases",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "Distributed Databases - GFG",
+        "url": "https://www.geeksforgeeks.org/distributed-database-system/",
+        "type": "article"
+      },
+      {
+        "label": "Distributed DBMS - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=3W6vZ2K5o4Q",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Distributed databases store data across multiple sites, using fragmentation and replication for efficiency.",
+    "order": 19
+  },
+  {
+    "subject": "DBMS",
+    "title": "NoSQL Databases",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "NoSQL Databases - GFG",
+        "url": "https://www.geeksforgeeks.org/introduction-to-nosql/",
+        "type": "article"
+      },
+      {
+        "label": "NoSQL Explained - Simplilearn",
+        "url": "https://www.youtube.com/watch?v=0buKQHokNB8",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "NoSQL databases handle unstructured data with flexible schemas, like document, key-value, or graph models.",
+    "order": 20
+  },
+  {
+    "subject": "DBMS",
+    "title": "OLTP, OLAP, and Data Warehousing",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "OLTP vs OLAP - GFG",
+        "url": "https://www.geeksforgeeks.org/oltp-vs-olap/",
+        "type": "article"
+      },
+      {
+        "label": "OLTP and OLAP - Simplilearn",
+        "url": "https://www.youtube.com/watch?v=3o6k6o9o4kQ",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "OLTP handles transactions, OLAP supports analytics, and data warehousing stores historical data for analysis.",
+    "order": 21
+  },
+  {
+    "subject": "DBMS",
+    "title": "Big Data and DBMS",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "Big Data vs DBMS - GFG",
+        "url": "https://www.geeksforgeeks.org/difference-between-dbms-and-big-data/",
+        "type": "article"
+      },
+      {
+        "label": "Big Data Overview - Simplilearn",
+        "url": "https://www.youtube.com/watch?v=3o6k6o9o4kQ",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Big data systems like Hadoop and Spark handle large-scale, unstructured data, differing from traditional DBMS.",
+    "order": 22
+  }
+]

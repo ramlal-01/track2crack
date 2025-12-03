@@ -1,3 +1,4 @@
+//CurrentTopicSection- A responsive component to display the current topic, resources, and quiz options.
 import React from "react";
 
 const CurrentTopicSection = ({
