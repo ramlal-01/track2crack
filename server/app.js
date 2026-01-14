@@ -72,4 +72,19 @@ app.use("/api/test", testRoutes);
 // ✅ Start daily reminder cron job
 require("./cronJobs/dailyReminderJob");  
 
+const sendVerificationEmail = require('./utils/sendVerificationEmail');
+
+app.get("/api/test-email", async (req, res) => {
+  try {
+    await sendVerificationEmail(
+      "ramlal0801@gmail.com",
+      "https://www.track2crack.com"
+    );
+    res.send("Email sent");
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(e.message);
+  }
+});
+
 module.exports = app;
