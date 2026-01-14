@@ -1,3 +1,4 @@
+//authController - Handles user authentication: registration, login, password reset, email verification, social login, and token refresh.
 require('dotenv').config(); // ⬅ force .env loading
 
 const User = require('../models/User');

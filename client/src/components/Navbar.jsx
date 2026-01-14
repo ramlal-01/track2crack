@@ -1,12 +1,12 @@
-import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen,setMenuOpen] = useState(false);
 
   // Close menu on navigation
   const handleNavClick = () => setMenuOpen(false);
-
+// 
   return (
     <nav className="sticky top-0 z-50 bg-gradient-to-r from-[#000C40] to-[#F0F2F0] shadow-md px-4 sm:px-6 py-4 flex items-center justify-between">
       {/* Left: Logo + Nav Links */}
@@ -110,8 +110,7 @@ const Navbar = () => {
             to="/login"
             onClick={handleNavClick}
             className="inline-block rounded-sm border border-current px-8 py-3 text-sb font-bold bg-white text-indigo-900 transition hover:scale-105 hover:shadow-xl focus:ring-3 focus:outline-hidden"
-          >
-            Login
+          >Login
           </Link>
           <Link
             to="/register"

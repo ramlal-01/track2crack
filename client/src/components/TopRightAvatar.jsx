@@ -6,7 +6,6 @@ import ThemeToggle from "./ThemeToggle";
 import {
   ChevronDownIcon,
   ArrowRightOnRectangleIcon,
-   
   UserIcon,
   CogIcon,
   AcademicCapIcon,
@@ -18,10 +17,10 @@ import {
 const TopRightAvatar = () => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [notificationPage, setNotificationPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [showMobileNotificationOverlay, setShowMobileNotificationOverlay] = useState(false);
   const [streak, setStreak] = useState(null);
+  const [notificationPage, setNotificationPage] = useState(1);
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const [avatarURL, setAvatarURL] = useState(null);

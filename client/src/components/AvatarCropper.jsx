@@ -1,12 +1,12 @@
-import React, { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "../utils/cropImage";
+import React, { useState, useCallback } from "react";
 import Modal from "react-modal";
-
+// change the Avatar
 const AvatarCropper = ({ image, onClose, onCropDone }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [zoom, setZoom] = useState(1);
 
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);

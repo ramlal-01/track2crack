@@ -1,8 +1,9 @@
+// Sidebar.jsx - A responsive sidebar component for navigation within the dashboard, optimized for mobile and desktop views.
 import { 
   ChevronDownIcon, 
   ChevronRightIcon,
-  ChartBarIcon,
   CodeBracketIcon,
+  ChartBarIcon,
   ServerIcon,
   BookOpenIcon,
   LifebuoyIcon,
@@ -13,10 +14,11 @@ import {
   CpuChipIcon,
   BoltIcon,
   CubeIcon,
-  ClockIcon,
+  ClockIcon,//
   DocumentTextIcon,
   PuzzlePieceIcon,
   LightBulbIcon,
+  // 
   Cog6ToothIcon // Added the missing import
 } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
@@ -134,8 +136,8 @@ const Sidebar = () => {
               <ChevronRightIcon className="w-5 h-5 ml-auto text-gray-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-transform group-hover:translate-x-1" />
             </button>
 
-            {/* Divider */}
             <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+            {/* Divider */}
 
             {/* Theory Subjects */}
             <div className="rounded-xl overflow-hidden">

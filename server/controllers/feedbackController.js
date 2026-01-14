@@ -1,3 +1,4 @@
+//feedbackController - Handles user feedback submission and storage.
 const Feedback = require('../models/Feedback');
 exports.submitFeedback = async (req, res) => {
   try {

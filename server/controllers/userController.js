@@ -1,3 +1,4 @@
+//userController - Manages user dashboard, profile, avatar upload, password change, account deletion, and FCM token storage.
 const DSAProgress = require('../models/UserDSAProgress');
 const CoreProgress = require('../models/UserCoreProgress');
 const TheoryProgress = require('../models/UserTheoryProgress');
@@ -74,20 +75,16 @@ exports.uploadAvatar = async (req, res) => {
       }
     }
 
-    // 🆕 Upload new avatar
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "track2crack/avatars",
-      width: 300,
-      height: 300,
-      crop: "fill"
-    });
-
-    // 🔃 Update user with new avatar data
-    user.avatarUrl = result.secure_url;
-    user.avatarPublicId = result.public_id;
+    // 🆕 The file is already uploaded by multer-cloudinary-storage middleware
+    // We just need to update the user with the new avatar data
+    user.avatarUrl = req.file.path; // Cloudinary secure_url
+    user.avatarPublicId = req.file.filename; // Cloudinary public_id
     await user.save();
 
-    return res.status(200).json({ avatarUrl: user.avatarUrl });
+    return res.status(200).json({ 
+      message: "Avatar updated successfully",
+      avatarUrl: user.avatarUrl 
+    });
 
   } catch (err) {
     console.error("Avatar Upload Error:", err);

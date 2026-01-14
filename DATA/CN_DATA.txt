@@ -1,0 +1,1046 @@
+[
+  {
+    "subject": "CN",
+    "title": "Introduction to Computer Networks",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Basics of Computer Networking - GFG",
+        "url": "https://www.geeksforgeeks.org/basics-computer-networki  ng/",
+        "type": "article"
+      },
+      {
+        "label": "Introduction to Computer Networks - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=3QhU9jd03a0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Computer networks connect devices to share data and resources using protocols over wired or wireless media.",
+    "order": 1
+  },
+  {
+    "subject": "CN",
+    "title": "Types of Computer Networks",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Types of Computer Networks - GFG",
+        "url": "https://www.geeksforgeeks.org/computer-networks/types-of-computer-networks/",
+        "type": "article"
+      },
+      {
+        "label": "Types of Networks - PowerCert Animated Videos",
+        "url": "https://www.youtube.com/watch?v=nMYapL6RQzU",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Networks are classified by scope (e.g., LAN, WAN, MAN, PAN) based on geographical coverage and use cases.",
+    "order": 2
+  },
+  {
+    "subject": "CN",
+    "title": "Network Topologies",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Types of Network Topology - GFG",
+        "url": "https://www.geeksforgeeks.org/types-of-network-topology/",
+        "type": "article"
+      },
+      {
+        "label": "Network Topologies - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=zbqrNg4C98U",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Topologies (e.g., bus, star, ring, mesh) define the physical or logical arrangement of network devices.",
+    "order": 3
+  },
+  {
+    "subject": "CN",
+    "title": "OSI vs TCP/IP Model",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Layers of OSI Model - GFG",
+        "url": "https://www.geeksforgeeks.org/layers-of-osi-model/",
+        "type": "article"
+      },
+      {
+        "label": "OSI and TCP/IP Models - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=vv4y_uOneC0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "OSI (7 layers) is a theoretical model; TCP/IP (4 layers) is practical for Internet communication.",
+    "order": 4
+  },
+  {
+    "subject": "CN",
+    "title": "Network Protocols",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Network Protocols - TutorialsPoint",
+        "url": "https://www.tutorialspoint.com/network-protocols",
+        "type": "article"
+      },
+      {
+        "label": "Network Protocols - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=1pfTxp25MA8",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Protocols (e.g., HTTP, TCP, UDP) define rules for data communication between devices.",
+    "order": 5
+  },
+  {
+    "subject": "CN",
+    "title": "IP Addressing and Subnetting",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "IP Addressing - GFG",
+        "url": "https://www.geeksforgeeks.org/introduction-of-classful-ip-addressing/",
+        "type": "article"
+      },
+      {
+        "label": "IP Addressing and Subnetting - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=6vFzG5t1g7k",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "IP addressing identifies devices; subnetting divides networks for efficient address allocation.",
+    "order": 6
+  },
+  {
+    "subject": "CN",
+    "title": "Routing Algorithms",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Routing Algorithms - GFG",
+        "url": "https://www.geeksforgeeks.org/classification-of-routing-algorithms/",
+        "type": "article"
+      },
+      {
+        "label": "Routing Algorithms - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=7aF6rBNkT90",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Routing algorithms (e.g., static, dynamic) determine optimal paths for data across networks.",
+    "order": 7
+  },
+  {
+    "subject": "CN",
+    "title": "Network Security",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Network Security - GFG",
+        "url": "https://www.geeksforgeeks.org/computer-network-tutorials/#security",
+        "type": "article"
+      },
+      {
+        "label": "Network Security - PowerCert Animated Videos",
+        "url": "https://www.youtube.com/watch?v=TkCSr30UojM",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Network security protects data from unauthorized access using encryption and policies.",
+    "order": 8
+  },
+  {
+    "subject": "CN",
+    "title": "Congestion Control",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Congestion Control in Computer Networks - GFG",
+        "url": "https://www.geeksforgeeks.org/congestion-control-in-computer-networks/",
+        "type": "article"
+      },
+      {
+        "label": "Congestion Control - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=3hW5Hs8pXPs",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Congestion control manages network traffic to prevent overload and ensure performance.",
+    "order": 9
+  },
+  {
+    "subject": "CN",
+    "title": "Transmission Modes",
+    "type": "Other",
+    "resources": [
+      {
+        "label": "Transmission Modes - GFG",
+        "url": "https://www.geeksforgeeks.org/transmission-modes-computer-networks/",
+        "type": "article"
+      },
+      {
+        "label": "Transmission Modes - TutorialsPoint",
+        "url": "https://www.youtube.com/watch?v=9OBjquC9H7s",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Transmission modes (simplex, half-duplex, full-duplex) define data flow directions.",
+    "order": 10
+  },
+  {
+    "subject": "CN",
+    "title": "Transmission Media",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Transmission Media in Computer Networks - GFG",
+        "url": "https://www.geeksforgeeks.org/transmission-media/",
+        "type": "article"
+      },
+      {
+        "label": "Transmission Media - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=7U7c1jJ_4wU",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Transmission media include guided (twisted pair, coaxial, fiber-optic) and unguided (wireless) channels for data transfer.",
+    "order": 11
+  },
+  {
+    "subject": "CN",
+    "title": "Bandwidth and Throughput",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Difference Between Bandwidth and Throughput - GFG",
+        "url": "https://www.geeksforgeeks.org/difference-between-bandwidth-and-throughput/",
+        "type": "article"
+      },
+      {
+        "label": "Bandwidth vs Throughput - PowerCert Animated Videos",
+        "url": "https://www.youtube.com/watch?v=7jHivj8xBwc",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Bandwidth is the maximum data rate of a channel; throughput is the actual data rate achieved.",
+    "order": 12
+  },
+  {
+    "subject": "CN",
+    "title": "Switching Techniques",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Switching Techniques in Computer Networks - GFG",
+        "url": "https://www.geeksforgeeks.org/switching-techniques-in-computer-networks/",
+        "type": "article"
+      },
+      {
+        "label": "Switching Techniques - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=3G3A4pOLUFE",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Switching techniques (circuit, packet, message) manage data flow between network nodes.",
+    "order": 13
+  },
+  {
+    "subject": "CN",
+    "title": "Multiplexing",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Multiplexing in Computer Networks - GFG",
+        "url": "https://www.geeksforgeeks.org/multiplexing-in-computer-network/",
+        "type": "article"
+      },
+      {
+        "label": "Multiplexing - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=3b5zCFSiVRQ",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Multiplexing (FDM, TDM, WDM) combines multiple signals for efficient channel use.",
+    "order": 14
+  },
+  {
+    "subject": "CN",
+    "title": "Digital vs Analog Transmission",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Difference Between Analog and Digital Transmission - GFG",
+        "url": "https://www.geeksforgeeks.org/analog-transmission-vs-digital-transmission/",
+        "type": "article"
+      },
+      {
+        "label": "Digital vs Analog Transmission - TutorialsPoint",
+        "url": "https://www.youtube.com/watch?v=3Qd3A0qa9f8",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Digital transmission sends discrete signals; analog sends continuous signals.",
+    "order": 15
+  },
+  {
+    "subject": "CN",
+    "title": "Framing and Error Control",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Framing in Data Link Layer - GFG",
+        "url": "https://www.geeksforgeeks.org/framing-in-data-link-layer/",
+        "type": "article"
+      },
+      {
+        "label": "Framing in Data Link Layer - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=6D2v7DR_9oY",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Framing organizes data into frames; error control ensures reliable transmission using detection and correction techniques.",
+    "order": 16
+  },
+  {
+    "subject": "CN",
+    "title": "Error Detection and Correction",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Error Detection and Correction - GFG",
+        "url": "https://www.geeksforgeeks.org/error-detection-in-computer-networks/",
+        "type": "article"
+      },
+      {
+        "label": "Error Detection and Correction - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=5h5rh-PN1PU",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Error detection (parity, CRC) identifies errors; correction (Hamming code) fixes them for reliable data transfer.",
+    "order": 17
+  },
+  {
+    "subject": "CN",
+    "title": "Flow Control",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Flow Control in Data Link Layer - GFG",
+        "url": "https://www.geeksforgeeks.org/flow-control-in-data-link-layer/",
+        "type": "article"
+      },
+      {
+        "label": "Flow Control - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=wnwk2VX9_zo",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Flow control (stop-and-wait, sliding window) regulates data flow to prevent sender-receiver mismatch.",
+    "order": 18
+  },
+  {
+    "subject": "CN",
+    "title": "MAC Protocols",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Multiple Access Protocols - GFG",
+        "url": "https://www.geeksforgeeks.org/multiple-access-protocols-in-computer-network/",
+        "type": "article"
+      },
+      {
+        "label": "MAC Protocols - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=6aZ3xRjMcHo",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "MAC protocols (ALOHA, CSMA/CD, CSMA/CA) manage shared medium access to avoid collisions.",
+    "order": 19
+  },
+  {
+    "subject": "CN",
+    "title": "Ethernet and LAN Standards",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Ethernet - GFG",
+        "url": "https://www.geeksforgeeks.org/local-area-network-lan-technologies/",
+        "type": "article"
+      },
+      {
+        "label": "Ethernet - PowerCert Animated Videos",
+        "url": "https://www.youtube.com/watch?v=gqS6gB9UfpM",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Ethernet (IEEE 802.3) defines LAN wiring and signaling; LAN standards ensure interoperability.",
+    "order": 20
+  },
+  {
+    "subject": "CN",
+    "title": "Switches and Bridges",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Difference Between Bridge and Switch - GFG",
+        "url": "https://www.geeksforgeeks.org/difference-between-bridge-and-switch/",
+        "type": "article"
+      },
+      {
+        "label": "Switches and Bridges - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=7g_4E5tqpUc",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Switches and bridges connect LAN devices, improving efficiency and segmenting traffic.",
+    "order": 21
+  },
+  {
+    "subject": "CN",
+    "title": "IP Addressing (IPv4 and IPv6), Subnetting, Supernetting",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "IP Addressing - GFG",
+        "url": "https://www.geeksforgeeks.org/introduction-of-classful-ip-addressing/",
+        "type": "article"
+      },
+      {
+        "label": "IP Addressing and Subnetting - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=6vFzG5t1g7k",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "IP addressing (IPv4, IPv6) identifies devices; subnetting and supernetting optimize address allocation.",
+    "order": 22
+  },
+  {
+    "subject": "CN",
+    "title": "Routing Algorithms: Distance Vector, Link State",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Routing Algorithms - GFG",
+        "url": "https://www.geeksforgeeks.org/classification-of-routing-algorithms/",
+        "type": "article"
+      },
+      {
+        "label": "Routing Algorithms - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=7aF6rBNkT90",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Routing algorithms (Distance Vector, Link State) determine optimal paths for data across networks.",
+    "order": 23
+  },
+  {
+    "subject": "CN",
+    "title": "Protocols: IP, ICMP, ARP, RARP",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Network Layer Protocols - GFG",
+        "url": "https://www.geeksforgeeks.org/network-layer-protocols/",
+        "type": "article"
+      },
+      {
+        "label": "Network Layer Protocols - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=3G3A4pOLUFE",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "IP, ICMP, ARP, and RARP enable addressing, error reporting, and address resolution in networks.",
+    "order": 24
+  },
+  {
+    "subject": "CN",
+    "title": "Routers and Routing Tables",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Routing Tables - GFG",
+        "url": "https://www.geeksforgeeks.org/routing-tables-in-computer-network/",
+        "type": "article"
+      },
+      {
+        "label": "Routers and Routing - PowerCert Animated Videos",
+        "url": "https://www.youtube.com/watch?v=8nN2a2v-Du4",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Routers use routing tables to forward packets based on destination IP addresses.",
+    "order": 25
+  },
+  {
+    "subject": "CN",
+    "title": "Fragmentation",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Fragmentation at Network Layer - GFG",
+        "url": "https://www.geeksforgeeks.org/fragmentation-network-layer/",
+        "type": "article"
+      },
+      {
+        "label": "IP Fragmentation - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=6i2xW4Nj1WY",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Fragmentation divides large packets into smaller fragments to match network MTU requirements.",
+    "order": 26
+  }
+,
+  {
+    "subject": "CN",
+    "title": "TCP vs UDP",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Difference Between TCP and UDP - GFG",
+        "url": "https://www.geeksforgeeks.org/differences-between-tcp-and-udp/",
+        "type": "article"
+      },
+      {
+        "label": "TCP vs UDP - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=qqRYkW8W5pQ",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "TCP ensures reliable, ordered data delivery; UDP offers fast, connectionless transmission.",
+    "order": 27
+  },
+  {
+    "subject": "CN",
+    "title": "Port Numbers and Sockets",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Port Numbers - GFG",
+        "url": "https://www.geeksforgeeks.org/what-is-ports-in-networking/",
+        "type": "article"
+      },
+      {
+        "label": "Ports and Sockets - PowerCert Animated Videos",
+        "url": "https://www.youtube.com/watch?v=8nN2a2v-Du4",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Port numbers identify applications; sockets enable communication between devices.",
+    "order": 28
+  },
+  {
+    "subject": "CN",
+    "title": "Connection Establishment (3-Way Handshake)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "TCP 3-Way Handshake - GFG",
+        "url": "https://www.geeksforgeeks.org/tcp-3-way-handshake-process/",
+        "type": "article"
+      },
+      {
+        "label": "TCP 3-Way Handshake - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=xZx3cyu3pck",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "TCP's 3-way handshake (SYN, SYN-ACK, ACK) establishes reliable connections.",
+    "order": 29
+  },
+  {
+    "subject": "CN",
+    "title": "Flow Control and Congestion Control",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "TCP Congestion Control - GFG",
+        "url": "https://www.geeksforgeeks.org/tcp-congestion-control/",
+        "type": "article"
+      },
+      {
+        "label": "TCP Flow and Congestion Control - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=3hW5Hs8pXPs",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "TCP's flow control manages sender-receiver speed; congestion control prevents network overload.",
+    "order": 30
+  },
+  {
+    "subject": "CN",
+    "title": "Quality of Service (QoS)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Quality of Service - GFG",
+        "url": "https://www.geeksforgeeks.org/computer-network-quality-of-service-and-multimedia/",
+        "type": "article"
+      },
+      {
+        "label": "Quality of Service - TutorialsPoint",
+        "url": "https://www.youtube.com/watch?v=5iVSCDqAbmM",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "QoS prioritizes network traffic to ensure performance for critical applications.",
+    "order": 31
+  },
+  {
+    "subject": "CN",
+    "title": "DNS, DHCP, FTP, HTTP, SMTP, POP3",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Application Layer Protocols - GFG",
+        "url": "https://www.geeksforgeeks.org/protocols-application-layer/",
+        "type": "article"
+      },
+      {
+        "label": "Application Layer Protocols - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=ID3k6Tw_o-s",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "DNS resolves domains, DHCP assigns IPs, FTP transfers files, HTTP serves web content, SMTP/POP3 handle email.",
+    "order": 32
+  },
+  {
+    "subject": "CN",
+    "title": "Client-Server vs Peer-to-Peer",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Client-Server vs Peer-to-Peer - GFG",
+        "url": "https://www.geeksforgeeks.org/difference-between-client-server-and-peer-to-peer-network/",
+        "type": "article"
+      },
+      {
+        "label": "Client-Server vs Peer-to-Peer - PowerCert Animated Videos",
+        "url": "https://www.youtube.com/watch?v=3QhU9jd03a0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Client-server uses centralized servers; peer-to-peer distributes tasks among peers.",
+    "order": 33
+  },
+  {
+    "subject": "CN",
+    "title": "Email Architecture and Protocols",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Email Protocols - GFG",
+        "url": "https://www.geeksforgeeks.org/simple-mail-transfer-protocol-smtp/",
+        "type": "article"
+      },
+      {
+        "label": "Email Protocols - TutorialsPoint",
+        "url": "https://www.youtube.com/watch?v=6Y1g7q9qC0s",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Email architecture uses SMTP for sending, POP3/IMAP for retrieval, with mail servers and clients.",
+    "order": 34
+  },
+  {
+    "subject": "CN",
+    "title": "Web Services and APIs",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Web Services - GFG",
+        "url": "https://www.geeksforgeeks.org/what-is-web-services/",
+        "type": "article"
+      },
+      {
+        "label": "Web Services and APIs - FreeCodeCamp",
+        "url": "https://www.youtube.com/watch?v=Ox6W7T3-khI",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Web services and APIs enable application communication, often using HTTP/REST or SOAP.",
+    "order": 35
+  }
+,
+  {
+    "subject": "CN",
+    "title": "Firewalls and VPNs",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Firewalls - GFG",
+        "url": "https://www.geeksforgeeks.org/introduction-of-firewall-in-computer-network/",
+        "type": "article"
+      },
+      {
+        "label": "Firewalls and VPNs - PowerCert Animated Videos",
+        "url": "https://www.youtube.com/watch?v=TkCSr30UojM",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Firewalls filter network traffic; VPNs secure connections via encrypted tunnels.",
+    "order": 36
+  },
+  {
+    "subject": "CN",
+    "title": "Network Attacks: DoS, Spoofing, Phishing",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Types of Network Attacks - GFG",
+        "url": "https://www.geeksforgeeks.org/types-of-cyber-attacks/",
+        "type": "article"
+      },
+      {
+        "label": "Network Attacks - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=0aG6yGqQz80",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "DoS overwhelms systems, spoofing fakes identities, and phishing steals credentials.",
+    "order": 37
+  },
+  {
+    "subject": "CN",
+    "title": "Encryption Basics: Symmetric/Asymmetric, SSL/TLS",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Symmetric and Asymmetric Encryption - GFG",
+        "url": "https://www.geeksforgeeks.org/difference-between-symmetric-and-asymmetric-key-encryption/",
+        "type": "article"
+      },
+      {
+        "label": "Encryption and SSL/TLS - Practical Networking",
+        "url": "https://www.youtube.com/watch?v=0TLDTodL7Lc",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Symmetric encryption uses one key; asymmetric uses key pairs; SSL/TLS secures web communication.",
+    "order": 38
+  },
+  {
+    "subject": "CN",
+    "title": "Intrusion Detection Systems (IDS)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Intrusion Detection System - GFG",
+        "url": "https://www.geeksforgeeks.org/intrusion-detection-system-ids/",
+        "type": "article"
+      },
+      {
+        "label": "Intrusion Detection Systems - TutorialsPoint",
+        "url": "https://www.youtube.com/watch?v=3s8jUsX-wYA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "IDS monitors networks for suspicious activity, detecting potential intrusions.",
+    "order": 39
+  }
+,
+  {
+    "subject": "CN",
+    "title": "Network Devices: Hubs, Repeaters, Gateways",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Types of Network Devices - GFG",
+        "url": "https://www.geeksforgeeks.org/network-devices-hub-repeater-bridge-switch-router-gateways/",
+        "type": "article"
+      },
+      {
+        "label": "Network Devices Explained - PowerCert Animated Videos",
+        "url": "https://www.youtube.com/watch?v=8nN2a2v-Du4",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Hubs broadcast data, repeaters amplify signals, and gateways connect different network protocols.",
+    "order": 40
+  },
+  {
+    "subject": "CN",
+    "title": "Virtual LANs (VLANs)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "VLAN in Computer Networks - GFG",
+        "url": "https://www.geeksforgeeks.org/virtual-lan-vlan/",
+        "type": "article"
+      },
+      {
+        "label": "VLAN Explained - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=1T3S9-Vg9HA",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "VLANs segment networks logically without physical separation, improving efficiency and security.",
+    "order": 41
+  },
+  {
+    "subject": "CN",
+    "title": "Network Address Translation (NAT)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Network Address Translation - GFG",
+        "url": "https://www.geeksforgeeks.org/network-address-translation-nat/",
+        "type": "article"
+      },
+      {
+        "label": "NAT Explained - PowerCert Animated Videos",
+        "url": "https://www.youtube.com/watch?v=FTUV0t3R7kQ",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "NAT maps private IP addresses to public IPs, conserving address space and enhancing security.",
+    "order": 42
+  },
+  {
+    "subject": "CN",
+    "title": "Wireless Networks (Wi-Fi, IEEE 802.11)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "IEEE 802.11 Wi-Fi - GFG",
+        "url": "https://www.geeksforgeeks.org/ieee-802-11-architecture/",
+        "type": "article"
+      },
+      {
+        "label": "Wi-Fi and IEEE 802.11 - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=1zXqF0C-Pv4",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Wi-Fi (IEEE 802.11) enables wireless communication using CSMA/CA and various standards (e.g., 802.11ac).",
+    "order": 43
+  },
+  {
+    "subject": "CN",
+    "title": "Network Management Protocols (SNMP)",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Simple Network Management Protocol - GFG",
+        "url": "https://www.geeksforgeeks.org/simple-network-management-protocol-snmp/",
+        "type": "article"
+      },
+      {
+        "label": "SNMP Explained - TutorialsPoint",
+        "url": "https://www.youtube.com/watch?v=3qZ8S9c3a0A",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "SNMP monitors and manages network devices, collecting performance and status data.",
+    "order": 44
+  }
+,
+  {
+    "subject": "CN",
+    "title": "OSI vs TCP/IP - Deep Comparison",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "OSI vs TCP/IP Model - GFG",
+        "url": "https://www.geeksforgeeks.org/differences-between-tcp-ip-and-osi-model/",
+        "type": "article"
+      },
+      {
+        "label": "OSI vs TCP/IP Models - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=vv4y_uOneC0",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "OSI is a 7-layer theoretical model; TCP/IP is a 4-layer practical model for Internet communication.",
+    "order": 45
+  },
+  {
+    "subject": "CN",
+    "title": "Subnetting Calculation Tricks",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Subnetting in Computer Networks - GFG",
+        "url": "https://www.geeksforgeeks.org/introduction-to-subnetting/",
+        "type": "article"
+      },
+      {
+        "label": "Subnetting Made Easy - Practical Networking",
+        "url": "https://www.youtube.com/watch?v=cbx7yN09J6M",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Subnetting tricks simplify dividing networks into subnets using binary or shortcut methods.",
+    "order": 46
+  },
+  {
+    "subject": "CN",
+    "title": "Real-World Networking Scenarios",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Real-World Network Configurations - TutorialsPoint",
+        "url": "https://www.tutorialspoint.com/computer-networking-real-world-scenarios",
+        "type": "article"
+      },
+      {
+        "label": "Real-World Networking Scenarios - PowerCert Animated Videos",
+        "url": "https://www.youtube.com/watch?v=8nN2a2v-Du4",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Real-world scenarios involve configuring networks, troubleshooting, and optimizing performance.",
+    "order": 47
+  },
+  {
+    "subject": "CN",
+    "title": "Common HR-Technical Bridge Questions",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Networking Interview Questions - GFG",
+        "url": "https://www.geeksforgeeks.org/commonly-asked-computer-networking-interview-questions-set-1/",
+        "type": "article"
+      },
+      {
+        "label": "Networking Interview Questions - Simplilearn",
+        "url": "https://www.youtube.com/watch?v=6G3z47b6M0I",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "HR-technical questions bridge networking concepts with problem-solving and communication skills.",
+    "order": 48
+  },
+  {
+    "subject": "CN",
+    "title": "Wireless Networks: WiFi, Bluetooth, LTE",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Wireless Networks - GFG",
+        "url": "https://www.geeksforgeeks.org/wireless-networks/",
+        "type": "article"
+      },
+      {
+        "label": "WiFi, Bluetooth, LTE Explained - Neso Academy",
+        "url": "https://www.youtube.com/watch?v=1zXqF0C-Pv4",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "WiFi (IEEE 802.11) enables wireless LAN, Bluetooth supports short-range device communication, and LTE provides high-speed mobile data.",
+    "order": 49
+  },
+  {
+    "subject": "CN",
+    "title": "Mobile IP, MANETs",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Mobile IP - GFG",
+        "url": "https://www.geeksforgeeks.org/mobile-ip/",
+        "type": "article"
+      },
+      {
+        "label": "Mobile IP and MANETs - TutorialsPoint",
+        "url": "https://www.youtube.com/watch?v=5g2YdN6B3gQ",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Mobile IP enables device mobility across networks; MANETs are self-configuring mobile ad hoc networks.",
+    "order": 50
+  },
+  {
+    "subject": "CN",
+    "title": "DNS Resolution Path",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "DNS Resolution Process - GFG",
+        "url": "https://www.geeksforgeeks.org/domain-name-system-dns-in-application-layer/",
+        "type": "article"
+      },
+      {
+        "label": "DNS Resolution Explained - PowerCert Animated Videos",
+        "url": "https://www.youtube.com/watch?v=mpQZVYPuDGU",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "DNS resolution maps domain names to IP addresses via recursive and iterative queries through resolvers and servers.",
+    "order": 51
+  },
+  {
+    "subject": "CN",
+    "title": "Network Simulation Tools: Packet Tracer, Wireshark",
+    "type": "Important",
+    "resources": [
+      {
+        "label": "Packet Tracer and Wireshark - GFG",
+        "url": "https://www.geeksforgeeks.org/network-simulation-using-packet-tracer/",
+        "type": "article"
+      },
+      {
+        "label": "Packet Tracer and Wireshark Tutorial - Simplilearn",
+        "url": "https://www.youtube.com/watch?v=2fH6W3lFz8E",
+        "type": "video"
+      }
+    ],
+    "studyNoteFiles": [],
+    "notes": "Packet Tracer simulates network configurations; Wireshark analyzes live network traffic.",
+    "order": 52
+  }
+]
