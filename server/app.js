@@ -77,7 +77,7 @@ const sendVerificationEmail = require('./utils/sendVerificationEmail');
 app.get("/api/test-email", async (req, res) => {
   try {
     await sendVerificationEmail(
-      "ramlal0801@gmail.com",
+      "ramlakhanvims@gmail.com",
       "https://www.track2crack.com"
     );
     res.send("Email sent");
