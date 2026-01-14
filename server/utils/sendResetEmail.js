@@ -4,7 +4,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendResetEmail = async (email, resetURL) => {
   await resend.emails.send({
-    from: "Track2Crack <onboarding@resend.dev>",
+    from: "Track2Crack <no-reply@track2crack.com>",
     to: email,
     subject: "Reset your Track2Crack password",
     html: `

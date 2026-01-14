@@ -4,7 +4,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendVerificationEmail = async (email, verificationURL) => {
   await resend.emails.send({
-    from: "Track2Crack <onboarding@resend.dev>",
+    from: "Track2Crack <no-reply@track2crack.com>",
     to: email,
     subject: "Verify your Track2Crack account",
     html: `
