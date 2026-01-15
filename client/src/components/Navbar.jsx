@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import logo from "/favicon.png";
 
 const Navbar = () => {
   const [menuOpen,setMenuOpen] = useState(false);
@@ -11,9 +12,20 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 bg-gradient-to-r from-[#000C40] to-[#F0F2F0] shadow-md px-4 sm:px-6 py-4 flex items-center justify-between">
       {/* Left: Logo + Nav Links */}
       <div className="flex items-center space-x-4 sm:space-x-12">
-        <Link to="/" className="text-2xl font-extrabold text-white tracking-wide hover:scale-105 transition duration-200">
-          Track2Crack
+        <Link
+          to="/"
+          className="flex items-center space-x-2 text-white hover:scale-105 transition duration-200"
+        >
+          <img
+            src={logo}
+            alt="Track2Crack logo"
+            className="w-8 h-8 sm:w-9 sm:h-9 object-contain"
+          />
+          <span className="text-2xl font-extrabold tracking-wide">
+            Track2Crack
+          </span>
         </Link>
+
         {/* Desktop Nav Links */}
         <ul className="hidden md:flex space-x-8 font-medium text-white">
           <li>
