@@ -148,12 +148,15 @@ const AppContent = () => {
   "/quiz/history"
 ];
 
+  // Better check: include exact matches AND prefix matches
+  const isDashboardRoute = dashboardRoutes.includes(location.pathname) || 
+    dashboardRoutes.some(route => location.pathname.startsWith(route + '/'));
 
   return (
     <div className="flex flex-col min-h-screen">
       {showNavbar && <Navbar  />}
 
-      {dashboardRoutes.includes(location.pathname) && <DashboardHeader />}
+      {isDashboardRoute && <DashboardHeader />}
 
       <div className="flex flex-grow relative">
         {/* Sidebar - only shows on dashboard pages */}
@@ -186,7 +189,7 @@ const AppContent = () => {
           
 
           <Route path="/dashboard/quizhistory" element={<ProtectedRoute><MainHistory /> </ProtectedRoute>} />
-          <Route path="/dashboard/revision-Planner" element={<ProtectedRoute><RevisionPlanner /> </ProtectedRoute>} />
+          <Route path="/dashboard/revision-planner" element={<ProtectedRoute><RevisionPlanner /> </ProtectedRoute>} />
           <Route path="/profile/" element={<ProtectedRoute><ProfilePage /> </ProtectedRoute>} />
           <Route path="/edit-profile" element={ <ProtectedRoute><EditProfile /> </ProtectedRoute>} />
           
