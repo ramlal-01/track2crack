@@ -42,36 +42,70 @@ const Sidebar = () => {
     }
   }, []);
 
-  const handleCoreClick = async (subject) => {
-    if (!userId) return;
-    
-    const [topicRes, progressRes] = await Promise.all([
-      API.get(`/core/topics?subject=${subject}`),
-      API.get(`/core/progress/${userId}`),
-    ]);
-    
-    switch(subject) {
-      case "CN": navigate("/dashboard/core/cn"); break;
-      case "DBMS": navigate("/dashboard/core/dbms"); break;
-      case "OS": navigate("/dashboard/core/os"); break;
+  const navigateToCore = (subject) => {
+    switch (subject) {
+      case "CN":
+        navigate("/dashboard/core/cn");
+        break;
+      case "DBMS":
+        navigate("/dashboard/core/dbms");
+        break;
+      case "OS":
+        navigate("/dashboard/core/os");
+        break;
+      default:
+        break;
     }
+  };
+
+  const navigateToTheory = (subject) => {
+    switch (subject) {
+      case "DSA":
+        navigate("/dashboard/theory/dsa");
+        break;
+      case "Java":
+        navigate("/dashboard/theory/java");
+        break;
+      case "OOPS":
+        navigate("/dashboard/theory/oops");
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleCoreClick = async (subject) => {
+    // Always navigate immediately so sidebar buttons remain responsive
+    navigateToCore(subject);
     closeSidebar(); // Close sidebar on mobile after navigation
+
+    // Prefetch data in the background; don't block navigation on API
+    if (!userId) return;
+    try {
+      await Promise.all([
+        API.get(`/core/topics?subject=${subject}`),
+        API.get(`/core/progress/${userId}`),
+      ]);
+    } catch (error) {
+      console.error("Failed to prefetch core data:", error);
+    }
   };
 
   const handleTheoryClick = async (subject) => {
-    if (!userId) return;
-    
-    const [topicRes, progressRes] = await Promise.all([
-      API.get(`/theory/topics?subject=${subject}`),
-      API.get(`/theory/progress/${userId}`),
-    ]);
-    
-    switch(subject) {
-      case "DSA": navigate("/dashboard/theory/dsa"); break;
-      case "Java": navigate("/dashboard/theory/java"); break;
-      case "OOPS": navigate("/dashboard/theory/oops"); break;
-    }
+    // Always navigate immediately so sidebar buttons remain responsive
+    navigateToTheory(subject);
     closeSidebar(); // Close sidebar on mobile after navigation
+
+    // Prefetch data in the background; don't block navigation on API
+    if (!userId) return;
+    try {
+      await Promise.all([
+        API.get(`/theory/topics?subject=${subject}`),
+        API.get(`/theory/progress/${userId}`),
+      ]);
+    } catch (error) {
+      console.error("Failed to prefetch theory data:", error);
+    }
   };
 
   const coreIcons = {
@@ -94,14 +128,16 @@ const Sidebar = () => {
       {/* Sidebar Overlay */}
       <div 
         className={`fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
-          isSidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+          isSidebarOpen 
+            ? 'opacity-100 visible pointer-events-auto' 
+            : 'opacity-0 invisible pointer-events-none'
         }`} 
         onClick={closeSidebar}
       />
 
       {/* Sidebar */}
       <aside 
-        className={`fixed lg:sticky top-[72px] left-0 z-40 flex-shrink-0 h-[calc(100vh-72px)] flex flex-col transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] transform-gpu will-change-[width,transform] bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
+        className={`fixed lg:sticky top-[72px] left-0 z-50 lg:z-40 flex-shrink-0 h-[calc(100vh-72px)] flex flex-col transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] transform-gpu will-change-[width,transform] bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
           isSidebarOpen ? 'w-72 translate-x-0' : 'w-0 -translate-x-full overflow-hidden'
         }`}
       >
