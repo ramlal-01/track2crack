@@ -144,6 +144,7 @@ const AppContent = () => {
   "/dashboard/feedback",
   "/profile",
   "/edit-profile" ,
+  "/quiz",
   "/quiz/history"
 ];
 
@@ -173,7 +174,7 @@ const AppContent = () => {
           {/* Theory Routes */}
           <Route path="/dashboard/theory/dsa" element={ <ProtectedRoute><DSA /> </ProtectedRoute>} />
           <Route path="/dashboard/theory/java" element={ <ProtectedRoute><Java /> </ProtectedRoute>} />
-          <Route path="/dashboard/theory/oops" element={  <OOPS />  } />
+          <Route path="/dashboard/theory/oops" element={  <ProtectedRoute><OOPS /></ProtectedRoute>  }/>
           {/* Quiz Route */}
           <Route path="/quiz" element={   <Quiz />  } />
           <Route path="/quiz/history" element={<ProtectedRoute><QuizHistory /> </ProtectedRoute>} />
