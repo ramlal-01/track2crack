@@ -239,9 +239,16 @@ const QuizHistory = () => {
         {subjectFromQuiz && sourceFromQuiz && (
           <div className="mt-10 text-center">
             <button
-              onClick={() =>
-                window.location.href = `/dashboard/${sourceFromQuiz}/${subjectFromQuiz.toLowerCase()}`
-              }
+              onClick={() => {
+                // Clear the stored values first
+                localStorage.removeItem("viewHistoryFor");
+                localStorage.removeItem("viewHistorySource");
+                // Navigate to the appropriate page
+                const path = sourceFromQuiz.toLowerCase() === "theory" 
+                  ? `/dashboard/theory/${subjectFromQuiz.toLowerCase()}`
+                  : `/dashboard/core/${subjectFromQuiz.toLowerCase()}`;
+                window.location.href = path;
+              }}
               className={`px-6 py-3 font-medium rounded-lg shadow transition-all ${
                 darkMode 
                   ? "bg-purple-700 hover:bg-purple-600 text-white" 
