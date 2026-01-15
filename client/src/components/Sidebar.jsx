@@ -101,9 +101,12 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed lg:sticky top-[72px] left-0 z-40 flex-shrink-0 h-[calc(100vh-72px)] flex flex-col transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] transform-gpu will-change-[width,transform] bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
-          isSidebarOpen ? 'w-72 translate-x-0' : 'w-0 -translate-x-full overflow-hidden'
+        className={`fixed lg:static top-[72px] left-0 z-40 flex-shrink-0 h-[calc(100vh-72px)] flex flex-col transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] transform-gpu will-change-[width,transform] bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-900/70 border-r border-gray-200 dark:border-gray-700 ${
+          isSidebarOpen ? 'w-72 translate-x-0' : 'w-0 -translate-x-full lg:translate-x-0 lg:w-72 lg:overflow-visible'
         }`}
+        style={{
+          pointerEvents: isSidebarOpen || typeof window !== 'undefined' && window.innerWidth >= 1024 ? 'auto' : 'none',
+        }}
       >
         {/* Sidebar Content - Fixed width wrapper */}
         <div className="w-72 h-full flex flex-col transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
