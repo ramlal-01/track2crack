@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -143,6 +144,7 @@ const AppContent = () => {
   "/dashboard/feedback",
   "/profile",
   "/edit-profile" ,
+  "/quiz",
   "/quiz/history"
 ];
 
@@ -207,6 +209,7 @@ const AppContent = () => {
         draggable
         theme="light"
       />
+      <Analytics />
     </div>
   );
 };
