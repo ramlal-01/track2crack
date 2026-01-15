@@ -1,6 +1,6 @@
+import Calendar from 'react-calendar';
 import React, { useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
-import Calendar from 'react-calendar';
 
 const MiniCalendar = ({ onDateSelect, reminderDates = [] }) => {
   const [value, setValue] = useState(new Date());
@@ -10,7 +10,7 @@ const MiniCalendar = ({ onDateSelect, reminderDates = [] }) => {
     onDateSelect(date);
     console.log("📅 Selected Date:", date);
   };
-
+// 
   return (
     <div className="mini-calendar-wrapper">
       <Calendar

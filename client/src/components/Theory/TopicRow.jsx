@@ -19,7 +19,7 @@ const TopicRow = ({
   openNoteId,
   noteText,
   setOpenReminderId,
-  setOpenNoteId,
+  setOpenNoteId,//
   setNoteText,
   reminderRefs,
   noteRefs,

@@ -13,7 +13,7 @@ const QuizHistory = () => {
   const token = localStorage.getItem("token");
   const { theme } = useTheme();
   const darkMode = theme === "dark";
-
+// 
   // Dark mode color classes
   const darkBg = "dark:bg-gray-900 dark:text-white";
   const darkCardBg = "dark:bg-gray-800";

@@ -11,7 +11,7 @@
       },
       {
         "label": "Time Complexity Analysis YouTube",
-        "url": "https://www.youtube.com/watch?v=9TlHvip-Q_0",
+        "url": "https://www.youtube.com/watch?v=hUdqNPhXOh4",
         "type": "video"
       }
     ],
@@ -32,7 +32,7 @@
       },
       {
         "label": "Arrays Tutorial YouTube",
-        "url": "https://www.youtube.com/watch?v=8hly31xKli0",
+        "url": "youtube.com/watch?v=qqRDHzPli3o",
         "type": "video"
       }
     ],
@@ -53,7 +53,7 @@
       },
       {
         "label": "String Manipulation YouTube",
-        "url": "https://www.youtube.com/watch?v=5L8mVqFeSng",
+        "url": "https://www.youtube.com/watch?v=vCRD36bG8xQ",
         "type": "video"
       }
     ],

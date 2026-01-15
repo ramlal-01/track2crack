@@ -6,6 +6,8 @@ server/node_modules/
 /package-lock.json
 # Firebase secret
 server/config/firebaseServiceAccount.json
+# Sensitive docs / secrets
+track2crack_doc/
 
 # Build output
 dist/
