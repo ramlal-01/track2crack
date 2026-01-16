@@ -6,7 +6,7 @@
     "resources": [
       {
         "label": "Basics of Computer Networking - GFG",
-        "url": "https://www.geeksforgeeks.org/basics-computer-networki  ng/",
+        "url": "https://www.geeksforgeeks.org/computer-networks/basics-computer-networking/",
         "type": "article"
       },
       {
