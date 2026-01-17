@@ -6,7 +6,7 @@
     "resources": [
       {
         "label": "GFG Introduction to OS",
-        "url": "https://www.geeksforgeeks.org/introduction-of-operating-system/",
+        "url": "https://www.geeksforgeeks.org/operating-systems/introduction-of-operating-system-set-1/",
         "type": "article"
       },
       {
@@ -31,7 +31,7 @@
       },
       {
         "label": "YouTube Types of OS",
-        "url": "https://www.youtube.com/watch?v=Ad4HwyNTo4Q",
+        "url": "https://www.youtube.com/watch?v=Ij71sDmmKpc",
         "type": "video"
       }
     ],
@@ -66,12 +66,12 @@
     "resources": [
       {
         "label": "GFG OS Architectures",
-        "url": "https://www.geeksforgeeks.org/operating-system-structure/",
+        "url": "https://www.geeksforgeeks.org/operating-systems/different-approaches-or-structures-of-operating-systems/",
         "type": "article"
       },
       {
         "label": "YouTube OS Architectures",
-        "url": "https://www.youtube.com/watch?v=1gAc5B-2uAc",
+        "url": "https://www.youtube.com/watch?v=88vlIFfsmKM&t=4s",
         "type": "video"
       }
     ],
@@ -86,12 +86,12 @@
     "resources": [
       {
         "label": "GFG User vs Kernel Mode",
-        "url": "https://www.geeksforgeeks.org/user-mode-and-kernel-mode/",
+        "url": "https://www.geeksforgeeks.org/operating-systems/difference-between-user-mode-and-kernel-mode/",
         "type": "article"
       },
       {
         "label": "YouTube User vs Kernel Mode",
-        "url": "https://www.youtube.com/watch?v=2iB-0RNM0TA",
+        "url": "https://www.youtube.com/watch?v=sUw32fUZgNk",
         "type": "video"
       }
     ],

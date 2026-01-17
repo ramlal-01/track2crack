@@ -17,9 +17,9 @@ cleanupExpiredResetTokens(); // 🔁 Start the cron job
 
 
 
-// const runReminderJob = require("./cronJobs/dailyReminderJob");
+const runReminderJob = require("./cronJobs/dailyReminderJob");
 
-// // Manually trigger for testing
-// runReminderJob(); // 🔥 Temporary — remove after verifying
+// Manually trigger for testing
+runReminderJob(); // 🔥 Temporary — remove after verifying
 
  

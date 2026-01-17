@@ -235,7 +235,7 @@ const Quiz = () => {
                   Topics: {quizData.topicsCovered.join(", ")}
                 </p>
               </div>
-              <div className="w-20 h-20 mt-4 md:mt-0">
+              {/* <div className="w-20 h-20 mt-4 md:mt-0">
                 <CircularProgressbar
                   value={completionPercentage}
                   text={`${completionPercentage}%`}
@@ -250,7 +250,7 @@ const Quiz = () => {
                     textSize: "32px",
                   })}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
 
