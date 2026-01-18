@@ -178,64 +178,125 @@ const QuizHistory = () => {
         </div>
       </div>
 
-      {/* Table */}
+      {/* Table - Desktop View */}
       <div className={`rounded-xl shadow-lg overflow-hidden border ${darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-purple-100"}`}>
-        <table className="min-w-full text-sm">
-          <thead className={`bg-gradient-to-r ${darkMode ? "from-purple-800 to-blue-800" : "from-purple-400 to-blue-400"}`}>
-            <tr>
-              {["#", "Subject", "Topics", "Score", "Date", "Performance"].map((head, i) => (
-                <th 
-                  key={i} 
-                  className="px-6 py-4 text-left font-semibold text-white hover:text-purple-100 transition-colors"
-                >
-                  {head}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className={`divide-y ${darkMode ? "divide-gray-700" : "divide-purple-50"}`}>
-            {filteredHistory.length > 0 ? (
-              filteredHistory.map((item, index) => {
-                const performance = getPerformanceLevel(item);
-                const rowStyle = getRowBgColor(performance);
-                return (
-                  <tr 
-                    key={index} 
-                    className={`${rowStyle} transition-all duration-150`}
-                  >
-                    <td className={`px-6 py-4 font-medium ${darkMode ? "text-gray-200" : "text-gray-900"}`}>{index + 1}</td>
-                    <td className={`px-6 py-4 font-medium ${darkMode ? "text-blue-300" : "text-blue-600"}`}>{item.subject}</td>
-                    <td className={`px-6 py-4 ${darkMode ? "text-gray-300" : "text-gray-600"} max-w-xs truncate`} title={item.topicsCovered?.join(", ")}>
-                      {item.topicsCovered?.join(", ") || "-"}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${darkMode ? "bg-blue-900/30 text-blue-300" : "bg-blue-100 text-blue-800"}`}>
-                        {item.score}/{item.totalQuestions}
-                      </span>
-                    </td>
-                    <td className={`px-6 py-4 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>{formatDate(item.takenAt)}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold ${perfColors[performance]}`}>
-                        {perfIcons[performance]}
-                        {performance}
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
+        {/* Desktop Table */}
+        <div className="hidden md:block">
+          <table className="min-w-full text-sm">
+            <thead className={`bg-gradient-to-r ${darkMode ? "from-purple-800 to-blue-800" : "from-purple-400 to-blue-400"}`}>
               <tr>
-                <td colSpan="6" className={`text-center px-6 py-16 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  <div className="flex flex-col items-center gap-3">
-                    <FaChartLine className={`text-5xl ${darkMode ? "text-purple-700" : "text-purple-200"}`} />
-                    <p className={`text-xl font-semibold ${darkMode ? "text-purple-300" : "text-purple-800"}`}>No quizzes found</p>
-                    <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Try adjusting your filters</p>
-                  </div>
-                </td>
+                {["#", "Subject", "Topics", "Score", "Date", "Performance"].map((head, i) => (
+                  <th 
+                    key={i} 
+                    className="px-6 py-4 text-left font-semibold text-white hover:text-purple-100 transition-colors"
+                  >
+                    {head}
+                  </th>
+                ))}
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className={`divide-y ${darkMode ? "divide-gray-700" : "divide-purple-50"}`}>
+              {filteredHistory.length > 0 ? (
+                filteredHistory.map((item, index) => {
+                  const performance = getPerformanceLevel(item);
+                  const rowStyle = getRowBgColor(performance);
+                  return (
+                    <tr 
+                      key={index} 
+                      className={`${rowStyle} transition-all duration-150`}
+                    >
+                      <td className={`px-6 py-4 font-medium ${darkMode ? "text-gray-200" : "text-gray-900"}`}>{index + 1}</td>
+                      <td className={`px-6 py-4 font-medium ${darkMode ? "text-blue-300" : "text-blue-600"}`}>{item.subject}</td>
+                      <td className={`px-6 py-4 ${darkMode ? "text-gray-300" : "text-gray-600"} max-w-xs truncate`} title={item.topicsCovered?.join(", ")}>
+                        {item.topicsCovered?.join(", ") || "-"}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${darkMode ? "bg-blue-900/30 text-blue-300" : "bg-blue-100 text-blue-800"}`}>
+                          {item.score}/{item.totalQuestions}
+                        </span>
+                      </td>
+                      <td className={`px-6 py-4 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>{formatDate(item.takenAt)}</td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold ${perfColors[performance]}`}>
+                          {perfIcons[performance]}
+                          {performance}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan="6" className={`text-center px-6 py-16 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                    <div className="flex flex-col items-center gap-3">
+                      <FaChartLine className={`text-5xl ${darkMode ? "text-purple-700" : "text-purple-200"}`} />
+                      <p className={`text-xl font-semibold ${darkMode ? "text-purple-300" : "text-purple-800"}`}>No quizzes found</p>
+                      <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Try adjusting your filters</p>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden">
+          {filteredHistory.length > 0 ? (
+            <div className={`divide-y ${darkMode ? "divide-gray-700" : "divide-purple-50"}`}>
+              {filteredHistory.map((item, index) => {
+                const performance = getPerformanceLevel(item);
+                const bgColor =
+                  performance === "Excellent"
+                    ? darkMode ? "bg-green-900/20" : "bg-green-50"
+                    : performance === "Good"
+                    ? darkMode ? "bg-yellow-900/20" : "bg-yellow-50"
+                    : darkMode ? "bg-red-900/20" : "bg-red-50";
+                return (
+                  <div key={index} className={`p-4 ${bgColor} transition-all`}>
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex items-center gap-3">
+                        <span className={`text-lg font-bold ${darkMode ? "text-gray-200" : "text-gray-900"}`}>#{index + 1}</span>
+                        <span className={`text-lg font-semibold ${darkMode ? "text-blue-300" : "text-blue-600"}`}>{item.subject}</span>
+                      </div>
+                      <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold ${perfColors[performance]} flex-shrink-0`}>
+                        {perfIcons[performance]}
+                        <span className="hidden xs:inline">{performance}</span>
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <span className={`font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Topics: </span>
+                        <span className={`${darkMode ? "text-gray-300" : "text-gray-600"} break-words`}>{item.topicsCovered?.join(", ") || "-"}</span>
+                      </div>
+                      
+                      <div className="flex justify-between items-center flex-wrap gap-2">
+                        <div>
+                          <span className={`font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Score: </span>
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold ${darkMode ? "bg-blue-900/30 text-blue-300" : "bg-blue-100 text-blue-800"}`}>
+                            {item.score}/{item.totalQuestions}
+                          </span>
+                        </div>
+                        <span className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                          {formatDate(item.takenAt)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className={`text-center px-4 py-16 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+              <div className="flex flex-col items-center gap-3">
+                <FaChartLine className={`text-4xl ${darkMode ? "text-purple-700" : "text-purple-200"}`} />
+                <p className={`text-lg font-semibold ${darkMode ? "text-purple-300" : "text-purple-800"}`}>No quizzes found</p>
+                <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Try adjusting your filters</p>
+              </div>
+            </div>
+          )}
+        </div>
         {subjectFromQuiz && sourceFromQuiz && (
           <div className="mt-10 text-center">
             <button

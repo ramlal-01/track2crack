@@ -114,22 +114,22 @@ const MainHistory = () => {
       {/* Header */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 sm:mb-8 gap-4">
         <div className="flex items-center gap-3">
-          <FaBookReader className="text-3xl sm:text-4xl lg:text-5xl text-indigo-400 dark:text-indigo-500" />
+          <FaBookReader className="text-3xl sm:text-4xl lg:text-5xl text-purple-500 dark:text-purple-400" />
           <div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-pink-400">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">
               My Quiz Journey
             </h2>
-            <p className="text-xs sm:text-sm text-indigo-400 dark:text-indigo-300">Track your learning progress</p>
+            <p className="text-xs sm:text-sm text-purple-500 dark:text-purple-400">Track your learning progress</p>
           </div>
         </div>
         
         {/* Summary Cards - Responsive Layout */}
-        <div className={`w-full lg:w-auto bg-white rounded-xl px-3 sm:px-5 py-3 shadow-lg border border-purple-100 ${darkCardBg} ${darkBorder} dark:border-purple-900`}>
+        <div className={`w-full lg:w-auto bg-white rounded-xl px-3 sm:px-5 py-3 shadow-lg border border-blue-100 ${darkCardBg} ${darkBorder} dark:border-blue-900`}>
           {/* Mobile: 2x2 Grid, Desktop: Horizontal */}
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
             <div className="flex flex-col items-center">
-              <div className="text-xs font-medium text-indigo-400 dark:text-indigo-300">Showing</div>
-              <div className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+              <div className="text-xs font-medium text-purple-500 dark:text-purple-400">Showing</div>
+              <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
                 {results.length}/{history.length}
               </div>
             </div>
@@ -159,20 +159,20 @@ const MainHistory = () => {
         <div className="flex justify-center sm:justify-end mb-4">
           <button
             onClick={clearFilters}
-            className={`flex items-center gap-2 bg-gradient-to-r from-pink-100 to-purple-100 hover:from-pink-200 hover:to-purple-200 text-pink-700 px-3 sm:px-4 py-2 rounded-lg border border-pink-200 shadow-sm hover:shadow-md transition text-sm dark:from-pink-900/50 dark:to-purple-900/50 dark:text-pink-300 dark:border-pink-800 dark:hover:from-pink-800 dark:hover:to-purple-800`}
+            className={`flex items-center gap-2 bg-gradient-to-r from-blue-100 to-purple-100 hover:from-blue-200 hover:to-purple-200 text-blue-700 px-3 sm:px-4 py-2 rounded-lg border border-blue-200 shadow-sm hover:shadow-md transition text-sm dark:from-blue-900/50 dark:to-purple-900/50 dark:text-blue-300 dark:border-blue-800 dark:hover:from-blue-800 dark:hover:to-purple-800`}
           >
             <FaTimes className="text-xs" /> Clear All Filters
           </button>
         </div>
 
         {/* Filter Row - Mobile: 2x2 Grid, Desktop: 4 columns */}
-        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 bg-white p-3 sm:p-4 rounded-xl shadow-md border border-amber-400 ${darkCardBg} ${darkBorder} dark:border-amber-600`}>
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 bg-white p-3 sm:p-4 rounded-xl shadow-md border border-purple-200 ${darkCardBg} ${darkBorder} dark:border-purple-700`}>
           <div>
-            <label className={`block text-xs font-medium text-pink-400 mb-1 dark:text-pink-300`}>Subject</label>
+            <label className={`block text-xs font-medium text-purple-600 mb-1 dark:text-purple-400`}>Subject</label>
             <select
               value={subjectFilter}
               onChange={(e) => setSubjectFilter(e.target.value)}
-              className={`w-full rounded-lg border border-pink-200 px-3 py-2 text-sm shadow-sm hover:shadow-md transition bg-gradient-to-r from-pink-50 to-purple-50 text-purple-700 ${darkInput} dark:from-pink-900/30 dark:to-purple-900/30 dark:text-purple-300 dark:border-pink-800`}
+              className={`w-full rounded-lg border border-purple-200 px-3 py-2 text-sm shadow-sm hover:shadow-md transition bg-gradient-to-r from-blue-50 to-purple-50 text-purple-700 ${darkInput} dark:from-blue-900/30 dark:to-purple-900/30 dark:text-purple-300 dark:border-purple-800`}
             >
               {allSubjects.map((s) => (
                 <option key={s} value={s}>
@@ -182,11 +182,11 @@ const MainHistory = () => {
             </select>
           </div>
           <div>
-            <label className={`block text-xs font-medium text-pink-400 mb-1 dark:text-pink-300`}>Performance</label>
+            <label className={`block text-xs font-medium text-purple-600 mb-1 dark:text-purple-400`}>Performance</label>
             <select
               value={performanceFilter}
               onChange={(e) => setPerformanceFilter(e.target.value)}
-              className={`w-full rounded-lg border border-pink-200 px-3 py-2 text-sm shadow-sm hover:shadow-md transition bg-gradient-to-r from-pink-50 to-purple-50 text-purple-700 ${darkInput} dark:from-pink-900/30 dark:to-purple-900/30 dark:text-purple-300 dark:border-pink-800`}
+              className={`w-full rounded-lg border border-purple-200 px-3 py-2 text-sm shadow-sm hover:shadow-md transition bg-gradient-to-r from-blue-50 to-purple-50 text-purple-700 ${darkInput} dark:from-blue-900/30 dark:to-purple-900/30 dark:text-purple-300 dark:border-purple-800`}
             >
               {["All", "Excellent", "Good", "Needs Work"].map((lvl) => (
                 <option key={lvl} value={lvl}>
@@ -196,37 +196,37 @@ const MainHistory = () => {
             </select>
           </div>
           <div>
-            <label className={`block text-xs font-medium text-pink-400 mb-1 dark:text-pink-300`}>Sort By</label>
+            <label className={`block text-xs font-medium text-purple-600 mb-1 dark:text-purple-400`}>Sort By</label>
             <select
               value={dateSort}
               onChange={(e) => setDateSort(e.target.value)}
-              className={`w-full rounded-lg border border-pink-200 px-3 py-2 text-sm shadow-sm hover:shadow-md transition bg-gradient-to-r from-pink-50 to-purple-50 text-purple-700 ${darkInput} dark:from-pink-900/30 dark:to-purple-900/30 dark:text-purple-300 dark:border-pink-800`}
+              className={`w-full rounded-lg border border-purple-200 px-3 py-2 text-sm shadow-sm hover:shadow-md transition bg-gradient-to-r from-blue-50 to-purple-50 text-purple-700 ${darkInput} dark:from-blue-900/30 dark:to-purple-900/30 dark:text-purple-300 dark:border-purple-800`}
             >
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
             </select>
           </div>
           <div className="relative sm:col-span-2 lg:col-span-1">
-            <label className={`block text-xs font-medium text-pink-400 mb-1 dark:text-pink-300`}>Search</label>
+            <label className={`block text-xs font-medium text-purple-600 mb-1 dark:text-purple-400`}>Search</label>
             <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               type="text"
               placeholder="Search quizzes..."
-              className={`w-full rounded-lg border border-pink-200 px-3 py-2 pl-10 text-sm shadow-sm hover:shadow-md focus:outline-none transition bg-gradient-to-r from-pink-50 to-purple-50 text-purple-700 ${darkInput} dark:from-pink-900/30 dark:to-purple-900/30 dark:text-purple-300 dark:border-pink-800`}
+              className={`w-full rounded-lg border border-purple-200 px-3 py-2 pl-10 text-sm shadow-sm hover:shadow-md focus:outline-none transition bg-gradient-to-r from-blue-50 to-purple-50 text-purple-700 ${darkInput} dark:from-blue-900/30 dark:to-purple-900/30 dark:text-purple-300 dark:border-purple-800`}
             />
-            <FaSearch className="absolute left-3 top-8 text-purple-400 dark:text-purple-300 text-xs" />
+            <FaSearch className="absolute left-3 top-8 text-purple-500 dark:text-purple-400 text-xs" />
           </div>
         </div>
       </div>
 
       {/* Results Section */}
-      <div className={`bg-white rounded-xl shadow-lg overflow-hidden border border-purple-100 ${darkCardBg} ${darkBorder} dark:border-purple-900`}>
+      <div className={`bg-white rounded-xl shadow-lg overflow-hidden border border-blue-100 ${darkCardBg} ${darkBorder} dark:border-blue-900`}>
         
         {/* Desktop Table View */}
         <div className="hidden lg:block">
           <table className="min-w-full text-sm">
-            <thead className={`bg-gradient-to-r from-indigo-300 to-pink-300 dark:from-indigo-700 dark:to-pink-700`}>
+            <thead className={`bg-gradient-to-r from-purple-400 to-blue-400 dark:from-purple-800 dark:to-blue-800`}>
               <tr>
                 {["#", "Subject", "Topics", "Score", "Date", "Performance"].map((h) => (
                   <th
@@ -238,7 +238,7 @@ const MainHistory = () => {
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-purple-50 dark:divide-gray-700">
+            <tbody className="divide-y divide-blue-50 dark:divide-gray-700">
               {results.length > 0 ? (
                 results.map((quiz, i) => {
                   const perf = getPerformanceLevel(quiz);
@@ -247,14 +247,14 @@ const MainHistory = () => {
                       ? "hover:bg-green-50 dark:hover:bg-green-900/30"
                       : perf === "Good"
                       ? "hover:bg-yellow-50 dark:hover:bg-yellow-900/30"
-                      : "hover:bg-pink-50 dark:hover:bg-pink-900/30";
+                      : "hover:bg-red-50 dark:hover:bg-red-900/30";
                   return (
                     <tr key={i} className={`${bgHover} transition-all`}>
-                      <td className="px-6 py-4 font-medium text-indigo-700 dark:text-indigo-300">{i + 1}</td>
-                      <td className="px-6 py-4 text-blue-500 font-medium dark:text-blue-400">
+                      <td className="px-6 py-4 font-medium text-purple-700 dark:text-purple-300">{i + 1}</td>
+                      <td className="px-6 py-4 text-blue-600 font-medium dark:text-blue-400">
                         {quiz.subject}
                       </td>
-                      <td className="px-6 py-4 text-indigo-600 max-w-xs truncate dark:text-indigo-300">
+                      <td className="px-6 py-4 text-purple-600 max-w-xs truncate dark:text-purple-300">
                         {quiz.topicsCovered?.join(", ") || "-"}
                       </td>
                       <td className="px-6 py-4">
@@ -262,7 +262,7 @@ const MainHistory = () => {
                           {quiz.score}/{quiz.totalQuestions}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-indigo-500 dark:text-indigo-400">
+                      <td className="px-6 py-4 text-purple-500 dark:text-purple-400">
                         {formatDate(quiz.takenAt)}
                       </td>
                       <td className="px-6 py-4">
@@ -283,16 +283,16 @@ const MainHistory = () => {
                     className="text-center px-6 py-16 text-gray-500 dark:text-gray-400"
                   >
                     <div className="flex flex-col items-center gap-3">
-                      <FaChartLine className="text-5xl text-indigo-200 dark:text-indigo-700" />
-                      <p className="text-xl font-semibold text-indigo-500 dark:text-indigo-400">
+                      <FaChartLine className="text-5xl text-purple-200 dark:text-purple-700" />
+                      <p className="text-xl font-semibold text-purple-600 dark:text-purple-400">
                         No quizzes found
                       </p>
-                      <p className="text-sm text-indigo-400 dark:text-indigo-300">
+                      <p className="text-sm text-purple-500 dark:text-purple-400">
                         Try adjusting filters or take some quizzes
                       </p>
                       <button
                         onClick={clearFilters}
-                        className={`mt-2 flex items-center justify-center gap-2 bg-gradient-to-r from-pink-100 to-purple-100 hover:from-pink-200 hover:to-purple-200 text-pink-700 px-4 py-2 rounded-lg border border-pink-200 shadow-sm hover:shadow-md transition dark:from-pink-900/50 dark:to-purple-900/50 dark:text-pink-300 dark:border-pink-800 dark:hover:from-pink-800 dark:hover:to-purple-800`}
+                        className={`mt-2 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-100 to-purple-100 hover:from-blue-200 hover:to-purple-200 text-blue-700 px-4 py-2 rounded-lg border border-blue-200 shadow-sm hover:shadow-md transition dark:from-blue-900/50 dark:to-purple-900/50 dark:text-blue-300 dark:border-blue-800 dark:hover:from-blue-800 dark:hover:to-purple-800`}
                       >
                         <FaTimes /> Clear All Filters
                       </button>
@@ -315,7 +315,7 @@ const MainHistory = () => {
                     ? "bg-green-50 dark:bg-green-900/20"
                     : perf === "Good"
                     ? "bg-yellow-50 dark:bg-yellow-900/20"
-                    : "bg-pink-50 dark:bg-pink-900/20";
+                    : "bg-red-50 dark:bg-red-900/20";
                 return (
                   <div key={i} className={`p-4 ${bgColor} transition-all`}>
                     <div className="flex justify-between items-start mb-3">
@@ -356,16 +356,16 @@ const MainHistory = () => {
           ) : (
             <div className="text-center px-4 py-16 text-gray-500 dark:text-gray-400">
               <div className="flex flex-col items-center gap-3">
-                <FaChartLine className="text-4xl text-indigo-200 dark:text-indigo-700" />
-                <p className="text-lg font-semibold text-indigo-500 dark:text-indigo-400">
+                <FaChartLine className="text-4xl text-purple-200 dark:text-purple-700" />
+                <p className="text-lg font-semibold text-purple-600 dark:text-purple-400">
                   No quizzes found
                 </p>
-                <p className="text-sm text-indigo-400 dark:text-indigo-300">
+                <p className="text-sm text-purple-500 dark:text-purple-400">
                   Try adjusting filters or take some quizzes
                 </p>
                 <button
                   onClick={clearFilters}
-                  className={`mt-2 flex items-center justify-center gap-2 bg-gradient-to-r from-pink-100 to-purple-100 hover:from-pink-200 hover:to-purple-200 text-pink-700 px-3 sm:px-4 py-2 rounded-lg border border-pink-200 shadow-sm hover:shadow-md transition text-sm dark:from-pink-900/50 dark:to-purple-900/50 dark:text-pink-300 dark:border-pink-800 dark:hover:from-pink-800 dark:hover:to-purple-800`}
+                  className={`mt-2 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-100 to-purple-100 hover:from-blue-200 hover:to-purple-200 text-blue-700 px-3 sm:px-4 py-2 rounded-lg border border-blue-200 shadow-sm hover:shadow-md transition text-sm dark:from-blue-900/50 dark:to-purple-900/50 dark:text-blue-300 dark:border-blue-800 dark:hover:from-blue-800 dark:hover:to-purple-800`}
                 >
                   <FaTimes className="text-xs" /> Clear All Filters
                 </button>
