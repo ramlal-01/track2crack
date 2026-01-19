@@ -12,6 +12,8 @@ track2crack_doc/
 # Build output
 dist/
 build/
+logo
+DATA
 
 # Environment variables
 .env
