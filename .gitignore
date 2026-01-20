@@ -12,6 +12,8 @@ track2crack_doc/
 # Build output
 dist/
 build/
+
+# inportant data
 logo/
 DATA/
 
