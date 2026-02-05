@@ -173,15 +173,15 @@ const EditProfile = () => {
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-6">Profile Picture</h3>
                 
                 <div className="relative group mb-6 flex-grow flex flex-col items-center justify-center">
-                  {(croppedPreviewUrl || currentAvatar) ? (
+                  {(previewImage || croppedPreviewUrl || currentAvatar) ? (
                     <>
                       <img 
-                        src={croppedPreviewUrl || currentAvatar} 
+                        src={previewImage || croppedPreviewUrl || currentAvatar} 
                         alt="Profile" 
-                        className="w-40 h-40 md:w-48 md:h-48 rounded-full object-cover border-4 border-white dark:border-gray-700 shadow-lg"
+                        className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-white dark:border-gray-700 shadow-lg"
                       />
-                      <label className="absolute inset-0 flex items-center justify-center w-40 h-40 md:w-48 md:h-48 rounded-full bg-black bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                        <div className="text-white text-2xl bg-blue-500 rounded-full w-10 h-10 flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform">+</div>
+                      <label className="absolute inset-0 flex items-center justify-center rounded-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <div className="text-white text-2xl md:text-3xl bg-blue-500 w-32 h-32 md:w-40 md:h-40 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform">+</div>
                         <input
                           type="file"
                           accept="image/*"
@@ -192,7 +192,7 @@ const EditProfile = () => {
                       </label>
                     </>
                   ) : (
-                    <label className="w-40 h-40 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-gray-600 dark:to-gray-500 flex items-center justify-center cursor-pointer relative shadow-lg">
+                    <label className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-gray-600 dark:to-gray-500 flex items-center justify-center cursor-pointer relative shadow-lg">
                       <span className="text-blue-500 dark:text-blue-300 text-4xl font-bold">+</span>
                       <input
                         type="file"
