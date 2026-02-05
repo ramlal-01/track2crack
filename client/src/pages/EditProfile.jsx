@@ -22,6 +22,7 @@ const EditProfile = () => {
   const [currentAvatar, setCurrentAvatar] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState("");
+  const [croppedPreviewUrl, setCroppedPreviewUrl] = useState(null);
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -115,11 +116,23 @@ const EditProfile = () => {
       alert(response.data.message || "Avatar updated successfully");
       setCroppedBlob(null);
       setSelectedFileName("");
+      // Clean up the preview URL
+      if (croppedPreviewUrl) {
+        URL.revokeObjectURL(croppedPreviewUrl);
+        setCroppedPreviewUrl(null);
+      }
       // Don't navigate immediately, let user see the updated avatar
     } catch (err) {
       console.error("Avatar Upload Failed:", err);
       const errorMessage = err.response?.data?.message || "Failed to upload avatar. Please try again.";
       alert(errorMessage);
+      // Clean up on error
+      if (croppedPreviewUrl) {
+        URL.revokeObjectURL(croppedPreviewUrl);
+        setCroppedPreviewUrl(null);
+      }
+      setCroppedBlob(null);
+      setSelectedFileName("");
     } finally {
       setIsUploading(false);
     }
@@ -160,10 +173,10 @@ const EditProfile = () => {
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-6">Profile Picture</h3>
                 
                 <div className="relative group mb-6 flex-grow flex flex-col items-center justify-center">
-                  {currentAvatar ? (
+                  {(croppedPreviewUrl || currentAvatar) ? (
                     <>
                       <img 
-                        src={currentAvatar} 
+                        src={croppedPreviewUrl || currentAvatar} 
                         alt="Profile" 
                         className="w-40 h-40 md:w-48 md:h-48 rounded-full object-cover border-4 border-white dark:border-gray-700 shadow-lg"
                       />
@@ -348,10 +361,17 @@ const EditProfile = () => {
           onClose={() => {
             setPreviewImage(null);
             setSelectedFileName("");
+            if (croppedPreviewUrl) {
+              URL.revokeObjectURL(croppedPreviewUrl);
+              setCroppedPreviewUrl(null);
+            }
           }}
           onCropDone={(blob) => {
             setCroppedBlob(blob);
             setPreviewImage(null);
+            // Create preview URL for the cropped image
+            const previewUrl = URL.createObjectURL(blob);
+            setCroppedPreviewUrl(previewUrl);
           }}
         />
       )}
