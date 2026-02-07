@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -143,15 +144,19 @@ const AppContent = () => {
   "/dashboard/feedback",
   "/profile",
   "/edit-profile" ,
+  "/quiz",
   "/quiz/history"
 ];
 
+  // Better check: include exact matches AND prefix matches
+  const isDashboardRoute = dashboardRoutes.includes(location.pathname) || 
+    dashboardRoutes.some(route => location.pathname.startsWith(route + '/'));
 
   return (
     <div className="flex flex-col min-h-screen">
       {showNavbar && <Navbar  />}
 
-      {dashboardRoutes.includes(location.pathname) && <DashboardHeader />}
+      {isDashboardRoute && <DashboardHeader />}
 
       <div className="flex flex-grow relative">
         {/* Sidebar - only shows on dashboard pages */}
@@ -172,7 +177,7 @@ const AppContent = () => {
           {/* Theory Routes */}
           <Route path="/dashboard/theory/dsa" element={ <ProtectedRoute><DSA /> </ProtectedRoute>} />
           <Route path="/dashboard/theory/java" element={ <ProtectedRoute><Java /> </ProtectedRoute>} />
-          <Route path="/dashboard/theory/oops" element={  <OOPS />  } />
+          <Route path="/dashboard/theory/oops" element={  <ProtectedRoute><OOPS /></ProtectedRoute>  } />
           {/* Quiz Route */}
           <Route path="/quiz" element={   <Quiz />  } />
           <Route path="/quiz/history" element={<ProtectedRoute><QuizHistory /> </ProtectedRoute>} />
@@ -184,7 +189,7 @@ const AppContent = () => {
           
 
           <Route path="/dashboard/quizhistory" element={<ProtectedRoute><MainHistory /> </ProtectedRoute>} />
-          <Route path="/dashboard/revision-Planner" element={<ProtectedRoute><RevisionPlanner /> </ProtectedRoute>} />
+          <Route path="/dashboard/revision-planner" element={<ProtectedRoute><RevisionPlanner /> </ProtectedRoute>} />
           <Route path="/profile/" element={<ProtectedRoute><ProfilePage /> </ProtectedRoute>} />
           <Route path="/edit-profile" element={ <ProtectedRoute><EditProfile /> </ProtectedRoute>} />
           
@@ -207,6 +212,7 @@ const AppContent = () => {
         draggable
         theme="light"
       />
+      <Analytics />
     </div>
   );
 };

@@ -4,6 +4,9 @@ import { Bars3Icon } from "@heroicons/react/24/solid";
 //import { FaFire } from "react-icons/fa"; 
 import StreakBadge from "../components/StreakBadge";
 import { useSidebar } from "../context/SidebarContext";
+import logo from "/favicon.png";
+
+
 //dashboard header
 const DashboardHeader = () => {
   const { toggleSidebar, isDashboardPage } = useSidebar();
@@ -11,7 +14,7 @@ const DashboardHeader = () => {
   return (
     <header className="sticky top-0 z-50 w-full h-[72px] bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white shadow-md flex items-center px-6 md:px-10 justify-between">
 
-      
+
       {/* Left: Hamburger Menu + App Name */}
       <div className="flex items-center">
         {/* Hamburger Menu - Show on all dashboard pages and all screen sizes */}
@@ -28,9 +31,17 @@ const DashboardHeader = () => {
         <div className="relative group">
           <div className="absolute-inset-1 bg-white rounded-lg blur opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
           <div className="flex items-center p-1">
-            <span className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-wide select-none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200">
-              Track2Crack
-            </span>
+            <div className="flex items-center gap-2">
+              <img
+                src={logo}
+                alt="Track2Crack logo"
+                className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 object-contain"
+              />
+              <span className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-wide select-none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200">
+                Track2Crack
+              </span>
+            </div>
+
           </div>
         </div>
       </div>

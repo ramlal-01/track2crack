@@ -1,3 +1,4 @@
+// client/src/pages/quiz/Quiz.jsx
 import React, { useEffect, useState, useRef } from "react";
 
 import { toast } from "react-toastify";
@@ -10,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { FiArrowLeft, } from "react-icons/fi";
 import API from '../../api/api';
 import { useTheme } from '../../context/ThemeContext';
-
+// 
 const Quiz = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
@@ -234,7 +235,7 @@ const Quiz = () => {
                   Topics: {quizData.topicsCovered.join(", ")}
                 </p>
               </div>
-              <div className="w-24 h-24 mt-4 md:mt-0">
+              {/* <div className="w-20 h-20 mt-4 md:mt-0">
                 <CircularProgressbar
                   value={completionPercentage}
                   text={`${completionPercentage}%`}
@@ -249,12 +250,12 @@ const Quiz = () => {
                     textSize: "32px",
                   })}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
 
           {/* Progress indicators */}
-          <div className="mb-8">
+          {/* <div className="mb-8">
             <div className="flex justify-between mb-2">
               <span className={`text-sm font-medium ${darkMode ? "text-blue-300" : "text-blue-500"}`}>
                 Correct answers: {correctAnswers}/{quizData.questions.length}
@@ -269,7 +270,7 @@ const Quiz = () => {
                 style={{ width: `${completionPercentage}%` }}
               ></div>
             </div>
-          </div>
+          </div> */}
 
           {/* Questions list */}
           <div className="space-y-6 mt-8">

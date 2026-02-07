@@ -1,4 +1,4 @@
-// models/UserDSAProgress.js
+// UserDSAProgress model definition using Mongoose
 const mongoose = require('mongoose');
 
 const userDSAProgressSchema = new mongoose.Schema({

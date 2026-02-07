@@ -1,3 +1,4 @@
+//theoryController - Manages theory topics and user progress: fetching topics by subject, updating progress, and retrieving user progress.
 const TheoryTopic = require('../models/TheoryTopic');
 const UserTheoryProgress = require('../models/UserTheoryProgress');
 

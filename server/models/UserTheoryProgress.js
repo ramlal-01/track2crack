@@ -1,4 +1,4 @@
-// models/UserTheoryProgress.js
+// UserTheoryProgress model definition using Mongoose
 const mongoose = require('mongoose');
 
 const userTheoryProgressSchema = new mongoose.Schema({

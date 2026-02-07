@@ -42,4 +42,13 @@ We’ve built a **personalized preparation tracker** that:
 | Database  | MongoDB / Firebase |
 | Others    | Chart.js, Axios, JWT Auth |
 
+## ER Diagram 
+
+![WhatsApp Image 2025-11-27 at 09 27 38](https://github.com/user-attachments/assets/7ed47f7a-df34-428d-bd09-e799f5ab5642)
+
+## Flowchart 
+
+![WhatsApp Image 2025-11-27 at 09 31 34](https://github.com/user-attachments/assets/649000b8-3dda-49a9-9c6b-d4b19cfa2f5d)
+
+
 ---

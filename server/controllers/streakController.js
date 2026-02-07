@@ -1,3 +1,4 @@
+//streakController - Manages user streaks: updating and retrieving daily activity streaks.
 const User = require("../models/User");
 
 exports.updateStreak = async (req, res) => {

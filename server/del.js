@@ -19,11 +19,11 @@ async function deleteCNTopics() {
     console.log('✅ Connected to MongoDB');
 
     // Delete from CoreTopic
-    const coreResult = await CoreTopic.deleteMany({ subject: 'Java' });
+    const coreResult = await CoreTopic.deleteMany({ subject: 'DBMS' });
     console.log(`🗑️ Deleted ${coreResult.deletedCount} CN topics from CoreTopic`);
 
     // If CN was also inserted into TheoryTopic accidentally
-    const theoryResult = await TheoryTopic.deleteMany({ subject: 'Java' });
+    const theoryResult = await TheoryTopic.deleteMany({ subject: 'DBMS' });
     console.log(`🗑️ Deleted ${theoryResult.deletedCount} CN topics from TheoryTopic`);
 
     await mongoose.disconnect();

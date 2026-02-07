@@ -7,6 +7,7 @@ const CurrentTopicSection = ({
   userKnowsTopic,
   showResources,
   showQuiz,
+  // 
   theme,
   handleUserResponse,
   handleSingleTopicQuiz,
@@ -14,7 +15,7 @@ const CurrentTopicSection = ({
   setShowResources,
   setShowQuiz,
   getIconUrl
-}) => {
+}) => { //
   if (!currentTopic) return null;
 
   const darkBorder = "dark:border-gray-700";
@@ -51,6 +52,10 @@ const CurrentTopicSection = ({
               </div>
             </div>
           )}
+
+
+
+          
 
           {/* Back Button */}
           {userKnowsTopic !== null && !topicProgress.quizTaken && (
